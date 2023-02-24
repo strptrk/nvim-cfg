@@ -1,0 +1,4 @@
+plugin/packer_compiled.lua
+*.orig
+.luarc.json
+lazy-lock.json

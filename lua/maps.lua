@@ -1,0 +1,383 @@
+local map = vim.keymap.set
+local exec = function(s) vim.api.nvim_exec(s, false) end
+local defcommand = vim.api.nvim_create_user_command
+local dmap = function(mode, key, func, desc, opt)
+  opt = opt or {}
+  opt.desc = desc
+  map(mode, key, func, opt)
+end
+
+local exp = { expr = true, noremap = true }
+
+defcommand('SaveSession', 'SessionManager save_current_session', { force = true })
+defcommand('LoadSession', 'SessionManager load_session', { force = true })
+defcommand('DelSession', 'SessionManager delete_session', { force = true })
+
+----------------------------------------------------
+-- s can be used as a modifier key (sort of)
+----------------------------------------------------
+
+map('n', ',', '<nop>')
+map('x', ',', '<nop>')
+map('n', 's', '<nop>')
+map('x', 's', '<nop>')
+map('n', 's', '<nop>')
+map('x', 's', '<nop>')
+
+map({ 'x', 'n' }, 'gA', 'ga')
+map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
+
+for k, _ in string.gmatch('\'"[](){}<>`', '.') do
+  map('n', [[<Space>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
+  map('x', [[<Space>]] .. k, [[<Plug>(sandwich-add)]] .. k)
+end
+
+----------------------------------------------------
+-- tabs, buffers
+----------------------------------------------------
+
+map('n', '<A-O>', '<cmd>only<cr>')
+map('n', '<A-a>', '<cmd>tabprevious<cr>')
+map('n', '<A-d>', '<cmd>tabnext<cr>')
+map('n', '<A-t>', '<cmd>tabnew<CR>')
+map('n', '<A-T>', '<cmd>tabclose<CR>')
+dmap('n', '<Space>u', '<C-^>', 'Last Used Buffer')
+map('t', '<A-n>', [[<C-\><C-n>]])
+
+map({ 'n', 'x' }, '<leader>m', ':Norm ')
+map('n', 'Q', '@q')
+map('x', 'Q', ':norm @q<CR>')
+
+map({ 'n', 'x' }, '<Space><CR>', function() require('hop').hint_words() end)
+map({ 'n', 'x' }, '<Space><BS>', function() require('hop').hint_lines() end)
+map({ 'n', 'x', 'o' }, 'f', function()
+  require('hop').hint_char1({
+    direction = require('hop.hint').HintDirection.AFTER_CURSOR,
+    current_line_only = true,
+  })
+end)
+map({ 'n', 'x', 'o' }, 'F', function()
+  require('hop').hint_char1({
+    direction = require('hop.hint').HintDirection.BEFORE_CURSOR,
+    current_line_only = true,
+  })
+end)
+map({ 'n', 'x', 'o' }, 't', function()
+  require('hop').hint_char1({
+    direction = require('hop.hint').HintDirection.AFTER_CURSOR,
+    current_line_only = true,
+    hint_offset = -1,
+  })
+end)
+map({ 'n', 'x', 'o' }, 'T', function()
+  require('hop').hint_char1({
+    direction = require('hop.hint').HintDirection.BEFORE_CURSOR,
+    current_line_only = true,
+    hint_offset = -1,
+  })
+end)
+
+map('n', '<C-M-h>', function() require('utils').SmartResize('h', 1) end)
+map('n', '<C-M-j>', function() require('utils').SmartResize('j', 1) end)
+map('n', '<C-M-k>', function() require('utils').SmartResize('k', 1) end)
+map('n', '<C-M-l>', function() require('utils').SmartResize('l', 1) end)
+
+map('n', '<C-s>', '<cmd>w<CR>')
+map('n', '<A-c>', '<cmd>q<CR>')
+map('n', '<A-C>', '<cmd>q!<CR>')
+map({ 'n', 't' }, '<A-Esc>', function()
+  if vim.bo.buftype == 'terminal' then
+    exec([[stopinsert]])
+  else
+    exec([[qa!]])
+  end
+end)
+map('n', '<Up>', '<C-Y>k')
+map('n', '<Down>', '<C-E>j')
+map('x', '<Up>', '<C-Y>k')
+map('x', '<Down>', '<C-E>j')
+map('n', '<C-j>', '<Plug>MoveLineDown')
+map('n', '<C-k>', '<Plug>MoveLineUp')
+-- map('n', '<C-H>', '<Plug>MoveCharLeft', {})
+-- map('n', '<C-L>', '<Plug>MoveCharRight', {})
+map('v', '<C-j>', '<Plug>MoveBlockDown', {})
+map('v', '<C-k>', '<Plug>MoveBlockUp', {})
+-- map('v', '<C-H>', '<Plug>MoveBlockLeft' , {})
+-- map('v', '<C-L>', '<Plug>MoveBlockRight', {})
+
+map('n', 'S', ':%s//gI<Left><Left><Left>')
+map('n', 'so', '<cmd>SymbolsOutline<CR>')
+
+dmap('n', 'ss', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace word")
+dmap('x', 'ss', ':s//gI<Left><Left><Left>', "Replace")
+map('n', 'sE', '<cmd>g/^$/d<CR>')
+map('n', 'sbc', '<cmd>.!bc -l<CR>')
+map('n', 'sbq', '<cmd>.!qalc | grep "=" | cut -d"=" -f2 | xargs<CR>')
+map('n', 'sbp', '<cmd>.!python<CR>')
+map('x', 'sbc', '!bc -l<CR>')
+map('x', 'sbp', '!python<CR>')
+map('n', 'se', '<cmd>.!$SHELL<CR>')
+map('x', 'se', '!$SHELL<CR>')
+dmap('n', 'sx', function() require('expand_expr').expand() end, 'Expand lua expression')
+dmap({ 'n', 'x' }, 'sF', '<cmd>Format<CR>', 'Format document (Formatter)')
+dmap({ 'n', 'x' }, 'sf', vim.lsp.buf.format, 'Format document (lsp)')
+map({ 'n', 'x' }, 'sc', function() require('chadtree').Open() end, { silent = true })
+dmap('n', 'sj', ':a<CR><CR>.<CR>', 'Append newline under', { silent = true })
+dmap('n', 'sk', ':i<CR><CR>.<CR>', 'Append newline above', { silent = true })
+
+map('n', ']b', '<cmd>bnext<CR>')
+map('n', '[b', '<cmd>bprevious<CR>')
+map('n', '<Space><Space>', '<C-^>')
+map('n', '[l', '<cmd>cprev<CR>')
+map('n', ']l', '<cmd>cnext<CR>')
+map('n', ']q', '<cmd>cclose<CR>')
+map('n', '[q', '<cmd>cclose<CR>')
+map('n', ']o', '<cmd>copen<CR>')
+map('n', '[o', '<cmd>copen<CR>')
+
+----------------------------------------------------
+-- make life a bit easier
+----------------------------------------------------
+
+map('n', 'n', 'nzz')
+map('n', 'N', 'Nzz')
+map('n', 'Y', 'y$')
+map('v', ';', ':')
+map('n', ';', ':')
+map('x', '.', ':norm.<CR>')
+-- map('x', 'Q', ":'<,'>:normal @q<CR>")
+map({ 'n', 'v' }, 'c', '"_c')
+map({ 'n', 'v' }, 'C', '"_C')
+map('i', '<C-v>', '<C-r>+')
+map('n', '<M-=>', '<cmd>wincmd =<CR>')
+map('n', 'J', 'mzJ`z')
+
+local CC = true
+map('n', '<A-i>', function()
+  -- exec([[IndentBlanklineToggle]])
+  -- exec([[TSContextToggle]])
+  if CC then
+    vim.wo.colorcolumn = '80,120'
+    vim.wo.cursorline = true
+  else
+    vim.wo.colorcolumn = '0'
+    vim.wo.cursorline = false
+  end
+  CC = not CC
+end)
+map('i', '<A-e>', '<C-o>e<Right>')
+map('i', '<A-w>', '<C-o>w')
+map('i', '<A-b>', '<C-o>b')
+map('x', 'il', '^o$')
+map({ 'x', 'n' }, '<Left>', '^')
+map({ 'x', 'n' }, '<Right>', '$')
+
+map('i', '<C-h>', '<Left>')
+map('i', '<C-l>', '<Right>')
+map('i', '<A-[>', '<C-o>A{}<Left>')
+map('n', '<A-[>', 'A{}<Left>')
+
+map('i', '<A-;>', '<C-o>mz<C-o>:norm A;<CR><C-o>`z')
+map('n', '<A-;>', 'mz:norm A;<CR>`z')
+
+-- paste last yanked thing, not deleted
+dmap('n', 'sp', '"0P', 'Paste before cursor', { silent = true })
+dmap('n', 'sP', 'viw"0P', 'Paste after cursor', { silent = true })
+dmap('x', 'sp', '"0P', 'Paste', { silent = true })
+
+----------------------------------------------------
+-- EasyAlign
+----------------------------------------------------
+
+dmap('n', 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
+dmap('x', 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
+
+defcommand('Banner', function(args)
+  require('utils').Banner(args)
+end, {
+  force = true,
+  nargs = '?',
+})
+
+----------------------------------------------------
+-- Window splits
+----------------------------------------------------
+
+map({ 'n', 'i', 't', 'v' }, '<A-h>', function()
+  require('utils').WinMove('h')
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-j>', function()
+  require('utils').WinMove('j')
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-k>', function()
+  require('utils').WinMove('k')
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-l>', function()
+  require('utils').WinMove('l')
+end)
+
+map({ 'n', 'i', 't', 'v' }, '<A-H>', function()
+  require('utils').SplitInDirection('h', nil, { new = true })
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-J>', function()
+  require('utils').SplitInDirection('j', nil, { new = true })
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-K>', function()
+  require('utils').SplitInDirection('k', nil, { new = true })
+end)
+map({ 'n', 'i', 't', 'v' }, '<A-L>', function()
+  require('utils').SplitInDirection('l', nil, { new = true })
+end)
+
+----------------------------------------------------
+-- autopairs behaviour
+----------------------------------------------------
+-- these mappings are coq recommended mappings unrelated to smart-pairs
+map('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], exp)
+map('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], exp)
+map('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], exp)
+map('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], exp)
+
+CR = function()
+  if vim.fn.pumvisible() ~= 0 then
+    if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+      return '<c-y>'
+    else
+      return '<c-e>' .. [[<cmd>lua require'pairs.enter'.type()<CR>]]
+    end
+  else
+    return [[<cmd>lua require'pairs.enter'.type()<CR>]]
+  end
+end
+map('i', '<cr>', 'v:lua.CR()', exp)
+
+dmap('n', '<space>T', function() require('utils').FnNewTab(nil, { zz = true }) end, 'Open New Tab')
+
+dmap('n', '<A-I>', '<cmd>IndentBlanklineToggle<cr>', 'Toggle Indent Lines')
+
+----------------------------------------------------
+-- Telescope, lsp
+----------------------------------------------------
+
+dmap('n', '<Space>hv', ':vert help ', ':vert help')
+dmap('n', '<Space>ht', ':tab help ', ':tab help')
+dmap('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7), ':vert help')
+dmap('n', 'gi', function() require('telescope.builtin').lsp_implementations() end, 'Go to Implementation')
+dmap('n', '<Space>f', function() require('telescope.builtin').find_files() end, 'Find Files')
+dmap('n', '<Space>F', function() require('telescope.builtin').git_files() end, 'Find Files (Git)')
+dmap('n', '<Space>g', function() require('telescope.builtin').live_grep() end, 'Grep')
+dmap('n', '<Space>b', function() require('telescope.builtin').buffers() end, 'Buffers')
+dmap('n', '<Space>m', function() require('telescope.builtin').marks() end, 'Marks')
+dmap('n', '<Space>h;', function() require('telescope.builtin').command_history() end, 'Command History')
+dmap('n', '<Space>h:', function() require('telescope.builtin').command_history() end, 'Command History')
+dmap('n', '<Space>h/', function() require('telescope.builtin').search_history() end, 'Search History')
+dmap('n', '<Space>H', function() require('telescope.builtin').help_tags() end, 'Help tags')
+dmap('n', '<Space>r', function() require('telescope.builtin').registers() end, 'Registers')
+dmap('n', '<Space>N', "<cmd>Notifications<cr>", 'Notifications')
+dmap('n', '<Space>ts', function() require('telescope.builtin').treesitter() end, 'Treesitter Symbols')
+dmap('n', '<Space>th', '<cmd>TSHighlightCapturesUnderCursor<cr>', 'Treesitter Highlight Captures')
+dmap('n', '<Space>L', vim.diagnostic.setloclist, 'Diagnostic Set Loclist')
+dmap('n', '<Space>l', function() require('telescope.builtin').loclist() end, 'Diagnostic Loclist')
+dmap('n', '<Space>a', vim.lsp.buf.code_action, "Code Action")
+dmap('n', 'gr', function() require('telescope.builtin').lsp_references() end, 'Go to References')
+dmap('n', 'gdd', function() require('telescope.builtin').lsp_definitions() end, 'Go to Definition')
+dmap('n', 'gs', vim.lsp.buf.declaration, 'Go to Declaration')
+dmap('n', 'gdt', function() require('utils').FnNewTab(require('telescope.builtin').lsp_definitions, { zz = true }) end,
+  'Go to Definition (new tab)')
+dmap('n', 'gdT', function() require('telescope.builtin').lsp_type_definitions() end, 'Go to Type Definition')
+
+for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
+  dmap('n', 'gd' .. key,
+    function() require('utils').SplitInDirection(key, require('telescope.builtin').lsp_definitions, { zz = true }) end,
+    'Go to Definition (split ' .. key .. ')')
+  dmap('n', '<A-s>' .. key, function() require('utils').SplitInDirection(key, nil, { zz = true }) end,
+    'Split in direction ' .. key)
+end
+
+dmap('n', '<Space>/', function() require('telescope.builtin').current_buffer_fuzzy_find() end, 'Grep current buffer')
+dmap('n', '<Space>#', function() require('telescope.builtin').grep_string() end, 'Grep current word')
+dmap('n', '<Space>vo', function() require('telescope.builtin').vim_options() end, 'Vim options')
+dmap('n', '<Space>km', function() require('telescope.builtin').keymaps() end, 'Keymaps')
+dmap('n', '<Space>qf', function() require('telescope.builtin').quickfix() end, 'Quickfix list')
+dmap('n', '<Space>qs', function() vim.diagnostic.setqflist() end, 'Set Quickfix list')
+dmap('n', '<Space>J', function() require('telescope.builtin').jumplist() end, 'Jumplist')
+dmap('n', '<space>ss', function() require('telescope.builtin').spell_suggest() end, "Spell suggest")
+dmap('n', '<Space>n', function() vim.lsp.buf.rename() end, 'Rename')
+dmap('n', '<Space>Dd', function() vim.diagnostic.disable() end, 'Disable Diagnostics')
+dmap('n', '<Space>De', function() vim.diagnostic.enable() end, 'Enable Diagnostics')
+dmap('n', '<Space>d', function() require('telescope.builtin').diagnostics() end, 'Treesitter diagnostics')
+dmap('n', 'g[', function() vim.diagnostic.goto_prev() end, 'Go to previous diagnostic')
+dmap('n', 'g]', function() vim.diagnostic.goto_next() end, 'Go to next diagnostic')
+dmap('n', 'sh', function() vim.lsp.buf.hover() end, 'Symbol hover information')
+dmap('n', 'sM', function() require('telescope.builtin').man_pages({ sections = { '1', '3' } }) end, 'Man pages (1,3)')
+dmap('n', 'sbm', function() require('telescope.builtin').find_files({ cwd = '~/.dotfiles' }) end, 'Dotfiles')
+dmap('n', '<Space>sh', function()
+  local bufnr = vim.fn.bufnr()
+  local clangd_client = require('lspconfig.util').get_active_client_by_name(bufnr, 'clangd')
+  local params = { uri = vim.uri_from_bufnr(bufnr) }
+  if clangd_client then
+    clangd_client.request('textDocument/switchSourceHeader', params, function(err, result)
+      if err then
+        error(tostring(err))
+      end
+      if not result then
+        print('Corresponding file cannot be determined')
+        return
+      end
+      vim.api.nvim_command('edit ' .. vim.uri_to_fname(result))
+    end, bufnr)
+  else
+    print('method textDocument/switchSourceHeader is not supported by any servers active on the current buffer')
+  end
+end, 'Switch source and header')
+
+-- git
+dmap('n', '<A-g>f', function() require('telescope.builtin').git_files() end, 'Git files')
+dmap('n', '<A-g>c', function() require('telescope.builtin').git_commits() end, 'Git commits')
+dmap('n', '<A-g>bc', function() require('telescope.builtin').git_bcommits() end, 'Git branch commits')
+dmap('n', '<A-g>br', function() require('telescope.builtin').git_branches() end, 'Git branches')
+dmap('n', '<A-g>ss', function() require('telescope.builtin').git_status() end, 'Git status')
+dmap('n', '<A-g>st', function() require('telescope.builtin').git_stash() end, 'Git stash')
+
+dmap('n', '<A-g>si', '<cmd>Gitsigns<cr>', "GitSigns")
+dmap('n', '<A-g>do', ':DiffviewOpen ', 'Git diff')
+dmap('n', '<A-g>dd', '<cmd>DiffviewOpen HEAD<cr>', 'Git diff unstaged changes')
+dmap('n', '<A-g>df', '<cmd>DiffviewToggleFiles<cr>', 'Git diff toggle files')
+dmap('n', '<A-g>dh', '<cmd>DiffviewFileHistory<cr>', 'Git file history')
+
+-- harpoon
+dmap('n', '<Space>ha', function() require("harpoon.mark").add_file() end, 'Harpoon Add File')
+dmap('n', '<Space>hM', function() require("harpoon.ui").toggle_quick_menu() end, 'Harpoon Menu')
+dmap('n', '<Space>hm', "<cmd>Telescope harpoon marks theme=ivy<cr>", 'Harpoon Telescope')
+
+-- :TSJToggle - toggle node under cursor (split if one-line and join if multiline);
+-- :TSJSplit - split node under cursor;
+-- :TSJJoin - split node under cursor;
+dmap('n', '<Space>j', "<cmd>TSJToggle<CR>", 'Treesitter join/split toggle')
+
+
+map('n', '<BS>;', function()
+  require('telescope').extensions.dap.commands(require('telescope.themes').get_ivy({}))
+end, { desc = "Telescope DAP Commands" })
+map('n', '<BS>C', function()
+  require('telescope').extensions.dap.configurations(require('telescope.themes').get_ivy({}))
+end, { desc = "Telescope DAP Configurations" })
+map('n', '<BS>B', function()
+  require('telescope').extensions.dap.list_breakpoints(require('telescope.themes').get_ivy({}))
+end, { desc = "Telescope DAP Breakpoints" })
+map('n', '<BS>v', function()
+  require('telescope').extensions.dap.variables(require('telescope.themes').get_ivy({}))
+end, { desc = "Telescope DAP Variables" })
+map('n', '<BS>f', function()
+  require('telescope').extensions.dap.frames(require('telescope.themes').get_ivy({}))
+end, { desc = "Telescope DAP Frames" })
+
+map('n', '<BS>E', function() require('dapui').close() end, { desc = 'Debug: Close DAP UI' })
+map('n', '<BS>b', function() require('dap').toggle_breakpoint() end, { desc = 'Debug: Toggle Breakpoint' })
+map('n', '<BS>c', function() require('dap').continue() end, { desc = 'Debug: Continue' })
+map('n', '<BS>i', function() require('dap').step_into() end, { desc = 'Debug: Step Into' })
+map('n', '<BS>o', function() require('dap').step_over() end, { desc = 'Debug: Step Over' })
+map('n', '<BS>r', function() require('dap').repl.open() end, { desc = 'Debug: Open REPL' })
+map('n', '<BS>u', function() require('dapui').toggle() end, { desc = 'Debug: Toggle UI' })
+map('n', '<BS>h', function() require('dap.ui.widgets').hover() end, { desc = 'Debug: Hover Symbol' })
+map({ 'n', 'v' }, '<BS>e', function() require('dapui').eval() end, { desc = 'Debug: Eval Expression' })
