@@ -1,4 +1,4 @@
-vim.g.Treesitter_langs = {
+vim.g.ts_installed = {
   'bash', 'norg', 'c', 'cpp', 'rust', 'python',
   'lua', 'json', 'markdown', 'markdown_inline',
   'comment', 'awk', 'cmake', "awk", "cmake",
@@ -8,11 +8,21 @@ vim.g.Treesitter_langs = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
+vim.g.ts_ft = {
+  'bash', 'norg', 'c', 'cpp', 'rust', 'python',
+  'lua', 'json', 'markdown', 'markdown_inline',
+  'comment', 'awk', 'cmake', "awk", "cmake",
+  "css", "diff", "dockerfile", "fennel",
+  "git_rebase", "gitcommit", "gitignore", "gitattributes",
+  "go", "jq", "latex", "tex", "make", "meson", "ninja", "perl",
+  "regex", "scss", "html", "sql", "toml", "yaml",
+}
+
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
     lazy = true, -- no config, has to be loaded after TS
-    ft = vim.g.Treesitter_langs,
+    ft = vim.g.ts_ft,
     cmd = {
       "IndentBlanklineToggle",
     },
@@ -46,7 +56,7 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     cmd = "TSInstall",
-    ft = vim.g.Treesitter_langs,
+    ft = vim.g.ts_ft,
     lazy = true,
     dependencies = {
       { 'nvim-treesitter/playground',                  lazy = true },
@@ -122,7 +132,7 @@ return {
     },
     config = function()
       require('nvim-treesitter.configs').setup({
-        ensure_installed = vim.g.Treesitter_langs,
+        ensure_installed = vim.g.ts_installed,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
         indent = { enable = false },
         autopairs = { enable = true },

@@ -11,7 +11,7 @@ o.mouse = 'a'
 o.clipboard = 'unnamedplus'
 
 o.syntax = 'enable'
-w.number = true
+o.number = false
 w.relativenumber = false
 w.cursorline = false
 w.linebreak = true
@@ -87,6 +87,14 @@ autocmd('TermOpen', {
     o.number = false
   end,
 })
+
+autocmd('FileType', {
+  pattern = vim.g.ts_ft,
+  callback = function()
+    w.number = true
+  end,
+})
+
 
 autocmd('BufRead', {
   pattern = 'COMMIT_EDITMSG',
