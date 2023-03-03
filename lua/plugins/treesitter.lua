@@ -120,6 +120,7 @@ return {
               vim.wo.cursorline = true
             end,
           })
+          vim.keymap.set('n', 'so', '<cmd>SymbolsOutline<CR>')
         end
       },
       {

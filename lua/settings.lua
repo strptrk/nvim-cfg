@@ -11,11 +11,12 @@ o.mouse = 'a'
 o.clipboard = 'unnamedplus'
 
 o.syntax = 'enable'
+o.virtualedit = 'block'
 o.number = false
 w.relativenumber = false
 w.cursorline = false
 w.linebreak = true
-w.wrap = true
+w.wrap = false
 o.showmatch = true
 -- w.foldmethod     = 'marker' -- enable folding (default 'foldmarker')
 -- w.colorcolumn = '80'

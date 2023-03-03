@@ -18,11 +18,20 @@ M.WinMove = function(key)
   end
 end
 
+M.SplitAndFocus = function(dir)
+  if string.match(dir, '[jk]') then
+    vim.cmd.wincmd('s')
+  else
+    vim.cmd.wincmd('v')
+  end
+  M.WinMove(dir)
+end
+
 M.SplitInDirection = function(dir, fn, opts)
   opts = opts or {}
   local bufnr = api.nvim_win_get_buf(0)
   local pos = api.nvim_win_get_cursor(0)
-  if opts.new then
+  if opts.new or (vim.fn.winnr() == vim.fn.winnr(dir)) then
     if string.match(dir, '[jk]') then
       vim.cmd.wincmd('s')
     else

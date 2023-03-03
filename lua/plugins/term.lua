@@ -2,6 +2,7 @@ return {
   {
     'akinsho/toggleterm.nvim',
     lazy = true,
+    cmd = {"TermExec", "ToggleTerm", "Lazygit"},
     keys = {
       { "<A-g>l", nil, desc = "Lazygit" },
       { "<A-f>",  nil, desc = "Open Terminal" },
@@ -59,6 +60,7 @@ return {
       Term.lazygit_toggle = function()
         lazygit:toggle()
       end
+      vim.api.nvim_create_user_command("Lazygit", Term.lazygit_toggle, { force = true })
       Term.Terminals = {}
       Term.Last = -1
 

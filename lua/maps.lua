@@ -12,7 +12,12 @@ local exp = { expr = true, noremap = true }
 defcommand('SaveSession', 'SessionManager save_current_session', { force = true })
 defcommand('LoadSession', 'SessionManager load_session', { force = true })
 defcommand('DelSession', 'SessionManager delete_session', { force = true })
-
+defcommand('Banner', function(args)
+  require('utils').Banner(args)
+end, {
+  force = true,
+  nargs = '?',
+})
 ----------------------------------------------------
 -- s can be used as a modifier key (sort of)
 ----------------------------------------------------
@@ -36,7 +41,6 @@ end
 -- tabs, buffers
 ----------------------------------------------------
 
-map('n', '<A-O>', '<cmd>only<cr>')
 map('n', '<A-a>', '<cmd>tabprevious<cr>')
 map('n', '<A-d>', '<cmd>tabnext<cr>')
 map('n', '<A-t>', '<cmd>tabnew<CR>')
@@ -46,7 +50,6 @@ map('t', '<A-n>', [[<C-\><C-n>]])
 
 map({ 'n', 'x' }, '<leader>m', ':Norm ')
 map('n', 'Q', '@q')
-map('x', 'Q', ':norm @q<CR>')
 
 map({ 'n', 'x' }, '<Space><CR>', function() require('hop').hint_words() end)
 map({ 'n', 'x' }, '<Space><BS>', function() require('hop').hint_lines() end)
@@ -82,7 +85,7 @@ map('n', '<C-M-j>', function() require('utils').SmartResize('j', 1) end)
 map('n', '<C-M-k>', function() require('utils').SmartResize('k', 1) end)
 map('n', '<C-M-l>', function() require('utils').SmartResize('l', 1) end)
 
-map('n', '<C-s>', '<cmd>w<CR>')
+map('n', '<C-s>', '<cmd>update<CR>')
 map('n', '<A-c>', '<cmd>q<CR>')
 map('n', '<A-C>', '<cmd>q!<CR>')
 map({ 'n', 't' }, '<A-Esc>', function()
@@ -105,11 +108,10 @@ map('v', '<C-k>', '<Plug>MoveBlockUp', {})
 -- map('v', '<C-H>', '<Plug>MoveBlockLeft' , {})
 -- map('v', '<C-L>', '<Plug>MoveBlockRight', {})
 
-map('n', 'S', ':%s//gI<Left><Left><Left>')
-map('n', 'so', '<cmd>SymbolsOutline<CR>')
+-- map('n', 'S', ':%s//gI<Left><Left><Left>')
+-- dmap('n', 'ss', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace word")
+-- dmap('x', 'ss', ':s//gI<Left><Left><Left>', "Replace")
 
-dmap('n', 'ss', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace word")
-dmap('x', 'ss', ':s//gI<Left><Left><Left>', "Replace")
 map('n', 'sE', '<cmd>g/^$/d<CR>')
 map('n', 'sbc', '<cmd>.!bc -l<CR>')
 map('n', 'sbq', '<cmd>.!qalc | grep "=" | cut -d"=" -f2 | xargs<CR>')
@@ -189,15 +191,7 @@ dmap('x', 'sp', '"0P', 'Paste', { silent = true })
 -- EasyAlign
 ----------------------------------------------------
 
-dmap('n', 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
-dmap('x', 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
-
-defcommand('Banner', function(args)
-  require('utils').Banner(args)
-end, {
-  force = true,
-  nargs = '?',
-})
+dmap({'n', 'x'}, 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
 
 ----------------------------------------------------
 -- Window splits
@@ -217,16 +211,16 @@ map({ 'n', 'i', 't', 'v' }, '<A-l>', function()
 end)
 
 map({ 'n', 'i', 't', 'v' }, '<A-H>', function()
-  require('utils').SplitInDirection('h', nil, { new = true })
+  require('utils').SplitAndFocus('h')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-J>', function()
-  require('utils').SplitInDirection('j', nil, { new = true })
+  require('utils').SplitAndFocus('j')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-K>', function()
-  require('utils').SplitInDirection('k', nil, { new = true })
+  require('utils').SplitAndFocus('k')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-L>', function()
-  require('utils').SplitInDirection('l', nil, { new = true })
+  require('utils').SplitAndFocus('l')
 end)
 
 ----------------------------------------------------
@@ -290,8 +284,6 @@ for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
   dmap('n', 'gd' .. key,
     function() require('utils').SplitInDirection(key, require('telescope.builtin').lsp_definitions, { zz = true }) end,
     'Go to Definition (split ' .. key .. ')')
-  dmap('n', '<A-s>' .. key, function() require('utils').SplitInDirection(key, nil, { zz = true }) end,
-    'Split in direction ' .. key)
 end
 
 dmap('n', '<Space>/', function() require('telescope.builtin').current_buffer_fuzzy_find() end, 'Grep current buffer')
@@ -303,8 +295,6 @@ dmap('n', '<Space>qs', function() vim.diagnostic.setqflist() end, 'Set Quickfix 
 dmap('n', '<Space>J', function() require('telescope.builtin').jumplist() end, 'Jumplist')
 dmap('n', '<space>ss', function() require('telescope.builtin').spell_suggest() end, "Spell suggest")
 dmap('n', '<Space>n', function() vim.lsp.buf.rename() end, 'Rename')
-dmap('n', '<Space>Dd', function() vim.diagnostic.disable() end, 'Disable Diagnostics')
-dmap('n', '<Space>De', function() vim.diagnostic.enable() end, 'Enable Diagnostics')
 dmap('n', '<Space>d', function() require('telescope.builtin').diagnostics() end, 'Treesitter diagnostics')
 dmap('n', 'g[', function() vim.diagnostic.goto_prev() end, 'Go to previous diagnostic')
 dmap('n', 'g]', function() vim.diagnostic.goto_next() end, 'Go to next diagnostic')
@@ -332,12 +322,6 @@ dmap('n', '<Space>sh', function()
 end, 'Switch source and header')
 
 -- git
-dmap('n', '<A-g>f', function() require('telescope.builtin').git_files() end, 'Git files')
-dmap('n', '<A-g>c', function() require('telescope.builtin').git_commits() end, 'Git commits')
-dmap('n', '<A-g>bc', function() require('telescope.builtin').git_bcommits() end, 'Git branch commits')
-dmap('n', '<A-g>br', function() require('telescope.builtin').git_branches() end, 'Git branches')
-dmap('n', '<A-g>ss', function() require('telescope.builtin').git_status() end, 'Git status')
-dmap('n', '<A-g>st', function() require('telescope.builtin').git_stash() end, 'Git stash')
 
 dmap('n', '<A-g>si', '<cmd>Gitsigns<cr>', "GitSigns")
 dmap('n', '<A-g>do', ':DiffviewOpen ', 'Git diff')
@@ -350,10 +334,6 @@ dmap('n', '<Space>ha', function() require("harpoon.mark").add_file() end, 'Harpo
 dmap('n', '<Space>hM', function() require("harpoon.ui").toggle_quick_menu() end, 'Harpoon Menu')
 dmap('n', '<Space>hm', "<cmd>Telescope harpoon marks theme=ivy<cr>", 'Harpoon Telescope')
 
--- :TSJToggle - toggle node under cursor (split if one-line and join if multiline);
--- :TSJSplit - split node under cursor;
--- :TSJJoin - split node under cursor;
-dmap('n', '<Space>j', "<cmd>TSJToggle<CR>", 'Treesitter join/split toggle')
 
 
 map('n', '<BS>;', function()

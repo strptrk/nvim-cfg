@@ -2,15 +2,7 @@ return {
   {
     "mhartington/formatter.nvim",
     lazy = true,
-    ft = {
-      'c', 'cpp',
-      'python',
-      'rust',
-      'json',
-      'html', 'css',
-      'lua',
-      'sh'
-    },
+    cmd = {"Format"},
     config = function()
       require('formatter').setup({
         logging = false,
