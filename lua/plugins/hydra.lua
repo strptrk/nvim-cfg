@@ -41,7 +41,7 @@ return {
    _K_: prev hunk   _u_: undo last stage   _p_: preview hunk      _C_: commit diffview ^ ^ ^
    ^ ^              _S_: stage buffe       _P_: preview hunk (il) _F_: file history
    ^ ^              _R_: reset hunk        _b_: blame line       
-   ^ ^ ^ ^                                 _B_: blame show full       
+   ^ ^ ^ ^                                 _B_: blame show full   _;_: Gitsigns   
    ^ ^
    ^ ^              _<Enter>_: Lazygit              _q_: exit
       ]]
@@ -100,6 +100,7 @@ return {
           { 'D',       "<cmd>DiffviewOpen<cr>",                                       { exit = true, desc = 'diffview' } },
           { 'C',       "<cmd>DiffviewFileHistory<cr>",                                { exit = true, desc = 'commit diffview' } },
           { 'F',       "<cmd>DiffviewFileHistory %<cr>",                              { exit = true, desc = 'file diffview' } },
+          { ';',       "<cmd>Gitsigns<cr>",                                           { exit = true, desc = 'Gitsigns' } },
           { 'b',       gitsigns.blame_line,                                           { desc = 'blame' } },
           { 'B',       function() gitsigns.blame_line { full = true } end,            { desc = 'blame show full' } },
           { '<Enter>', '<Cmd>Lazygit<CR>',                                            { exit = true, desc = 'Lazygit' } },
