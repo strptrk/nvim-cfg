@@ -51,7 +51,8 @@ return {
             },
             workspace = {
               library = {
-                vim.fn.stdpath('data') .. '/runtime/lua',
+                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                [vim.fn.stdpath("config") .. '/lua'] = true,
               }
             }
           },

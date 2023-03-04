@@ -1,7 +1,6 @@
 local map = vim.keymap.set
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
--- local fn = vim.fn -- call Vim functions
 local g = vim.g -- global variables
 local o = vim.o -- global options
 local b = vim.bo -- buffer-scoped options
@@ -18,8 +17,6 @@ w.cursorline = false
 w.linebreak = true
 w.wrap = false
 o.showmatch = true
--- w.foldmethod     = 'marker' -- enable folding (default 'foldmarker')
--- w.colorcolumn = '80'
 w.colorcolumn = '0'
 w.signcolumn = 'yes'
 o.splitright = true
