@@ -4,7 +4,7 @@ return {
     lazy = true,
     keys = {
       { "<A-z>", nil, desc = "Scroll" },
-      { "<A-G>", nil, desc = "Scroll" },
+      { "<A-G>", nil, desc = "Git Actions" },
       { "<A-o>", nil, desc = "Options" },
       { "<A-O>", nil, desc = "Development Options" },
     },
@@ -37,13 +37,13 @@ return {
       -- vim.keymap.set('n', '<A-g>ss', function() require('telescope.builtin').git_status() end, 'Git status')
       -- vim.keymap.set('n', '<A-g>st', function() require('telescope.builtin').git_stash() end, 'Git stash')
       local hint = [[
-      _J_: next hunk   _s_: stage hunk        _d_: show deleted      _D_: diffview
-      _K_: prev hunk   _u_: undo last stage   _p_: preview hunk      _C_: commit diffview 
-      ^ ^              _S_: stage buffe       _P_: preview hunk (il) _F_: file history
-      ^ ^              _R_: reset hunk        _b_: blame line       
-      ^ ^ ^ ^                                 _B_: blame show full       
-      ^ ^
-      ^ ^              _<Enter>_: Lazygit              _q_: exit
+   _J_: next hunk   _s_: stage hunk        _d_: show deleted      _D_: diffview
+   _K_: prev hunk   _u_: undo last stage   _p_: preview hunk      _C_: commit diffview ^ ^ ^
+   ^ ^              _S_: stage buffe       _P_: preview hunk (il) _F_: file history
+   ^ ^              _R_: reset hunk        _b_: blame line       
+   ^ ^ ^ ^                                 _B_: blame show full       
+   ^ ^
+   ^ ^              _<Enter>_: Lazygit              _q_: exit
       ]]
 
       Hydra({
@@ -109,14 +109,15 @@ return {
       hint = [[
       ^ ^        Options ^ ^ ^
       ^
-      _v_ %{ve} virtual edit
-      _i_ %{list} invisible characters  
-      _s_ %{spell} spell
-      _w_ %{wrap} wrap
-      _l_ %{cul} cursor line
-      _c_ %{cc} color column
-      _n_ %{nu} number
-      _r_ %{rnu} relative number
+   _v_ %{ve} virtual edit
+   _i_ %{list} invisible characters  
+   _s_ %{spell} spell
+   _w_ %{wrap} wrap
+   _l_ %{cul} cursor line
+   _c_ %{cc} color column
+   _n_ %{nu} number
+   _r_ %{rnu} relative number
+   _t_ %{trans} background transparency ^ ^ ^
       ^
            _q_ / _<Esc>_
       ]]
@@ -137,6 +138,12 @@ return {
                 end
                 return "[x]"
               end,
+              trans = function()
+                if vim.g.transparent then
+                  return "[x]"
+                end
+                return "[ ]"
+              end
             },
           }
         },
@@ -206,6 +213,7 @@ return {
               vim.o.colorcolumn = ""
             end
           end, { desc = 'color column' } },
+          { 't', '<cmd>TransparentBGToggle<cr>', desc = "Background transparency"},
           { '<Esc>', nil, { exit = true } },
           { 'q', nil, { exit = true } }
         }

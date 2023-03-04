@@ -3,11 +3,12 @@ return { {
   lazy = false,
   priority = 1000,
   config = function()
-    local transparent = true
+    local background = '#1c1c1c'
+    vim.g.transparent = true
     require('nightfox').setup({
       options = {
-        transparent = transparent,
-        dim_inactive = not transparent,
+        transparent = vim.g.transparent,
+        dim_inactive = not vim.g.transparent,
         module_default = true,
         styles = {
           comments = 'NONE',
@@ -49,5 +50,12 @@ return { {
     })
     vim.cmd.colorscheme("nordfox")
     vim.o.laststatus = 3
+    vim.api.nvim_create_user_command("TransparentBGToggle",
+      function()
+        vim.g.transparent = not vim.g.transparent
+        vim.api.nvim_set_hl(0, "Normal", {
+          bg = vim.g.transparent and 'none' or background
+        })
+    end, { force = true })
   end,
 } }
