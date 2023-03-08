@@ -16,6 +16,11 @@ cargo install tree-sitter-cli --git https://github.com/tree-sitter/tree-sitter.g
 sudo pacman -S lua-language-server
 ```
 
+### go
+```sh
+sudo pacman -S gopls
+```
+
 ## debugger adapters
 ### python3
 ```sh
