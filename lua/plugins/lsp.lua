@@ -5,7 +5,8 @@ return {
       'c', 'cpp',
       'python',
       'rust',
-      'lua'
+      'lua',
+      'go'
     },
     lazy = true,
     dependencies = {
@@ -36,6 +37,7 @@ return {
       local lsp = require('lspconfig')
       lsp.clangd.setup(coq.lsp_ensure_capabilities())
       lsp.pylsp.setup(coq.lsp_ensure_capabilities())
+      lsp.gopls.setup(coq.lsp_ensure_capabilities())
       lsp.rust_analyzer.setup(coq.lsp_ensure_capabilities({
         settings = {
           ['rust-analyzer'] = {}
