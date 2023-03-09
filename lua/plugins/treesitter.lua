@@ -139,16 +139,22 @@ return {
         autopairs = { enable = true },
         rainbow = { enable = false, extended_mode = true },
         refactor = {
-          highlight_definitions = {
-            enable = true,
-            clear_on_cursor_move = true,
-          },
-          highlight_current_scope = { enable = false },
           navigation = {
             enable = true,
             keymaps = {
               goto_next_usage = "<C-.>",
               goto_previous_usage = "<C-,>",
+            },
+          },
+          highlight_definitions = {
+            enable = true,
+            clear_on_cursor_move = true,
+          },
+          highlight_current_scope = { enable = false },
+          smart_rename = {
+            enable = true,
+            keymaps = {
+              smart_rename = "gS",
             },
           },
         },

@@ -286,6 +286,18 @@ for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
     'Go to Definition (split ' .. key .. ')')
 end
 
+local smart_rename = function()
+  if vim.g.Get_langserv() ~= '' then
+    return [[<cmd>lua vim.lsp.buf.rename()<cr>]]
+  elseif vim.g.Get_treesitter() ~= '' then
+    return [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
+  else
+    return [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
+  end
+end
+map('n', 'ss', smart_rename, {expr = true, desc = "Rename"})
+dmap('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Rename on line")
+
 dmap('n', '<Space>/', function() require('telescope.builtin').current_buffer_fuzzy_find() end, 'Grep current buffer')
 dmap('n', '<Space>#', function() require('telescope.builtin').grep_string() end, 'Grep current word')
 dmap('n', '<Space>vo', function() require('telescope.builtin').vim_options() end, 'Vim options')
@@ -294,7 +306,6 @@ dmap('n', '<Space>qf', function() require('telescope.builtin').quickfix() end, '
 dmap('n', '<Space>qs', function() vim.diagnostic.setqflist() end, 'Set Quickfix list')
 dmap('n', '<Space>J', function() require('telescope.builtin').jumplist() end, 'Jumplist')
 dmap('n', '<space>ss', function() require('telescope.builtin').spell_suggest() end, "Spell suggest")
-dmap('n', '<Space>n', function() vim.lsp.buf.rename() end, 'Rename')
 dmap('n', '<Space>d', function() require('telescope.builtin').diagnostics() end, 'Treesitter diagnostics')
 dmap('n', 'g[', function() vim.diagnostic.goto_prev() end, 'Go to previous diagnostic')
 dmap('n', 'g]', function() vim.diagnostic.goto_next() end, 'Go to next diagnostic')

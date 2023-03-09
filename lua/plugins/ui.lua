@@ -122,10 +122,10 @@ return {
       { 'kyazdani42/nvim-web-devicons' }
     },
     config = function()
-      Get_langserv = function()
+      vim.g.Get_langserv = function()
         return (vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })[1] or { name = '' })['name']
       end
-      Get_treesitter = function()
+      vim.g.Get_treesitter = function()
         if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil then
           return ' TS'
         else
@@ -150,7 +150,7 @@ return {
             { 'diagnostics', sources = { 'nvim_diagnostic' } },
           },
           lualine_c = { 'filename' },
-          lualine_x = { 'Get_langserv()', 'Get_treesitter()', 'filetype' },
+          lualine_x = { 'vim.g.Get_langserv()', 'vim.g.Get_treesitter()', 'filetype' },
           lualine_y = { 'fileformat', 'encoding', 'filesize' },
           lualine_z = { 'progress', 'location' },
         },

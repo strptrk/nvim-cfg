@@ -12,7 +12,8 @@ return {
       { "<A-v>t", nil, desc = "Open Terminal (tab)" },
       { "<A-v>v", nil, desc = "Open Terminal (vertical)" },
       { "<A-v>h", nil, desc = "Open Terminal (horizontal)" },
-      { "<A-v>l", nil, desc = "Open Terminal (horizontal)" },
+      { "<A-v>l", nil, desc = "Open Terminal (vertical)" },
+      { "<A-v>j", nil, desc = "Open Terminal (horizontal)" },
     },
     config = function()
       local api = vim.api
