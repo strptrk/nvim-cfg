@@ -70,6 +70,10 @@ return {
       {
         'Wansmer/treesj',
         lazy = true,
+        cmd = { "TSJToggle", "TSJSplit", 'TSJJoin' },
+        keys = {
+          {'<Space>j', '<cmd>TSJToggle<cr>', desc = "Toggle Block Split"}
+        },
         config = function()
           require('treesj').setup({
             use_default_keymaps = false,

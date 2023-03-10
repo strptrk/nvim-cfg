@@ -4,13 +4,13 @@ return {
     branch = 'coq',
     cmd = {
       "COQdeps",
-      "COQ"
+      "COQnow",
     },
     event = 'InsertEnter',
     init = function()
       vim.g.coq_settings = {
         auto_start = false,
-        keymap = { recommended = false, jump_to_mark = '<A-m>' },
+        keymap = { recommended = false, jump_to_mark = '<A-Tab>' },
         ['display.ghost_text.context'] = { ' < ', ' >' },
         ['display.pum.source_context'] = { '[', ']' }
       }

@@ -258,6 +258,7 @@ dmap('n', '<Space>ht', ':tab help ', ':tab help')
 dmap('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7), ':vert help')
 dmap('n', 'gi', function() require('telescope.builtin').lsp_implementations() end, 'Go to Implementation')
 dmap('n', '<Space>f', function() require('telescope.builtin').find_files() end, 'Find Files')
+dmap('n', '<Space>,', function() require('telescope.builtin').resume() end, 'Resume previous telescope')
 dmap('n', '<Space>F', function() require('telescope.builtin').git_files() end, 'Find Files (Git)')
 dmap('n', '<Space>g', function() require('telescope.builtin').live_grep() end, 'Grep')
 dmap('n', '<Space>b', function() require('telescope.builtin').buffers() end, 'Buffers')
@@ -296,7 +297,8 @@ local smart_rename = function()
   end
 end
 map('n', 'ss', smart_rename, {expr = true, desc = "Rename"})
-dmap('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Rename on line")
+dmap('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Substitute (line)")
+dmap('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Substitute (file)")
 
 dmap('n', '<Space>/', function() require('telescope.builtin').current_buffer_fuzzy_find() end, 'Grep current buffer')
 dmap('n', '<Space>#', function() require('telescope.builtin').grep_string() end, 'Grep current word')
