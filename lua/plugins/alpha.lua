@@ -5,13 +5,14 @@ return {
       local alpha = require('alpha')
       local dashboard = require('alpha.themes.dashboard')
       local fortune = require('alpha.fortune')
+      local cfgdir = vim.fn.stdpath('config')
       dashboard.section.buttons.val = {
         dashboard.button('e', '  New file', [[:ene<CR>]]),
         dashboard.button('f', '  Find file', [[<cmd>lua require('telescope.builtin').find_files()<CR>]]),
         dashboard.button('g', '  Find word', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]]),
         dashboard.button('s', '  Load Session', ':SessionManager load_session<CR>'),
         dashboard.button('l', '  Load Last Session', ':SessionManager load_last_session<CR>'),
-        dashboard.button('c', '  Config', [[<cmd>lua require('telescope.builtin').find_files({ cwd = '~/.config/nvim/' })<CR>]]),
+        dashboard.button('c', '  Config', [[<cmd>cd ]] .. cfgdir .. [[ | lua require('telescope.builtin').find_files({ cwd = ']] .. cfgdir .. [[' })<CR>]]),
         dashboard.button('u', '  Update Packages', ':Lazy sync<CR>'),
         dashboard.button('q', '  Quit NVIM', ':qa<CR>'),
       }
