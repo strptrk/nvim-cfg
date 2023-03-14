@@ -6,7 +6,7 @@ return {
       'python',
       'rust',
       'lua',
-      'go'
+      'go',
     },
     lazy = true,
     dependencies = {
@@ -18,18 +18,18 @@ return {
             floating_window = false,
             hint_prefix = ' ',
           })
-        end
+        end,
       },
       {
         'j-hui/fidget.nvim',
         lazy = true,
         config = function()
-          require("fidget").setup({
+          require('fidget').setup({
             text = {
-              spinner = "dots"
-            }
+              spinner = 'dots',
+            },
           })
-        end
+        end,
       },
     },
     config = function()
@@ -40,28 +40,28 @@ return {
       lsp.gopls.setup(coq.lsp_ensure_capabilities())
       lsp.rust_analyzer.setup(coq.lsp_ensure_capabilities({
         settings = {
-          ['rust-analyzer'] = {}
-        }
+          ['rust-analyzer'] = {},
+        },
       }))
       lsp.lua_ls.setup(coq.lsp_ensure_capabilities({
         settings = {
           Lua = {
             diagnostics = {
               globals = {
-                'vim'
-              }
+                'vim',
+              },
             },
             workspace = {
               library = {
-                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                [vim.fn.stdpath("config") .. '/lua'] = true,
-              }
-            }
+                [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                [vim.fn.stdpath('config') .. '/lua'] = true,
+              },
+            },
           },
           telemetry = {
-            enable = false
+            enable = false,
           },
-        }
+        },
       }))
     end,
   },

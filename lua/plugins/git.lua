@@ -4,9 +4,9 @@ return {
     lazy = true,
     dependencies = 'nvim-lua/plenary.nvim',
     cmd = {
-      "DiffviewOpen",
-      "DiffviewToggleFiles",
-      "DiffviewFileHistory",
+      'DiffviewOpen',
+      'DiffviewToggleFiles',
+      'DiffviewFileHistory',
     },
     config = function()
       local actions = require('diffview.actions')
@@ -25,16 +25,16 @@ return {
         },
         view = {
           default = {
-            layout = "diff2_horizontal",
+            layout = 'diff2_horizontal',
             winbar_info = true,
           },
           merge_tool = {
-            layout = "diff4_mixed",
+            layout = 'diff4_mixed',
             disable_diagnostics = true,
             winbar_info = true,
           },
           file_history = {
-            layout = "diff2_horizontal",
+            layout = 'diff2_horizontal',
             winbar_info = true,
           },
         },
@@ -77,85 +77,83 @@ return {
             vim.opt_local.wrap = false
             vim.opt_local.list = false
             vim.opt_local.number = false
-          end
+          end,
         },
         keymaps = {
           disable_defaults = false,
           view = {
-            ['<tab>']      = actions.select_next_entry,
-            ['<s-tab>']    = actions.select_prev_entry,
-            ['gF']         = actions.goto_file,
-            ['gS']         = actions.goto_file_split,
-            ['gf']         = actions.goto_file_tab,
-            ['[x']         = actions.prev_conflict,
-            [']x']         = actions.next_conflict,
-            ['<A-S>']  = actions.focus_files,
-            ['<A-s>']  = actions.toggle_files,
-            ["<Space>Co"] = actions.conflict_choose("ours"),
-            ["<Space>Ct"] = actions.conflict_choose("theirs"),
-            ["<Space>Cb"] = actions.conflict_choose("base"),
-            ["<Space>Ca"] = actions.conflict_choose("all"),
-            ["<Space>Cd"] = actions.conflict_choose("none"),
+            ['<tab>']     = actions.select_next_entry,
+            ['<s-tab>']   = actions.select_prev_entry,
+            ['gF']        = actions.goto_file,
+            ['gS']        = actions.goto_file_split,
+            ['gf']        = actions.goto_file_tab,
+            ['[x']        = actions.prev_conflict,
+            [']x']        = actions.next_conflict,
+            ['<A-S>']     = actions.focus_files,
+            ['<A-s>']     = actions.toggle_files,
+            ['<Space>Co'] = actions.conflict_choose('ours'),
+            ['<Space>Ct'] = actions.conflict_choose('theirs'),
+            ['<Space>Cb'] = actions.conflict_choose('base'),
+            ['<Space>Ca'] = actions.conflict_choose('all'),
+            ['<Space>Cd'] = actions.conflict_choose('none'),
           },
           file_panel = {
-            ['j'] = actions.next_entry,
-            ['k'] = actions.prev_entry,
-            ['<cr>'] = actions.select_entry,
-            ['o'] = actions.select_entry,
-            ['<2-LeftMouse>'] = actions.select_entry,
-            ['-'] = actions.toggle_stage_entry,
-            ['S'] = actions.stage_all,
-            ['U'] = actions.unstage_all,
-            ['X'] = actions.restore_entry,
-            ['R'] = actions.refresh_files,
-            ['L'] = actions.open_commit_log,
-            ['<c-b>'] = actions.scroll_view( -0.25),
-            ['<c-f>'] = actions.scroll_view(0.25),
-            ['<down>'] = actions.scroll_view(1),
-            ['<up>'] = actions.scroll_view(-1),
-            ['<tab>'] = actions.select_next_entry,
+            ['j']       = actions.next_entry,
+            ['k']       = actions.prev_entry,
+            ['<cr>']    = actions.select_entry,
+            ['o']       = actions.select_entry,
+            ['-']       = actions.toggle_stage_entry,
+            ['S']       = actions.stage_all,
+            ['U']       = actions.unstage_all,
+            ['X']       = actions.restore_entry,
+            ['R']       = actions.refresh_files,
+            ['L']       = actions.open_commit_log,
+            ['<c-b>']   = actions.scroll_view(-0.25),
+            ['<c-f>']   = actions.scroll_view(0.25),
+            ['<down>']  = actions.scroll_view(1),
+            ['<up>']    = actions.scroll_view(-1),
+            ['<tab>']   = actions.select_next_entry,
             ['<s-tab>'] = actions.select_prev_entry,
-            ['gF'] = actions.goto_file,
-            ['gS'] = actions.goto_file_split,
-            ['gf'] = actions.goto_file_tab,
-            ['i'] = actions.listing_style,
-            ['f'] = actions.toggle_flatten_dirs,
-            ['<A-S>'] = actions.focus_files,
-            ['<A-s>'] = actions.toggle_files,
-            ["[x"] = actions.prev_conflict,
-            ["]x"] = actions.next_conflict,
+            ['gF']      = actions.goto_file,
+            ['gS']      = actions.goto_file_split,
+            ['gf']      = actions.goto_file_tab,
+            ['i']       = actions.listing_style,
+            ['f']       = actions.toggle_flatten_dirs,
+            ['<A-S>']   = actions.focus_files,
+            ['<A-s>']   = actions.toggle_files,
+            ['[x']      = actions.prev_conflict,
+            [']x']      = actions.next_conflict,
           },
           file_history_panel = {
-            ['g!'] = actions.options,
-            ['D'] = actions.open_in_diffview,
-            ['y'] = actions.copy_hash,
-            ['L'] = actions.open_commit_log,
-            ['zo'] = actions.open_all_folds,
-            ['zc'] = actions.close_all_folds,
-            ['j'] = actions.next_entry,
-            ['k'] = actions.prev_entry,
-            ['<down>'] = actions.scroll_view(1),
-            ['<up>'] = actions.scroll_view(-1),
-            ['<cr>'] = actions.select_entry,
-            ['o'] = actions.select_entry,
-            ['<2-LeftMouse>'] = actions.select_entry,
-            ['<c-b>'] = actions.scroll_view( -0.25),
-            ['<c-f>'] = actions.scroll_view(0.25),
-            ['<tab>'] = actions.select_next_entry,
+            ['g!']      = actions.options,
+            ['D']       = actions.open_in_diffview,
+            ['y']       = actions.copy_hash,
+            ['L']       = actions.open_commit_log,
+            ['zo']      = actions.open_all_folds,
+            ['zc']      = actions.close_all_folds,
+            ['j']       = actions.next_entry,
+            ['k']       = actions.prev_entry,
+            ['<down>']  = actions.scroll_view(1),
+            ['<up>']    = actions.scroll_view(-1),
+            ['<cr>']    = actions.select_entry,
+            ['o']       = actions.select_entry,
+            ['<c-b>']   = actions.scroll_view(-0.25),
+            ['<c-f>']   = actions.scroll_view(0.25),
+            ['<tab>']   = actions.select_next_entry,
             ['<s-tab>'] = actions.select_prev_entry,
-            ['gF'] = actions.goto_file,
-            ['gS'] = actions.goto_file_split,
-            ['gf'] = actions.goto_file_tab,
-            ['<A-s>'] = actions.toggle_files,
-            ['<A-S>'] = actions.focus_files,
+            ['gF']      = actions.goto_file,
+            ['gS']      = actions.goto_file_split,
+            ['gf']      = actions.goto_file_tab,
+            ['<A-s>']   = actions.toggle_files,
+            ['<A-S>']   = actions.focus_files,
           },
           option_panel = {
             ['<tab>'] = actions.select_entry,
-            ['q'] = actions.close,
+            ['q']     = actions.close,
           },
         },
       })
-    end
+    end,
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -227,24 +225,19 @@ return {
             end)
             return '<Ignore>'
           end, { expr = true })
-          maploc({ 'n', 'v' }, '<A-g>sh', ':Gitsigns stage_hunk<CR>')
-          maploc({ 'n', 'v' }, '<A-g>rh', ':Gitsigns reset_hunk<CR>')
-          maploc('n', '<A-g>sb', gs.stage_buffer, { desc = "Stage Buffer" })
-          maploc('n', '<A-g>uh', gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
-          maploc('n', '<A-g>rb', gs.reset_buffer, { desc = "Reset Buffer" })
-          maploc('n', '<A-g>ph', gs.preview_hunk, { desc = "Preview Hunk" })
-          maploc('n', '<A-g>bl', function()
+          maploc({ 'n', 'v' }, '<leader>sh', ':Gitsigns stage_hunk<CR>')
+          maploc({ 'n', 'v' }, '<leader>rh', ':Gitsigns reset_hunk<CR>')
+          maploc('n', '<leader>sb', gs.stage_buffer, { desc = 'Stage Buffer' })
+          maploc('n', '<leader>uh', gs.undo_stage_hunk, { desc = 'Undo Stage Hunk' })
+          maploc('n', '<leader>rb', gs.reset_buffer, { desc = 'Reset Buffer' })
+          maploc('n', '<leader>ph', gs.preview_hunk, { desc = 'Preview Hunk' })
+          maploc('n', '<leader>bl', function()
             gs.blame_line({ full = true })
-          end, { desc = "Blame Line" })
-          maploc('n', '<A-g>bt', gs.toggle_current_line_blame, { desc = "Toggle Current Line Blame" })
-          maploc('n', '<A-g>Dt', gs.diffthis, { desc = "Diff This" })
-          maploc('n', '<A-g>Dh', function()
-            gs.diffthis('~')
-          end, { desc = "Diff ~" })
-          maploc('n', '<A-g>td', gs.toggle_deleted, { desc = "Toggle Deleted" })
-          maploc({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+          end, { desc = 'Blame Line' })
+          maploc({ 'o', 'x' }, 'ih', '<cmd><C-U>Gitsigns select_hunk<cr>')
+          maploc({ 'o', 'x' }, 'ah', '<cmd><C-U>Gitsigns select_hunk<cr>')
         end,
       })
-    end
+    end,
   },
 }

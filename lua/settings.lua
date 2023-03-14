@@ -94,7 +94,7 @@ autocmd('FileType', {
 })
 
 autocmd('FileType', {
-  pattern = {"sh", "zsh"},
+  pattern = { 'sh', 'zsh' },
   callback = function()
     vim.api.nvim_buf_set_option(0, 'filetype', 'bash')
   end,

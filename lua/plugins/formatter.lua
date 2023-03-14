@@ -1,8 +1,8 @@
 return {
   {
-    "mhartington/formatter.nvim",
+    'mhartington/formatter.nvim',
     lazy = true,
-    cmd = {"Format"},
+    cmd = { 'Format' },
     config = function()
       require('formatter').setup({
         logging = false,
@@ -113,6 +113,6 @@ return {
           },
         },
       })
-    end
-  }
+    end,
+  },
 }

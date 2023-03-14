@@ -2,7 +2,7 @@ return {
   {
     'ms-jpq/chadtree',
     branch = 'chad',
-    cmd = "CHADopen",
+    cmd = 'CHADopen',
     lazy = true,
     init = function()
       vim.g.chadtree_settings = {
@@ -13,8 +13,8 @@ return {
           h_split = { 'wh' },
         },
         ignore = {
-          name_glob = { [[.*]] }
-        }
+          name_glob = { [[.*]] },
+        },
       }
     end,
     config = function()
@@ -22,8 +22,8 @@ return {
         pattern = 'CHADTree',
         callback = function()
           vim.keymap.set('n', '?', ':CHADhelp keybind<CR>')
-        end
+        end,
       })
-    end
-  }
+    end,
+  },
 }

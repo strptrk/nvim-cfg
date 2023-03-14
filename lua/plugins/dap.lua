@@ -6,9 +6,9 @@ return {
     lazy = true,
     dependencies = {
       { 'nvim-telescope/telescope-dap.nvim', lazy = true },
-      { 'theHamsta/nvim-dap-virtual-text',   lazy = true },
+      { 'theHamsta/nvim-dap-virtual-text', lazy = true },
       {
-        "rcarriga/nvim-dap-ui",
+        'rcarriga/nvim-dap-ui',
         lazy = true,
         config = function()
           local dapui = require('dapui')
@@ -22,8 +22,7 @@ return {
               repl = 'r',
               toggle = 't',
             },
-            element_mappings = {
-            },
+            element_mappings = {},
             expand_lines = vim.fn.has('nvim-0.7') == 1,
             layouts = {
               {
@@ -73,7 +72,7 @@ return {
               max_value_lines = 100,
             },
           })
-        end
+        end,
       },
     },
     config = function()
@@ -112,22 +111,22 @@ return {
       local select_executable = function(opts, fn)
         opts = opts or {}
         pickers
-            .new(opts, {
-              prompt_title = 'Executable to run with debugger',
-              finder = finders.new_oneshot_job(findcmd(), opts),
-              sorter = conf.generic_sorter(opts),
-              attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                  actions.close(prompt_bufnr)
-                  Executable = action_state.get_selected_entry()
-                  if fn then
-                    fn()
-                  end
-                end)
-                return true
-              end,
-            })
-            :find()
+          .new(opts, {
+            prompt_title = 'Executable to run with debugger',
+            finder = finders.new_oneshot_job(findcmd(), opts),
+            sorter = conf.generic_sorter(opts),
+            attach_mappings = function(prompt_bufnr, _)
+              actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                Executable = action_state.get_selected_entry()
+                if fn then
+                  fn()
+                end
+              end)
+              return true
+            end,
+          })
+          :find()
       end
 
       defcommand('DBGSelectExecutable', function()
@@ -171,7 +170,7 @@ return {
             program = get_exec,
             cwd = '${workspaceFolder}',
             stopOnEntry = false,
-            args = get_args
+            args = get_args,
           },
         }
       elseif CPP_ADAPTER == 'cppdbg' then
@@ -194,7 +193,7 @@ return {
               {
                 text = '-enable-pretty-printing',
                 description = 'enable pretty printing',
-                ignoreFailures = false
+                ignoreFailures = false,
               },
             },
           },
@@ -210,7 +209,7 @@ return {
               {
                 text = '-enable-pretty-printing',
                 description = 'enable pretty printing',
-                ignoreFailures = false
+                ignoreFailures = false,
               },
             },
           },
@@ -227,7 +226,7 @@ return {
               {
                 text = '-enable-pretty-printing',
                 description = 'enable pretty printing',
-                ignoreFailures = false
+                ignoreFailures = false,
               },
             },
           },
@@ -317,6 +316,6 @@ return {
       map('n', '<BS>se', function()
         select_executable({}, require('dapui').open)
       end, { desc = 'Debug: Select Executable' })
-    end
+    end,
   },
 }

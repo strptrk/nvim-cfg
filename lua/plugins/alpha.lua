@@ -73,13 +73,13 @@ return {
       alpha.setup({
         layout = {
           { type = 'padding', val = 4 },
-          { type = 'group',   val = colorize_header() },
+          { type = 'group', val = colorize_header() },
           { type = 'padding', val = 2 },
           dashboard.section.buttons,
           dashboard.section.footer,
         },
         opts = { margin = 5 },
       })
-    end
-  }
+    end,
+  },
 }

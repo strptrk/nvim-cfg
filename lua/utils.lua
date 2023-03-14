@@ -1,19 +1,21 @@
-local exec = function(s) vim.api.nvim_exec(s, false) end
 local api = vim.api
+local exec = function(s)
+  api.nvim_exec(s, false)
+end
 local M = {}
 
 M.WinMove = function(key)
   local curwin = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if curwin == vim.fn.winnr() then
-    if (os.getenv('TERM_PROGRAM') == 'WezTerm') then
+    if os.getenv('TERM_PROGRAM') == 'WezTerm' then
       local dir = {
-        ['h'] = "Left",
-        ['j'] = "Down",
-        ['k'] = "Up",
-        ['l'] = "Right",
+        ['h'] = 'Left',
+        ['j'] = 'Down',
+        ['k'] = 'Up',
+        ['l'] = 'Right',
       }
-      vim.fn.system("wezterm cli activate-pane-direction " .. dir[key])
+      vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
     end
   end
 end
@@ -50,8 +52,7 @@ M.SplitInDirection = function(dir, fn, opts)
 end
 
 M.SmartResize = function(direction, size)
-  if string.match('jk', direction) and
-    (vim.fn.winnr('j') == vim.fn.winnr('k')) then
+  if string.match('jk', direction) and (vim.fn.winnr('j') == vim.fn.winnr('k')) then
     return -- prevent horizontally resizing the viewport
   end
   local to_dir = vim.fn.winnr(direction)

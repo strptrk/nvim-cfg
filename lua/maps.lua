@@ -1,6 +1,8 @@
 local map = vim.keymap.set
-local exec = function(s) vim.api.nvim_exec(s, false) end
 local defcommand = vim.api.nvim_create_user_command
+local exec = function(s)
+  vim.api.nvim_exec(s, false)
+end
 local dmap = function(mode, key, func, desc, opt)
   opt = opt or {}
   opt.desc = desc
@@ -41,8 +43,12 @@ map('t', '<A-n>', [[<C-\><C-n>]])
 map({ 'n', 'x' }, '<leader>m', ':Norm ')
 map('n', 'Q', '@q')
 
-map({ 'n', 'x' }, '<Space><CR>', function() require('hop').hint_words() end)
-map({ 'n', 'x' }, '<Space><BS>', function() require('hop').hint_lines() end)
+map({ 'n', 'x' }, '<Space><CR>', function()
+  require('hop').hint_words()
+end)
+map({ 'n', 'x' }, '<Space><BS>', function()
+  require('hop').hint_lines()
+end)
 map({ 'n', 'x', 'o' }, 'f', function()
   require('hop').hint_char1({
     direction = require('hop.hint').HintDirection.AFTER_CURSOR,
@@ -70,10 +76,18 @@ map({ 'n', 'x', 'o' }, 'T', function()
   })
 end)
 
-map('n', '<C-M-h>', function() require('utils').SmartResize('h', 1) end)
-map('n', '<C-M-j>', function() require('utils').SmartResize('j', 1) end)
-map('n', '<C-M-k>', function() require('utils').SmartResize('k', 1) end)
-map('n', '<C-M-l>', function() require('utils').SmartResize('l', 1) end)
+map('n', '<C-M-h>', function()
+  require('utils').SmartResize('h', 1)
+end)
+map('n', '<C-M-j>', function()
+  require('utils').SmartResize('j', 1)
+end)
+map('n', '<C-M-k>', function()
+  require('utils').SmartResize('k', 1)
+end)
+map('n', '<C-M-l>', function()
+  require('utils').SmartResize('l', 1)
+end)
 
 map('n', '<C-s>', '<cmd>update<CR>')
 map('n', '<A-c>', '<cmd>q<CR>')
@@ -110,10 +124,12 @@ map('x', 'sbc', '!bc -l<CR>')
 map('x', 'sbp', '!python<CR>')
 map('n', 'se', '<cmd>.!$SHELL<CR>')
 map('x', 'se', '!$SHELL<CR>')
-dmap('n', 'sx', function() require('expand_expr').expand() end, 'Expand lua expression')
+dmap('n', 'sx', function()
+  require('expand_expr').expand()
+end, 'Expand lua expression')
 dmap({ 'n', 'x' }, 'sF', '<cmd>Format<CR>', 'Format document (Formatter)')
 dmap({ 'n', 'x' }, 'sf', vim.lsp.buf.format, 'Format document (lsp)')
-map({ 'n', 'x' }, 'sc', "<cmd>CHADopen --always-focus<cr>", { silent = true })
+map({ 'n', 'x' }, 'sc', '<cmd>CHADopen --always-focus<cr>', { silent = true })
 dmap('n', 'sj', ':a<CR><CR>.<CR>', 'Append newline under', { silent = true })
 dmap('n', 'sk', ':i<CR><CR>.<CR>', 'Append newline above', { silent = true })
 
@@ -180,7 +196,7 @@ dmap('x', 'sp', '"0P', 'Paste', { silent = true })
 -- EasyAlign
 ----------------------------------------------------
 
-dmap({'n', 'x'}, 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
+dmap({ 'n', 'x' }, 'ga', '<Plug>(EasyAlign)', 'EasyAlign')
 
 ----------------------------------------------------
 -- Window splits
@@ -234,7 +250,9 @@ CR = function()
 end
 map('i', '<cr>', 'v:lua.CR()', exp)
 
-dmap('n', '<space>T', function() require('utils').FnNewTab(nil, { zz = true }) end, 'Open New Tab')
+dmap('n', '<space>T', function()
+  require('utils').FnNewTab(nil, { zz = true })
+end, 'Open New Tab')
 
 dmap('n', '<A-I>', '<cmd>IndentBlanklineToggle<cr>', 'Toggle Indent Lines')
 
@@ -266,14 +284,13 @@ dmap('n', '<Space>a', vim.lsp.buf.code_action, "Code Action")
 dmap('n', 'gr', function() require('telescope.builtin').lsp_references() end, 'Go to References')
 dmap('n', 'gdd', function() require('telescope.builtin').lsp_definitions() end, 'Go to Definition')
 dmap('n', 'gs', vim.lsp.buf.declaration, 'Go to Declaration')
-dmap('n', 'gdt', function() require('utils').FnNewTab(require('telescope.builtin').lsp_definitions, { zz = true }) end,
-  'Go to Definition (new tab)')
+dmap('n', 'gdt', function() require('utils').FnNewTab(require('telescope.builtin').lsp_definitions, { zz = true }) end, 'Go to Definition (new tab)')
 dmap('n', 'gdT', function() require('telescope.builtin').lsp_type_definitions() end, 'Go to Type Definition')
 
 for _, key in ipairs({ 'h', 'j', 'k', 'l' }) do
-  dmap('n', 'gd' .. key,
-    function() require('utils').SplitInDirection(key, require('telescope.builtin').lsp_definitions, { zz = true }) end,
-    'Go to Definition (split ' .. key .. ')')
+  dmap('n', 'gd' .. key, function()
+    require('utils').SplitInDirection(key, require('telescope.builtin').lsp_definitions, { zz = true })
+  end, 'Go to Definition (split ' .. key .. ')')
 end
 
 local smart_rename = function()
@@ -324,8 +341,7 @@ dmap('n', '<Space>sh', function()
 end, 'Switch source and header')
 
 -- git
-
-dmap('n', '<A-g>si', '<cmd>Gitsigns<cr>', "GitSigns")
+dmap('n', '<A-g>si', '<cmd>Gitsigns<cr>', 'GitSigns')
 dmap('n', '<A-g>do', ':DiffviewOpen ', 'Git diff')
 dmap('n', '<A-g>dd', '<cmd>DiffviewOpen HEAD<cr>', 'Git diff unstaged changes')
 dmap('n', '<A-g>df', '<cmd>DiffviewToggleFiles<cr>', 'Git diff toggle files')
@@ -340,16 +356,16 @@ dmap('n', '<Space>hm', "<cmd>Telescope harpoon marks theme=ivy<cr>", 'Harpoon Te
 
 map('n', '<BS>;', function()
   require('telescope').extensions.dap.commands(require('telescope.themes').get_ivy({}))
-end, { desc = "Telescope DAP Commands" })
+end, { desc = 'Telescope DAP Commands' })
 map('n', '<BS>C', function()
   require('telescope').extensions.dap.configurations(require('telescope.themes').get_ivy({}))
-end, { desc = "Telescope DAP Configurations" })
+end, { desc = 'Telescope DAP Configurations' })
 map('n', '<BS>B', function()
   require('telescope').extensions.dap.list_breakpoints(require('telescope.themes').get_ivy({}))
-end, { desc = "Telescope DAP Breakpoints" })
+end, { desc = 'Telescope DAP Breakpoints' })
 map('n', '<BS>v', function()
   require('telescope').extensions.dap.variables(require('telescope.themes').get_ivy({}))
-end, { desc = "Telescope DAP Variables" })
+end, { desc = 'Telescope DAP Variables' })
 map('n', '<BS>f', function()
   require('telescope').extensions.dap.frames(require('telescope.themes').get_ivy({}))
 end, { desc = "Telescope DAP Frames" })

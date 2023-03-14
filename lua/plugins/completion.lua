@@ -3,8 +3,8 @@ return {
     'ms-jpq/coq_nvim',
     branch = 'coq',
     cmd = {
-      "COQdeps",
-      "COQnow",
+      'COQdeps',
+      'COQnow',
     },
     event = 'InsertEnter',
     init = function()
@@ -12,7 +12,7 @@ return {
         auto_start = false,
         keymap = { recommended = false, jump_to_mark = '<A-Tab>' },
         ['display.ghost_text.context'] = { ' < ', ' >' },
-        ['display.pum.source_context'] = { '[', ']' }
+        ['display.pum.source_context'] = { '[', ']' },
       }
     end,
     config = function()
@@ -26,7 +26,7 @@ return {
         config = function()
           require('coq_3p')({
             { src = 'nvimlua', short_name = 'nLUA' },
-            { src = 'vimtex',  short_name = 'vTEX' },
+            { src = 'vimtex', short_name = 'vTEX' },
             -- { src = 'dap' },
           })
         end,
@@ -34,8 +34,8 @@ return {
       {
         'ms-jpq/coq.artifacts',
         branch = 'artifacts',
-        lazy = true
+        lazy = true,
       },
-    }
+    },
   },
 }

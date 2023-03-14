@@ -2,7 +2,7 @@ return {
   {
     'b0o/incline.nvim',
     lazy = true,
-    event = "BufEnter",
+    event = 'BufEnter',
     config = function()
       local get_diagnostic_label = function(props)
         local icons = {
@@ -58,7 +58,7 @@ return {
           local buffer = {
             { filetype_icon, guifg = color },
             { ' ' },
-            { filename,      gui = modified },
+            { filename, gui = modified },
           }
           if #diagnostics > 0 then
             table.insert(diagnostics, { '| ', guifg = 'grey' })
@@ -99,15 +99,15 @@ return {
           zindex = 50,
         },
       })
-    end
+    end,
   },
   {
     'norcalli/nvim-colorizer.lua',
     lazy = true,
-    event = "BufEnter",
+    event = 'BufEnter',
     config = function()
       require('colorizer').setup()
-    end
+    end,
   },
   {
     'Pocco81/true-zen.nvim',
@@ -119,7 +119,7 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     dependencies = {
-      { 'kyazdani42/nvim-web-devicons' }
+      { 'kyazdani42/nvim-web-devicons' },
     },
     config = function()
       vim.g.Get_langserv = function()
@@ -159,32 +159,23 @@ return {
         -- extensions = {'fzf', 'toggleterm', 'quickfix'}
         extensions = { 'chadtree', 'fzf', 'toggleterm', 'quickfix', 'symbols-outline' },
       })
-    end
+    end,
   },
-  -- {
-  --   'alvarosevilla95/luatab.nvim',
-  --   dependencies = {
-  --     { 'kyazdani42/nvim-web-devicons' }
-  --   },
-  --   config = function()
-  --     require('luatab').setup()
-  --   end
-  -- },
   {
     'kyazdani42/nvim-web-devicons',
     lazy = true,
-    event = "BufEnter",
+    event = 'BufEnter',
     config = function()
       require('nvim-web-devicons').setup({
         override = { zsh = { icon = '', color = '#428850', name = 'Zsh' } },
         default = true,
       })
-    end
+    end,
   },
   {
     'crispgm/nvim-tabline',
     dependencies = {
-      "kyazdani42/nvim-web-devicons"
+      'kyazdani42/nvim-web-devicons',
     },
     config = function()
       require('tabline').setup({
@@ -195,7 +186,7 @@ return {
         no_name = '[No name]', -- no name buffer name
         brackets = { ' ', ' ' }, -- file name brackets surrounding
       })
-    end
+    end,
   },
   {
     'stevearc/dressing.nvim',
@@ -213,8 +204,8 @@ return {
             top_down = false,
           })
           vim.notify = require('notify')
-        end
+        end,
       },
-    }
+    },
   },
 }

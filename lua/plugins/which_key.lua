@@ -68,14 +68,13 @@ return {
           'g', 's', 'z',
           '<M-g>', '<M-v>', '<M-o>', '<M-s>',
           [[`]], [[']], [["]], [[,]],
-          -- '{', '}', -- no binding so far, maybe in future
-        }, -- or specify a list manually
-        triggers_blacklist = { },
+        },
+        triggers_blacklist = {},
         disable = {
           buftypes = {},
           filetypes = { 'TelescopePrompt' },
         },
       })
-    end
+    end,
   },
 }
