@@ -93,6 +93,12 @@ autocmd('FileType', {
   end,
 })
 
+autocmd('FileType', {
+  pattern = "sh",
+  callback = function()
+    vim.api.nvim_buf_set_option(0, 'filetype', 'bash')
+  end,
+})
 
 autocmd('BufRead', {
   pattern = 'COMMIT_EDITMSG',
