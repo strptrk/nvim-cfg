@@ -18,16 +18,6 @@ end, {
   force = true,
   nargs = '?',
 })
-----------------------------------------------------
--- s can be used as a modifier key (sort of)
-----------------------------------------------------
-
-map('n', ',', '<nop>')
-map('x', ',', '<nop>')
-map('n', 's', '<nop>')
-map('x', 's', '<nop>')
-map('n', 's', '<nop>')
-map('x', 's', '<nop>')
 
 map({ 'x', 'n' }, 'gA', 'ga')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
@@ -170,7 +160,6 @@ end)
 map('i', '<A-e>', '<C-o>e<Right>')
 map('i', '<A-w>', '<C-o>w')
 map('i', '<A-b>', '<C-o>b')
-map('x', 'il', '^o$')
 map({ 'x', 'n' }, '<Left>', '^')
 map({ 'x', 'n' }, '<Right>', '$')
 
