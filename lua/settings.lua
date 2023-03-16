@@ -45,6 +45,8 @@ o.history = 100
 o.lazyredraw = false
 b.synmaxcol = 240
 
+vim.opt.laststatus = 3
+
 -- lower updatetime to trigger treesitter-refactor's token highlight
 -- swapfile directory changed to ramfs to avoid excessive disk writes
 -- but nvim will not be able to recover after a power outage
