@@ -104,9 +104,11 @@ return {
   {
     'norcalli/nvim-colorizer.lua',
     lazy = true,
-    event = 'BufEnter',
+    cmd = { 'ColorizerToggle', 'ColorizerAttachToBuffer' },
     config = function()
-      require('colorizer').setup()
+      require('colorizer').setup({
+        'css', 'html', 'lua', 'md', 'neorg'
+      })
     end,
   },
   {
