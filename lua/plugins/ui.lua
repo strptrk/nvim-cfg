@@ -181,7 +181,7 @@ return {
           themable = true,
           offsets = {
             {
-              filetype = 'CHADTree',
+              filetype = 'neo-tree',
               text = 'File Explorer',
               separator = true
             },

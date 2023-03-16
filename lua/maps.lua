@@ -129,7 +129,6 @@ dmap('n', 'sx', function()
 end, 'Expand lua expression')
 dmap({ 'n', 'x' }, 'sF', '<cmd>Format<CR>', 'Format document (Formatter)')
 dmap({ 'n', 'x' }, 'sf', vim.lsp.buf.format, 'Format document (lsp)')
-map({ 'n', 'x' }, 'sc', '<cmd>CHADopen --always-focus<cr>', { silent = true })
 dmap('n', 'sj', ':a<CR><CR>.<CR>', 'Append newline under', { silent = true })
 dmap('n', 'sk', ':i<CR><CR>.<CR>', 'Append newline above', { silent = true })
 
