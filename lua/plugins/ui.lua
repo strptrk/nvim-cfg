@@ -136,7 +136,7 @@ return {
       require('lualine').setup({
         options = {
           icons_enabled = true,
-          theme = 'OceanicNext',
+          theme = 'catppuccin',
           component_separators = { left = '', right = '' },
           section_separators = { left = '', right = '' },
           disabled_filetypes = {},
@@ -176,6 +176,7 @@ return {
     'akinsho/bufferline.nvim',
     config = function()
       require('bufferline').setup({
+        highlights = require("catppuccin.groups.integrations.bufferline").get(),
         options = {
           mode = 'tabs',
           themable = true,

@@ -51,8 +51,6 @@ b.synmaxcol = 240
 o.updatetime = 750
 vim.api.nvim_set_option('directory', '/tmp/nvimswap//')
 
-o.termguicolors = true
-
 g.move_map_keys = 0
 
 g.c_syntax_for_h = 1

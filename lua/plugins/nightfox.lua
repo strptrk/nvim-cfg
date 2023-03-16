@@ -49,7 +49,7 @@ return {
           },
         },
       })
-      vim.cmd.colorscheme('nordfox')
+      -- vim.cmd.colorscheme('nordfox')
       vim.o.laststatus = 3
       vim.api.nvim_create_user_command('TransparentBGToggle', function()
         vim.g.transparent = not vim.g.transparent
