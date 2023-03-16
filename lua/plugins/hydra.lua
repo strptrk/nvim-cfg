@@ -174,7 +174,6 @@ return {
    _c_ %{cc} color column
    _n_ %{nu} number
    _r_ %{rnu} relative number
-   _t_ %{trans} background transparency ^ ^ ^
       ^
            _q_ / _<Esc>_
       ]]
@@ -194,12 +193,6 @@ return {
                   return '[ ]'
                 end
                 return '[x]'
-              end,
-              trans = function()
-                if vim.g.transparent then
-                  return '[x]'
-                end
-                return '[ ]'
               end,
             },
           },
@@ -304,7 +297,6 @@ return {
             end,
             { desc = 'color column' },
           },
-          { 't', '<cmd>TransparentBGToggle<cr>', desc = 'Background transparency' },
           { '<Esc>', nil, { exit = true } },
           { 'q', nil, { exit = true } },
         },
