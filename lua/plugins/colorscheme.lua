@@ -105,9 +105,9 @@ return {
           },
         },
         custom_highlights = {
-          -- HopNextKey = { fg = '#F72044', style = {'bold'} },
-          -- HopNextKey1 = { fg = '#F72044', style = {'bold'} },
-          -- HopNextKey2 = { fg = '#f7a156' },
+          HopNextKey = { fg = '#F72044', style = {'bold'} },
+          HopNextKey1 = { fg = '#F72044', style = {'bold'} },
+          HopNextKey2 = { fg = '#f7a156' },
         },
         integrations = {
           -- cmp = true,
@@ -118,10 +118,9 @@ return {
           treesitter_context = true,
           notify = true,
           harpoon = true,
-          hop = true,
           dap = {
             enabled = true,
-            enable_ui = true, -- enable nvim-dap-ui
+            enable_ui = true,
           },
           native_lsp = {
             enabled = true,
