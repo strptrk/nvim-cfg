@@ -5,7 +5,7 @@ return {
     priority = 1000,
     config = function()
       local background = '#1c1c1c'
-      vim.g.transparent = true
+      vim.g.transparent = false
       require('nightfox').setup({
         options = {
           transparent = vim.g.transparent,
@@ -31,10 +31,10 @@ return {
           modules = {},
         },
         palettes = {
-          nordfox = {
-            bg1 = '#343438',
-            bg0 = '#0f0f10',
-          },
+          -- nordfox = {
+          --   bg1 = '#343438',
+          --   bg0 = '#0f0f10',
+          -- },
         },
         specs = {},
         groups = {
@@ -42,10 +42,10 @@ return {
             HopNextKey = { fg = '#F72044', style = 'bold' },
             HopNextKey1 = { fg = '#F72044', style = 'bold' },
             HopNextKey2 = { fg = '#f7a156' },
-            TreesitterContext = { bg = '#3a3a3c' },
-            TabLine = { bg = '#212121', fg = '#dedede' },
-            TabLineFill = { bg = 'NONE' },
-            TabLineSel = { bg = '#4c4c4c', fg = '#ffffff' },
+            -- TreesitterContext = { bg = '#3a3a3c' },
+            -- TabLine = { bg = '#212121', fg = '#dedede' },
+            -- TabLineFill = { bg = 'NONE' },
+            -- TabLineSel = { bg = '#4c4c4c', fg = '#ffffff' },
           },
         },
       })

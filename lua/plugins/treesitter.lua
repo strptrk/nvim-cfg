@@ -159,14 +159,11 @@ return {
               ['if'] = '@function.inner',
               ['al'] = '@loop.outer',
               ['il'] = '@loop.inner',
-              ['aS'] = '@statement.outer',
+              ['aA'] = '@statement.outer',
               ['ac'] = '@class.outer',
               ['ic'] = '@class.inner',
-              -- 'a scope' instead of 'a block', because
-              -- block works like how you think scope works,
-              -- and b is reserved for brackets
-              ['as'] = '@block.outer',
-              ['is'] = '@block.inner',
+              ['aB'] = '@block.outer',
+              ['iB'] = '@block.inner',
               ['iP'] = { query = '@parameter.inner' },
               ['aP'] = { query = '@parameter.outer' },
             },

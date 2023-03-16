@@ -173,18 +173,25 @@ return {
     end,
   },
   {
-    'crispgm/nvim-tabline',
-    dependencies = {
-      'kyazdani42/nvim-web-devicons',
-    },
+    'akinsho/bufferline.nvim',
     config = function()
-      require('tabline').setup({
-        show_index = false, -- show tab index
-        show_modify = true, -- show buffer modification indicator
-        show_icon = true, -- show file extension icon
-        modify_indicator = '[+]', -- modify indicator
-        no_name = '[No name]', -- no name buffer name
-        brackets = { ' ', ' ' }, -- file name brackets surrounding
+      require('bufferline').setup({
+        options = {
+          mode = 'tabs',
+          themable = true,
+          offsets = {
+            {
+              filetype = 'CHADTree',
+              text = 'File Explorer',
+              separator = true
+            },
+          },
+          show_duplicate_prefix = false,
+          hover = {
+            enabled = false,
+          },
+          separator_style = {'|', '|'}
+        },
       })
     end,
   },
