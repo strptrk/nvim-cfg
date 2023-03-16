@@ -36,7 +36,7 @@ end
 map('n', '<A-a>', '<cmd>tabprevious<cr>')
 map('n', '<A-d>', '<cmd>tabnext<cr>')
 map('n', '<A-t>', '<cmd>tabnew<CR>')
-map('n', '<A-T>', '<cmd>tabclose<CR>')
+map('n', '<A-C>', '<cmd>tabclose<CR>')
 dmap('n', '<Space>u', '<C-^>', 'Last Used Buffer')
 map('t', '<A-n>', [[<C-\><C-n>]])
 
@@ -91,7 +91,6 @@ end)
 
 map('n', '<C-s>', '<cmd>update<CR>')
 map('n', '<A-c>', '<cmd>q<CR>')
-map('n', '<A-C>', '<cmd>q!<CR>')
 map({ 'n', 't' }, '<A-Esc>', function()
   if vim.bo.buftype == 'terminal' then
     exec([[stopinsert]])
@@ -111,10 +110,6 @@ map('v', '<C-j>', '<Plug>MoveBlockDown', {})
 map('v', '<C-k>', '<Plug>MoveBlockUp', {})
 -- map('v', '<C-H>', '<Plug>MoveBlockLeft' , {})
 -- map('v', '<C-L>', '<Plug>MoveBlockRight', {})
-
--- map('n', 'S', ':%s//gI<Left><Left><Left>')
--- dmap('n', 'ss', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], "Replace word")
--- dmap('x', 'ss', ':s//gI<Left><Left><Left>', "Replace")
 
 map('n', 'sE', '<cmd>g/^$/d<CR>')
 map('n', 'sbc', '<cmd>.!bc -l<CR>')
@@ -319,39 +314,12 @@ dmap('n', 'g]', function() vim.diagnostic.goto_next() end, 'Go to next diagnosti
 dmap('n', 'sh', function() vim.lsp.buf.hover() end, 'Symbol hover information')
 dmap('n', 'sM', function() require('telescope.builtin').man_pages({ sections = { '1', '3' } }) end, 'Man pages (1,3)')
 dmap('n', 'sbm', function() require('telescope.builtin').find_files({ cwd = '~/.dotfiles' }) end, 'Dotfiles')
-dmap('n', '<Space>sh', function()
-  local bufnr = vim.fn.bufnr()
-  local clangd_client = require('lspconfig.util').get_active_client_by_name(bufnr, 'clangd')
-  local params = { uri = vim.uri_from_bufnr(bufnr) }
-  if clangd_client then
-    clangd_client.request('textDocument/switchSourceHeader', params, function(err, result)
-      if err then
-        error(tostring(err))
-      end
-      if not result then
-        print('Corresponding file cannot be determined')
-        return
-      end
-      vim.api.nvim_command('edit ' .. vim.uri_to_fname(result))
-    end, bufnr)
-  else
-    print('method textDocument/switchSourceHeader is not supported by any servers active on the current buffer')
-  end
-end, 'Switch source and header')
-
--- git
-dmap('n', '<A-g>si', '<cmd>Gitsigns<cr>', 'GitSigns')
-dmap('n', '<A-g>do', ':DiffviewOpen ', 'Git diff')
-dmap('n', '<A-g>dd', '<cmd>DiffviewOpen HEAD<cr>', 'Git diff unstaged changes')
-dmap('n', '<A-g>df', '<cmd>DiffviewToggleFiles<cr>', 'Git diff toggle files')
-dmap('n', '<A-g>dh', '<cmd>DiffviewFileHistory<cr>', 'Git file history')
+dmap('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', 'Switch source and header')
 
 -- harpoon
 dmap('n', '<Space>ha', function() require("harpoon.mark").add_file() end, 'Harpoon Add File')
 dmap('n', '<Space>hM', function() require("harpoon.ui").toggle_quick_menu() end, 'Harpoon Menu')
 dmap('n', '<Space>hm', "<cmd>Telescope harpoon marks theme=ivy<cr>", 'Harpoon Telescope')
-
-
 
 map('n', '<BS>;', function()
   require('telescope').extensions.dap.commands(require('telescope.themes').get_ivy({}))

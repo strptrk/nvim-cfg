@@ -32,7 +32,7 @@ return {
         ignore = '^$',
         toggler = { line = '<Space>cc', block = '<Space>cx' },
         opleader = { line = '<Space>c', block = '<Space>x' },
-        extra = { above = '<Space>O', below = '<Space>o', eol = '<Space>A' },
+        extra = { above = '<Space>O', below = '<Space>o', eol = '<Space>e' },
         mappings = { basic = true, extra = true, extended = false },
         pre_hook = function() end,
         post_hook = function() end,
