@@ -62,6 +62,40 @@ return {
   {
     'phaazon/hop.nvim',
     lazy = true,
+    init = function()
+      vim.keymap.set({ 'n', 'x' }, '<Space><CR>', function()
+        require('hop').hint_words()
+      end)
+      vim.keymap.set({ 'n', 'x' }, '<Space><BS>', function()
+        require('hop').hint_lines()
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, 'f', function()
+        require('hop').hint_char1({
+          direction = require('hop.hint').HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+        })
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, 'F', function()
+        require('hop').hint_char1({
+          direction = require('hop.hint').HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+        })
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, 't', function()
+        require('hop').hint_char1({
+          direction = require('hop.hint').HintDirection.AFTER_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        })
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, 'T', function()
+        require('hop').hint_char1({
+          direction = require('hop.hint').HintDirection.BEFORE_CURSOR,
+          current_line_only = true,
+          hint_offset = -1,
+        })
+      end)
+    end,
     config = function()
       require('hop').setup()
     end
