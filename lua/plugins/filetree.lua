@@ -36,30 +36,29 @@ return {
       vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
       require('neo-tree').setup({
         source_selector = {
-          winbar = true, -- toggle to show selector on winbar
-          statusline = false, -- toggle to show selector on statusline
-          show_scrolled_off_parent_node = false, -- boolean
+          winbar = true,
+          statusline = false,
+          show_scrolled_off_parent_node = false,
           tab_labels = {
-            -- table
-            filesystem = '  Files', -- string | nil
-            buffers = '  Buffers', -- string | nil
-            git_status = '  Git', -- string | nil
-            diagnostics = ' 裂Diagnostics ', -- string | nil
+            filesystem = '  Files',
+            buffers = '  Buffers',
+            git_status = '  Git',
+            diagnostics = ' 裂Diagnostics ',
           },
-          content_layout = 'start', -- string
-          tabs_layout = 'equal', -- string
-          truncation_character = '…', -- string
-          tabs_min_width = nil, -- int | nil
-          tabs_max_width = nil, -- int | nil
-          padding = 0, -- int | { left: int, right: int }
-          separator = { left = '▏', right = '▕' }, -- string | { left: string, right: string, override: string | nil }
-          separator_active = nil, -- string | { left: string, right: string, override: string | nil } | nil
-          show_separator_on_edge = false, -- boolean
-          highlight_tab = 'NeoTreeTabInactive', -- string
-          highlight_tab_active = 'NeoTreeTabActive', -- string
-          highlight_background = 'NeoTreeTabInactive', -- string
-          highlight_separator = 'NeoTreeTabSeparatorInactive', -- string
-          highlight_separator_active = 'NeoTreeTabSeparatorActive', -- string
+          content_layout = 'start',
+          tabs_layout = 'equal',
+          truncation_character = '…',
+          tabs_min_width = nil,
+          tabs_max_width = nil,
+          padding = 0,
+          separator = { left = '▏', right = '▕' },
+          separator_active = nil,
+          show_separator_on_edge = false,
+          highlight_tab = 'NeoTreeTabInactive',
+          highlight_tab_active = 'NeoTreeTabActive',
+          highlight_background = 'NeoTreeTabInactive',
+          highlight_separator = 'NeoTreeTabSeparatorInactive',
+          highlight_separator_active = 'NeoTreeTabSeparatorActive',
         },
         close_if_last_window = false,
         popup_border_style = 'rounded',
@@ -75,13 +74,11 @@ return {
           indent = {
             indent_size = 2,
             padding = 1, -- extra padding on left hand side
-            -- indent guides
             with_markers = true,
             indent_marker = '│',
             last_indent_marker = '└',
             highlight = 'NeoTreeIndentMarker',
-            -- expander config, needed for nesting files
-            with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
+            with_expanders = nil,
             expander_collapsed = '',
             expander_expanded = '',
             expander_highlight = 'NeoTreeExpander',
