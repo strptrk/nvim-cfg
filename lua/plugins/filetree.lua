@@ -9,56 +9,61 @@ return {
     dependencies = {
       'MunifTanjim/nui.nvim',
       {
-        "s1n7ax/nvim-window-picker",
+        's1n7ax/nvim-window-picker',
         config = function()
-          require'window-picker'.setup({
+          require('window-picker').setup({
             autoselect_one = true,
             include_current = false,
             filter_rules = {
               -- filter using buffer options
               bo = {
-                filetype = { 'neo-tree', "neo-tree-popup", "notify" },
-                buftype = { 'terminal', "quickfix" },
+                filetype = { 'neo-tree', 'neo-tree-popup', 'notify' },
+                buftype = { 'terminal', 'quickfix' },
               },
             },
             other_win_hl_color = '#e35e4f',
           })
         end,
-      }
+      },
     },
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 1
     end,
     config = function()
+      vim.api.nvim_create_autocmd('TabNew', {
+        group = vim.api.nvim_create_augroup('NeotreeOnNewTab', { clear = true }),
+        command = 'Neotree',
+      })
       vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
       vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
       vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
       vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
       require('neo-tree').setup({
         source_selector = {
-            winbar = true, -- toggle to show selector on winbar
-            statusline = false, -- toggle to show selector on statusline
-            show_scrolled_off_parent_node = false,                    -- boolean
-            tab_labels = {                                            -- table
-                filesystem = "  Files",                             -- string | nil
-                buffers =    "  Buffers",                           -- string | nil
-                git_status = "  Git",                               -- string | nil
-                diagnostics = " 裂Diagnostics " ,                     -- string | nil
-            },
-            content_layout = "start",                                 -- string
-            tabs_layout = "equal",                                    -- string
-            truncation_character = "…",                               -- string
-            tabs_min_width = nil,                                     -- int | nil
-            tabs_max_width = nil,                                     -- int | nil
-            padding = 0,                                              -- int | { left: int, right: int }
-            separator = { left = "▏", right= "▕" },                   -- string | { left: string, right: string, override: string | nil }
-            separator_active = nil,                                   -- string | { left: string, right: string, override: string | nil } | nil
-            show_separator_on_edge = false,                           -- boolean
-            highlight_tab = "NeoTreeTabInactive",                     -- string
-            highlight_tab_active = "NeoTreeTabActive",                -- string
-            highlight_background = "NeoTreeTabInactive",              -- string
-            highlight_separator = "NeoTreeTabSeparatorInactive",      -- string
-            highlight_separator_active = "NeoTreeTabSeparatorActive", -- string
+          winbar = true, -- toggle to show selector on winbar
+          statusline = false, -- toggle to show selector on statusline
+          show_scrolled_off_parent_node = false, -- boolean
+          tab_labels = {
+            -- table
+            filesystem = '  Files', -- string | nil
+            buffers = '  Buffers', -- string | nil
+            git_status = '  Git', -- string | nil
+            diagnostics = ' 裂Diagnostics ', -- string | nil
+          },
+          content_layout = 'start', -- string
+          tabs_layout = 'equal', -- string
+          truncation_character = '…', -- string
+          tabs_min_width = nil, -- int | nil
+          tabs_max_width = nil, -- int | nil
+          padding = 0, -- int | { left: int, right: int }
+          separator = { left = '▏', right = '▕' }, -- string | { left: string, right: string, override: string | nil }
+          separator_active = nil, -- string | { left: string, right: string, override: string | nil } | nil
+          show_separator_on_edge = false, -- boolean
+          highlight_tab = 'NeoTreeTabInactive', -- string
+          highlight_tab_active = 'NeoTreeTabActive', -- string
+          highlight_background = 'NeoTreeTabInactive', -- string
+          highlight_separator = 'NeoTreeTabSeparatorInactive', -- string
+          highlight_separator_active = 'NeoTreeTabSeparatorActive', -- string
         },
         close_if_last_window = false,
         popup_border_style = 'rounded',
@@ -142,8 +147,8 @@ return {
             -- ["S"] = "split_with_window_picker",
             -- ["s"] = "vsplit_with_window_picker",
             ['t'] = 'open_tabnew',
-            ["o"] = "open_drop",
-            ["O"] = "open_tab_drop",
+            ['o'] = 'open_drop',
+            ['O'] = 'open_tab_drop',
             ['w'] = 'open_with_window_picker',
             --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
             ['C'] = 'close_node',
