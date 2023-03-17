@@ -30,10 +30,6 @@ return {
       vim.g.neo_tree_remove_legacy_commands = 1
     end,
     config = function()
-      vim.api.nvim_create_autocmd('TabNew', {
-        group = vim.api.nvim_create_augroup('NeotreeOnNewTab', { clear = true }),
-        command = 'Neotree',
-      })
       vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
       vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
       vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
