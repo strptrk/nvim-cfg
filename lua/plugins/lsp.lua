@@ -34,11 +34,12 @@ return {
       },
     },
     config = function()
-      local coq = require('coq')
       local lsp = require('lspconfig')
-      lsp.pylsp.setup(coq.lsp_ensure_capabilities())
-      lsp.gopls.setup(coq.lsp_ensure_capabilities())
-      lsp.lua_ls.setup(coq.lsp_ensure_capabilities({
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      lsp.pylsp.setup({ capabilities = capabilities })
+      lsp.gopls.setup({ capabilities = capabilities })
+      lsp.lua_ls.setup({
+        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = {
@@ -57,7 +58,7 @@ return {
             enable = false,
           },
         },
-      }))
+      })
     end,
   },
   {
@@ -66,7 +67,9 @@ return {
     ft = { 'c', 'cpp' },
     config = function()
       require('clangd_extensions').setup({
-        server = {}, -- options to pass to nvim-lspconfig
+        server = {
+          capabilities = require('cmp_nvim_lsp').default_capabilities(),
+        }, -- options to pass to nvim-lspconfig
         extensions = {
           -- defaults:
           -- Automatically set inlay hints (type hints)
@@ -109,7 +112,6 @@ return {
               statement = '',
               ['template argument'] = '',
             },
-
             kind_icons = {
               Compound = '',
               Recovery = '',
@@ -119,7 +121,6 @@ return {
               TemplateTemplateParm = '',
               TemplateParamObject = '',
             },
-
             highlights = {
               detail = 'Comment',
             },
@@ -142,6 +143,7 @@ return {
       local rt = require('rust-tools')
       rt.setup({
         server = {
+          capabilities = require('cmp_nvim_lsp').default_capabilities(),
           on_attach = function(_, bufnr)
             -- Hover actions
             vim.keymap.set('n', 'sH', rt.hover_actions.hover_actions, { buffer = bufnr })

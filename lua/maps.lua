@@ -29,6 +29,11 @@ for k, _ in string.gmatch('\'"[](){}<>`', '.') do
   map('x', [[<Space>]] .. k, [[<Plug>(sandwich-add)]] .. k)
 end
 
+map('i', '<A-s>', '<Plug>luasnip-expand-or-jump')
+map('i', '<A-a>', function()
+  require('luasnip').jump(-1)
+end)
+
 ----------------------------------------------------
 -- tabs, buffers
 ----------------------------------------------------
