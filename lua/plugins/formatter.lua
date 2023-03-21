@@ -59,6 +59,16 @@ return {
               }
             end,
           },
+          rust = {
+            function()
+              return {
+                exe = 'rustfmt',
+                args = { vim.api.nvim_buf_get_name(0) },
+                stdin = false,
+                cwd = vim.fn.expand('%:p:h'),
+              }
+            end,
+          },
           cpp = {
             -- clang-format
             function()
