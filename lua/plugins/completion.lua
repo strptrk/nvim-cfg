@@ -2,7 +2,13 @@ return {
   {
     'hrsh7th/nvim-cmp',
     lazy = true,
-    event = { 'InsertEnter', 'CmdlineEnter' },
+    event = {
+      'InsertEnter',
+    },
+    keys = {
+      -- workaround to not load cmp with alpha.nvim
+      {'<C-;>', ':', desc = ''},
+    },
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')

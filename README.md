@@ -11,9 +11,20 @@ cargo install tree-sitter-cli --git https://github.com/tree-sitter/tree-sitter.g
 ```
 
 ## language servers
+
+### C/C++ (`clang` contains `clangd`)
+```sh
+sudo pacman -S clang
+```
+
 ### lua
 ```sh
 sudo pacman -S lua-language-server
+```
+
+### python
+```sh
+pip install "python-lsp-server[all]"
 ```
 
 ### go
