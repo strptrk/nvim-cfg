@@ -8,6 +8,8 @@ return {
     keys = {
       -- workaround to not load cmp with alpha.nvim
       {'<C-;>', ':', desc = ''},
+      {'/', '/', desc = ''},
+      {'?', '?', desc = ''},
     },
     config = function()
       local cmp = require('cmp')
