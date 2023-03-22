@@ -8,6 +8,9 @@ return {
       { '<A-f>', nil, desc = 'Open Terminal' },
       { '<A-b>', nil, desc = 'Select Terminal' },
       { '<A-n>', nil, desc = 'Set Terminal Name' },
+      { '<A-r>', nil, desc = 'Run Command in Terminal' },
+      { '<A-C-r>', nil, desc = 'Set Command to Run' },
+      { '<A-R>', nil, desc = 'Toggle Run Terminal' },
       { '<A-v>f', nil, desc = 'Open Terminal (float)' },
       { '<A-v>t', nil, desc = 'Open Terminal (tab)' },
       { '<A-v>v', nil, desc = 'Open Terminal (vertical)' },
@@ -42,6 +45,8 @@ return {
         persist_size = true,
         direction = 'float',
         close_on_exit = true,
+        autochdir = true,
+        autoscroll = true,
         float_opts = { border = 'single', winblend = 0 },
         winbar = {
           enabled = false,
@@ -62,6 +67,7 @@ return {
         lazygit:toggle()
       end
       vim.api.nvim_create_user_command('Lazygit', Term.lazygit_toggle, { force = true })
+
       Term.Terminals = {}
       Term.Last = -1
 
@@ -145,6 +151,7 @@ return {
                 actions.close(prompt_bufnr)
                 local entry = action_state.get_selected_entry()
                 Term.focus_term(entry.value.term.count, nil)
+                Term.Terminals[entry.value.term.count].term:set_mode('i')
               end)
               return true
             end,
@@ -199,7 +206,69 @@ return {
           :find()
       end
 
-      vim.keymap.set({ 'n', 't', 'x' }, '<A-g>l', function()
+      Term.runterm = Terminal:new({
+        direction = 'vertical',
+        hidden = true,
+        count = 1001,
+      })
+      Term.runterm_toggle = function()
+        Term.runterm:toggle()
+      end
+
+      Term.runterm_run = function()
+        if Term.runcmd == nil then
+          vim.ui.input({ prompt = 'Command to run: ' }, function(input)
+            if not input or input == '' then
+              return
+            else
+              Term.runcmd = input
+              if not Term.runterm:is_open() then
+                Term.runterm:open()
+              end
+              Term.runterm:send(Term.runcmd, true)
+            end
+          end)
+        else
+          if not Term.runterm:is_open() then
+            Term.runterm:open()
+          end
+          Term.runterm:send(Term.runcmd, true)
+        end
+      end
+
+      Term.runterm_askcmd = function()
+        vim.ui.input({ prompt = 'Command to run: ', }, function(input)
+          if not input or input == '' then
+            return
+          else
+            Term.runcmd = input
+          end
+        end)
+      end
+
+      vim.api.nvim_create_user_command('RunTermDir', function(args)
+        local dir = args.fargs[1]
+        if not dir or dir == '' then
+          return
+        end
+        if Term.runterm:is_open() then
+          Term.runterm:close()
+        end
+        Term.runterm:change_direction(dir)
+        Term.runterm:open()
+      end, { force = true, nargs = '?' })
+
+      vim.keymap.set({ 'n', 't', 'x' }, '<A-R>', function()
+        Term.runterm_toggle()
+      end, { desc = 'Set Command to Run' })
+      vim.keymap.set({ 'n', 't', 'x' }, '<A-C-r>', function()
+        Term.runterm_askcmd()
+      end, { desc = 'Toggle Run Terminal' })
+      vim.keymap.set({ 'n', 't', 'x' }, '<A-r>', function()
+        Term.runterm_run()
+      end, { desc = 'Run Command in Terminal' })
+
+      vim.keymap.set({ 'n', 't', 'x' }, '<A-G>l', function()
         Term.lazygit_toggle()
       end, { desc = 'Lazygit' })
       vim.keymap.set({ 'n', 'v', 't' }, [[<A-f>]], function()
