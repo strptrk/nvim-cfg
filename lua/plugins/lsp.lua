@@ -99,7 +99,7 @@ return {
             -- padding from the right if right_align is true
             right_align_padding = 7,
             -- The color of the hints
-            highlight = 'Comment',
+            highlight = 'InlayHint',
             -- The highlight group priority for extmark
             priority = 100,
           },
@@ -151,6 +151,13 @@ return {
             vim.keymap.set('n', '<Space>A', rt.code_action_group.code_action_group, { buffer = bufnr })
           end,
         },
+        tools = {
+          inlay_hints = {
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=> ",
+            highlight = "InlayHint"
+          }
+        }
       })
     end,
   },

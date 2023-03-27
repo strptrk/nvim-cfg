@@ -7,11 +7,11 @@ return {
     config = function()
       vim.o.termguicolors = true
       require('catppuccin').setup({
-        flavour = 'mocha', -- latte, frappe, macchiato, mocha
-        background = {
-          light = 'latte',
-          dark = 'mocha',
-        },
+        flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+        -- background = {
+        --   light = 'latte',
+        --   dark = 'mocha',
+        -- },
         transparent_background = false,
         show_end_of_buffer = true, -- show the '~' characters after the end of buffers
         term_colors = false,
@@ -38,6 +38,12 @@ return {
         },
         color_overrides = {
           mocha = {
+            base = '#1c1c1c',
+            mantle = '#181815',
+            crust = '#111111',
+            text = '#d6dff9',
+          },
+          macchiato = {
             base = '#1c1c1c',
             mantle = '#181815',
             crust = '#111111',
@@ -76,6 +82,7 @@ return {
             HopNextKey2 = { fg = '#f7a156' },
             Pmenu = { fg = C.text, bg = C.mantle },
             PmenuSel = { fg = C.text, bg = C.base },
+            InlayHint = { fg = C.lavender, bg = C.mantle, style = { 'italic' } },
           }
         end,
         integrations = {
