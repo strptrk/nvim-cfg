@@ -21,6 +21,22 @@ end, {
   nargs = '?',
 })
 
+defcommand('Diff', function(args)
+  local a = args.fargs[1]
+  local b = args.fargs[2]
+  if a == nil or b == nil then
+    print("error: 2 files needed")
+    return
+  end
+  vim.cmd.tabedit(a)
+  vim.cmd.vsplit(b)
+  vim.cmd.windo('diffthis')
+end, {
+  force = true,
+  nargs = "+",
+  complete = 'file'
+})
+
 map({ 'x', 'n' }, 'gA', 'ga')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
 
