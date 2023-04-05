@@ -10,6 +10,17 @@ return {
       {
         'rcarriga/nvim-dap-ui',
         lazy = true,
+        keys = {
+          { '<BS>E', function() require('dapui').close() end, desc = 'Debug: Close DAP UI' },
+          { '<BS>b', function() require('dap').toggle_breakpoint() end, desc = 'Debug: Toggle Breakpoint' },
+          { '<BS>c', function() require('dap').continue() end, desc = 'Debug: Continue' },
+          { '<BS>i', function() require('dap').step_into() end, desc = 'Debug: Step Into' },
+          { '<BS>o', function() require('dap').step_over() end, desc = 'Debug: Step Over' },
+          { '<BS>r', function() require('dap').repl.open() end, desc = 'Debug: Open REPL' },
+          { '<BS>u', function() require('dapui').toggle() end, desc = 'Debug: Toggle UI' },
+          { '<BS>h', function() require('dap.ui.widgets').hover() end, desc = 'Debug: Hover Symbol' },
+          { '<BS>e', function() require('dapui').eval() end, desc = 'Debug: Eval Expression' },
+        },
         config = function()
           local dapui = require('dapui')
           dapui.setup({

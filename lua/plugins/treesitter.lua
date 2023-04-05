@@ -23,6 +23,9 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     lazy = true, -- no config, has to be loaded after TS
     ft = vim.g.ts_ft,
+    keys = {
+      { '<A-I>', '<cmd>IndentBlanklineToggle<cr>', desc = 'Toggle Indent Lines' },
+    },
     cmd = {
       'IndentBlanklineToggle',
     },
@@ -162,8 +165,12 @@ return {
               ['aA'] = '@statement.outer',
               ['ac'] = '@class.outer',
               ['ic'] = '@class.inner',
-              ['aB'] = '@block.outer',
-              ['iB'] = '@block.inner',
+              ['ai'] = '@block.outer',
+              ['ii'] = '@block.inner',
+              ['ij'] = { query = '@scope', query_group = 'locals'},
+              ['aj'] = { query = '@scope', query_group = 'locals'},
+              ['ak'] = '@comment.outer',
+              ['ik'] = '@comment.outer',
               ['iP'] = { query = '@parameter.inner' },
               ['aP'] = { query = '@parameter.outer' },
             },
