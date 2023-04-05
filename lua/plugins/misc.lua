@@ -1,9 +1,23 @@
 return {
-  { 'machakann/vim-sandwich' },
-  { 'junegunn/vim-easy-align' },
-  { 'matze/vim-move' },
+  {
+    lazy = true,
+    event = { 'VeryLazy' },
+    'machakann/vim-sandwich',
+  },
+  {
+    lazy = true,
+    event = { 'VeryLazy' },
+    'junegunn/vim-easy-align',
+  },
+  {
+    lazy = true,
+    event = { 'VeryLazy' },
+    'matze/vim-move',
+  },
   {
     'Shatur/neovim-session-manager',
+    lazy = true,
+    cmd = { 'SessionManager' },
     config = function()
       local Path = require('plenary.path')
       require('session_manager').setup({
@@ -24,7 +38,7 @@ return {
   {
     'numToStr/Comment.nvim',
     lazy = true,
-    event = "BufEnter",
+    event = 'VeryLazy',
     config = function()
       require('Comment').setup({
         padding = true,
@@ -42,6 +56,7 @@ return {
   },
   {
     'samjwill/nvim-unception',
+    lazy = false,
     init = function()
       vim.g.unception_open_buffer_in_new_tab = true
       vim.g.unception_enable_flavor_text = false

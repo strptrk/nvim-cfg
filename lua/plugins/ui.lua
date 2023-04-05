@@ -2,7 +2,7 @@ return {
   {
     'b0o/incline.nvim',
     lazy = true,
-    event = 'BufEnter',
+    event = 'VeryLazy',
     config = function()
       local get_diagnostic_label = function(props)
         local icons = {
@@ -201,14 +201,15 @@ return {
   },
   {
     'stevearc/dressing.nvim',
-    lazy = false,
+    lazy = true,
+    event = 'VeryLazy',
     config = function()
       require('dressing').setup()
     end,
     dependencies = {
       {
         'rcarriga/nvim-notify',
-        lazy = false,
+        lazy = true,
         config = function()
           require('notify').setup({
             background_colour = '#2e3440',
