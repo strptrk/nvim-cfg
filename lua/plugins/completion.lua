@@ -3,13 +3,7 @@ return {
     'hrsh7th/nvim-cmp',
     lazy = true,
     event = {
-      'InsertEnter',
-    },
-    keys = {
-      -- workaround to not load cmp with alpha.nvim
-      {'<C-;>', ':', desc = ''},
-      {'/', '/', desc = ''},
-      {'?', '?', desc = ''},
+      'InsertEnter', 'BufNewFile', 'BufReadPost'
     },
     config = function()
       local cmp = require('cmp')

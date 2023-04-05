@@ -68,6 +68,7 @@ return {
           vim.opt.laststatus = 3
           vim.opt.showcmd = true
           vim.opt.ruler = true
+          vim.cmd([[Lazy load nvim-cmp]])
         end,
       })
       alpha.setup({
