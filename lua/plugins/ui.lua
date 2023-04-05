@@ -120,6 +120,10 @@ return {
   },
   {
     'nvim-lualine/lualine.nvim',
+    lazy = true,
+    event = {
+      'BufNewFile', 'BufReadPost'
+    },
     dependencies = {
       { 'kyazdani42/nvim-web-devicons' },
     },
@@ -167,7 +171,7 @@ return {
   {
     'kyazdani42/nvim-web-devicons',
     lazy = true,
-    event = 'BufEnter',
+    event = 'VeryLazy',
     config = function()
       require('nvim-web-devicons').setup({
         override = { zsh = { icon = '', color = '#428850', name = 'Zsh' } },
@@ -177,6 +181,10 @@ return {
   },
   {
     'akinsho/bufferline.nvim',
+    lazy = true,
+    event = {
+      'BufNewFile', 'BufReadPost'
+    },
     config = function()
       require('bufferline').setup({
         highlights = require("catppuccin.groups.integrations.bufferline").get(),

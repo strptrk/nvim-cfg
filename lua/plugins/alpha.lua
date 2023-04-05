@@ -65,10 +65,11 @@ return {
         callback = function()
           vim.opt.showtabline = 2
           vim.opt.showmode = true
-          vim.opt.laststatus = 3
           vim.opt.showcmd = true
           vim.opt.ruler = true
-          vim.cmd([[Lazy load nvim-cmp]])
+          vim.cmd([[Lazy load lualine.nvim]])
+          vim.cmd([[Lazy load bufferline.nvim]])
+          vim.opt.laststatus = 3
         end,
       })
       alpha.setup({
