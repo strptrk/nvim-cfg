@@ -121,6 +121,9 @@ return {
       { 'ray-x/cmp-treesitter' },
       {
         'saadparwaiz1/cmp_luasnip',
+        config = function()
+          require('luasnip.loaders.from_snipmate').lazy_load({ paths = './snippets' })
+        end,
         dependencies = {
           {
             'L3MON4D3/LuaSnip',
