@@ -39,11 +39,19 @@ return {
           winbar = true,
           statusline = false,
           show_scrolled_off_parent_node = false,
-          tab_labels = {
-            filesystem = '  Files',
-            buffers = '  Buffers',
-            git_status = '  Git',
-            diagnostics = ' 裂Diagnostics ',
+          sources = {
+            {
+              source = "filesystem",
+              display_name = "  Files "
+            },
+            {
+              source = "buffers",
+              display_name = "  Buffers"
+            },
+            {
+              source = "git_status",
+              display_name = "  Git "
+            },
           },
           content_layout = 'start',
           tabs_layout = 'equal',
