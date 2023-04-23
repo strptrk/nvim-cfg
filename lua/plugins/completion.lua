@@ -46,16 +46,8 @@ return {
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
+          ['<A-Tab>'] = cmp.mapping.abort(),
           ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          -- if completion is active, just close it without going to normal mode
-          ['<Esc>'] = cmp.mapping(function(_)
-            if cmp.visible() then
-              cmp.close()
-            else
-              vim.api.nvim_exec([[stopinsert]], false)
-            end
-          end),
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
