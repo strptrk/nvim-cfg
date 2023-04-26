@@ -267,9 +267,6 @@ return {
         Term.runterm_run()
       end, { desc = 'Run Command in Terminal' })
 
-      vim.keymap.set({ 'n', 't', 'x' }, '<A-G>', function()
-        Term.lazygit_toggle()
-      end, { desc = 'Lazygit' })
       vim.keymap.set({ 'n', 'v', 't' }, [[<A-f>]], function()
         if vim.v.count == 0 then
           Term.focus_last()
