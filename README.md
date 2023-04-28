@@ -32,6 +32,11 @@ pip install "python-lsp-server[all]"
 sudo pacman -S gopls
 ```
 
+### CMake
+```
+pip install cmake-language-server
+```
+
 ## debugger adapters
 ### python3
 ```sh

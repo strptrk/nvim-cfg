@@ -5,6 +5,7 @@ return {
       'python',
       'lua',
       'go',
+      'cmake'
     },
     lazy = true,
     dependencies = {
@@ -38,6 +39,7 @@ return {
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
+      lsp.cmake.setup({ capabilities = capabilities })
       lsp.lua_ls.setup({
         capabilities = capabilities,
         settings = {
