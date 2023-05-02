@@ -21,11 +21,13 @@ return {
         formatting = {
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
-            local kind = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
+            local kind = require('lspkind').cmp_format({
+              mode = 'symbol_text',
+              maxwidth = 50,
+            })(entry, vim_item)
             local strings = vim.split(kind.kind, '%s', { trimempty = true })
             kind.kind = ' ' .. (strings[1] or '') .. ' '
             kind.menu = '    (' .. (strings[2] or '') .. ')'
-
             return kind
           end,
         },
@@ -112,7 +114,71 @@ return {
       })
     end,
     dependencies = {
-      { 'onsails/lspkind.nvim' },
+      {
+        'onsails/lspkind.nvim',
+        config = function()
+          require('lspkind').init({
+            -- defines how annotations are shown
+            -- default: symbol
+            -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+            mode = 'symbol_text',
+            -- default symbol map
+            -- can be either 'default' (requires nerd-fonts font) or
+            -- 'codicons' for codicon preset (requires vscode-codicons font)
+            --
+            -- default: 'default'
+            -- preset = 'codicons',
+            -- override preset symbols
+            --
+            -- default: {}
+            symbol_map = {
+              Text = "",
+              String = "",
+              Comment = "󰆉",
+              Method = "",
+              Function = "",
+              FunctionCall = "",
+              Constructor = "",
+              Field = "ﰠ",
+              Variable = "",
+              Class = "ﴯ",
+              _Parent = "ﴯ",
+              Interface = "",
+              Module = "",
+              Property = "ﰠ",
+              FunctionMacro = "",
+              Repeat = "󰑖",
+              Unit = "塞",
+              Type = "",
+              Boolean = "",
+              TypeBuiltin = "",
+              Value = "",
+              Number = "",
+              Enum = "",
+              Conditional = "",
+              Keyword = "",
+              KeywordReturn = "󰌑",
+              Namespace = "",
+              Snippet = "",
+              Color = "",
+              File = "",
+              Reference = "",
+              Folder = "",
+              EnumMember = "",
+              Constant = "",
+              ConstantBuiltin = "",
+              Struct = "פּ",
+              Event = "",
+              Operator = "",
+              Define = "",
+              Include = "󰼢",
+              TypeParameter = "",
+              Parameter = "",
+              TypeQualifier = "󰉺",
+            },
+          })
+        end
+      },
       { 'hrsh7th/cmp-nvim-lsp' },
       { 'hrsh7th/cmp-buffer' },
       { 'hrsh7th/cmp-path' },
