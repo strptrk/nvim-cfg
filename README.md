@@ -60,7 +60,7 @@ OR
 ```sh
 mkdir -p ~/.clones/vscode-lldb ~/.local/bin
 cd ~/.clones/vscode-lldb
-wget $(curl -s https://api.github.com/repos/vadimcn/vscode-lldb/releases | \
+wget $(curl -s https://api.github.com/repositories/49407251/releases | \
   jq '.[0].assets[] | select(.name == "codelldb-x86_64-linux.vsix").browser_download_url' -r)
 unzip codelldb-x86_64-linux.vsix
 ln -s $PWD/extension/adapter/codelldb ~/.local/bin

@@ -202,6 +202,7 @@ return {
           hover = {
             enabled = false,
           },
+          always_show_bufferline = false,
           separator_style = {'|', '|'}
         },
       })
