@@ -10,15 +10,15 @@ return {
       require('neorg').setup({
         load = {
           ['core.defaults'] = {},
-          ['core.norg.concealer'] = {
+          ['core.concealer'] = {
             config = {
               folds = false,
               conceal = false,
               adaptive = false,
             },
           },
-          ['core.norg.dirman'] = {},
-          ['core.norg.qol.toc'] = {},
+          ['core.dirman'] = {},
+          ['core.qol.toc'] = {},
           ['core.presenter'] = {
             config = {
               zen_mode = 'truezen',
@@ -26,7 +26,7 @@ return {
           },
           ['core.export'] = {},
           ['core.export.markdown'] = {},
-          ['core.norg.manoeuvre'] = {},
+          ['core.manoeuvre'] = {},
         },
       })
     end,

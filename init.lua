@@ -328,8 +328,8 @@ map({ 'n', 'x' }, 'sf', vim.lsp.buf.format, { desc = 'Format document (lsp)' })
 map('n', 'sj', ':a<CR><CR>.<CR>', { desc = 'Append newline under', silent = true })
 map('n', 'sk', ':i<CR><CR>.<CR>', { desc = 'Append newline above', silent = true })
 
-map('n', ']b', '<cmd>bnext<CR>')
-map('n', '[b', '<cmd>bprevious<CR>')
+map('n', 's]', '<cmd>bnext<CR>')
+map('n', 's[', '<cmd>bprevious<CR>')
 map('n', '<Space><Space>', '<C-^>')
 
 ----------------------------------------------------
@@ -342,9 +342,6 @@ map('n', 'Y', 'y$')
 map('v', ';', ':')
 map('n', ';', ':')
 map('x', '.', ':norm.<CR>')
--- map('x', 'Q', ":'<,'>:normal @q<CR>")
-map({ 'n', 'v' }, 'c', '"_c')
-map({ 'n', 'v' }, 'C', '"_C')
 map('i', '<C-v>', '<C-r>+')
 map('n', '<M-=>', '<cmd>wincmd =<CR>')
 map('n', 'J', 'mzJ`z')
@@ -429,24 +426,29 @@ map('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist
 map('n', '<Space>a', vim.lsp.buf.code_action, { desc = "Code Action" })
 map('n', 'gs', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
 
+local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
+
 local smart_rename = function()
   if vim.g.Get_langserv() ~= '' then
     return [[<cmd>lua vim.lsp.buf.rename()<cr>]]
   elseif vim.g.Get_treesitter() ~= '' then
-    return [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
+    return ts_rename
   else
     return [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
   end
 end
 map('n', 'ss', smart_rename, { expr = true, desc = "Rename" })
+map('n', 'sS', ts_rename, { desc = "Treesitter Rename" })
 map('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (line)" })
 map('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (file)" })
+map('v', 'ss', [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
+map('v', 'sS', [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 
 map('n', '<Space>qp', '<cmd>cprev<CR>')
 map('n', '<Space>qn', '<cmd>cnext<CR>')
 map('n', '<Space>qc', '<cmd>cclose<CR>')
 map('n', '<Space>qo', '<cmd>copen<CR>')
-map('n', 'g[', function() vim.diagnostic.goto_prev() end, { desc = 'Go to previous diagnostic' })
-map('n', 'g]', function() vim.diagnostic.goto_next() end, { desc = 'Go to next diagnostic' })
-map('n', 'sh', function() vim.lsp.buf.hover() end, { desc = 'Symbol hover information' })
+map('n', '<A-[>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+map('n', '<A-]>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+map('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
 map('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
