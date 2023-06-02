@@ -5,6 +5,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      local transparent = true
       vim.o.termguicolors = true
       require('catppuccin').setup({
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
@@ -12,11 +13,11 @@ return {
         --   light = 'latte',
         --   dark = 'mocha',
         -- },
-        transparent_background = false,
+        transparent_background = transparent,
         show_end_of_buffer = true, -- show the '~' characters after the end of buffers
         term_colors = false,
         dim_inactive = {
-          enabled = true,
+          enabled = not transparent,
           shade = 'dark',
           percentage = 0.15,
         },

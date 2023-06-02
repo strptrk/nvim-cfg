@@ -180,7 +180,15 @@ local WinMove = function(key)
   local curwin = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if curwin == vim.fn.winnr() then
-    if os.getenv('TERM_PROGRAM') == 'WezTerm' then
+    if os.getenv('TMUX') then
+      local dir = {
+        ['h'] = '-L',
+        ['j'] = '-D',
+        ['k'] = '-U',
+        ['l'] = '-R',
+      }
+      vim.fn.system('tmux select-pane ' .. dir[key])
+    elseif os.getenv('TERM_PROGRAM') == 'WezTerm' then
       local dir = {
         ['h'] = 'Left',
         ['j'] = 'Down',
@@ -452,3 +460,12 @@ map('n', '<A-[>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic'
 map('n', '<A-]>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 map('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
 map('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
+
+defcommand("Mktmpf", function (args)
+  math.randomseed(os.time())
+  local dname = '/tmp/tmpdir_nvim_' .. tostring(math.random(100000,999999))
+  local fname = 'main.' .. args.fargs[1]
+  os.execute('mkdir -p ' .. dname)
+  exec('cd ' .. dname)
+  exec('e ' .. fname)
+end, { nargs = 1 })
