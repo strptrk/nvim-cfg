@@ -1,21 +1,9 @@
 vim.g.ts_installed = {
-  'bash', 'norg', 'c', 'cpp', 'rust', 'python',
-  'lua', 'json', 'markdown', 'markdown_inline',
-  'comment', 'awk', 'cmake', "awk", "cmake",
-  "css", "diff", "dockerfile", "fennel",
-  "git_rebase", "gitcommit", "gitignore", "gitattributes",
-  "go", "jq", "latex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml",
+  'c'
 }
 
 vim.g.ts_ft = {
-  'bash', 'norg', 'c', 'cpp', 'rust', 'python',
-  'lua', 'json', 'markdown', 'markdown_inline',
-  'comment', 'awk', 'cmake', "awk", "cmake",
-  "css", "diff", "dockerfile", "fennel",
-  "git_rebase", "gitcommit", "gitignore", "gitattributes",
-  "go", "jq", "latex", "tex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml",
+  'c'
 }
 
 return {

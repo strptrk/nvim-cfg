@@ -1,12 +1,12 @@
 return {
   {
     'neovim/nvim-lspconfig',
-    ft = {
-      'python',
-      'lua',
-      'go',
-      'cmake'
-    },
+    -- ft = {
+    --   'python',
+    --   'lua',
+    --   'go',
+    --   'cmake'
+    -- },
     lazy = true,
     dependencies = {
       {
@@ -66,7 +66,7 @@ return {
   {
     'p00f/clangd_extensions.nvim',
     lazy = true,
-    ft = { 'c', 'cpp' },
+    -- ft = { 'c', 'cpp' },
     config = function()
       require('clangd_extensions').setup({
         server = {
