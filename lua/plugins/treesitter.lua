@@ -1,10 +1,6 @@
-vim.g.ts_installed = {
-  'c'
-}
+vim.g.ts_installed = { }
 
-vim.g.ts_ft = {
-  'c'
-}
+vim.g.ts_ft = { }
 
 return {
   {
