@@ -233,7 +233,7 @@ return {
             request = 'launch',
             program = os.getenv("DEBUG_PROGRAM") or function() return vim.fn.input('Program Path: ', '') end,
             coreDumpPath = os.getenv("COREDUMP") or function() return vim.fn.input('Coredump Path: ', '') end,
-            cwd = '${workspaceFolder}',
+            cwd = os.getenv("DEBUG_CWD") or '${workspaceFolder}',
             stopAtEntry = true,
             setupCommands = {
               {
