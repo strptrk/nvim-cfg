@@ -228,6 +228,22 @@ return {
             },
           },
           {
+            name = 'Debug Coredump',
+            type = 'cppdbg',
+            request = 'launch',
+            program = os.getenv("DEBUG_PROGRAM") or function() return vim.fn.input('Program Path: ', '') end,
+            coreDumpPath = os.getenv("COREDUMP") or function() return vim.fn.input('Coredump Path: ', '') end,
+            cwd = '${workspaceFolder}',
+            stopAtEntry = true,
+            setupCommands = {
+              {
+                text = '-enable-pretty-printing',
+                description = 'enable pretty printing',
+                ignoreFailures = false,
+              },
+            },
+          },
+          {
             name = 'Attach to gdbserver',
             type = 'cppdbg',
             request = 'launch',
