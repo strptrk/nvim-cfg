@@ -8,11 +8,7 @@ return {
       local transparent = true
       vim.o.termguicolors = true
       require('catppuccin').setup({
-        flavour = 'macchiato', -- latte, frappe, macchiato, mocha
-        -- background = {
-        --   light = 'latte',
-        --   dark = 'mocha',
-        -- },
+        flavour = 'frappe', -- latte, frappe, macchiato, mocha
         transparent_background = transparent,
         show_end_of_buffer = true, -- show the '~' characters after the end of buffers
         term_colors = false,
@@ -37,20 +33,7 @@ return {
           types = {},
           operators = {},
         },
-        color_overrides = {
-          mocha = {
-            base = '#1c1c1c',
-            mantle = '#181815',
-            crust = '#111111',
-            text = '#d6dff9',
-          },
-          macchiato = {
-            base = '#1c1c1c',
-            mantle = '#181815',
-            crust = '#111111',
-            text = '#d6dff9',
-          },
-        },
+        color_overrides = { },
         custom_highlights = function(C)
           return {
             CmpItemKindSnippet = { fg = C.base, bg = C.mauve },
@@ -82,12 +65,11 @@ return {
             HopNextKey1 = { fg = '#F72044', style = { 'bold' } },
             HopNextKey2 = { fg = '#f7a156' },
             Pmenu = { fg = C.text, bg = C.mantle },
-            PmenuSel = { fg = C.text, bg = C.base },
             InlayHint = { fg = C.lavender, bg = C.mantle, style = { 'italic' } },
           }
         end,
         integrations = {
-          cmp = false,
+          cmp = true,
           gitsigns = true,
           neotree = true,
           telescope = true,
