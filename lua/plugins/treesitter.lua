@@ -113,7 +113,17 @@ return {
     config = function()
       require('nvim-treesitter.configs').setup({
         ensure_installed = vim.g.ts_installed,
-        highlight = { enable = true, additional_vim_regex_highlighting = false },
+        highlight = {
+          enable = true,
+          disable = function(_, buf) -- language, buffer
+            local max_filesize = 200 * 1024 -- 200 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+              return true
+            end
+          end,
+          additional_vim_regex_highlighting = false,
+        },
         indent = { enable = false },
         autopairs = { enable = true },
         rainbow = { enable = false, extended_mode = true },
