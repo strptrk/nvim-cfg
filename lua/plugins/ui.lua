@@ -163,8 +163,7 @@ return {
         },
         inactive_sections = {},
         tabline = {},
-        -- extensions = {'fzf', 'toggleterm', 'quickfix'}
-        extensions = { 'chadtree', 'fzf', 'toggleterm', 'quickfix', 'symbols-outline' },
+        extensions = { 'toggleterm', 'quickfix', 'symbols-outline' },
       })
     end,
   },

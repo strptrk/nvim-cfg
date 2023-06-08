@@ -5,7 +5,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      local transparent = true
+      local transparent = os.getenv('TRANSPARENT') and true or false
       vim.o.termguicolors = true
       require('catppuccin').setup({
         flavour = 'frappe', -- latte, frappe, macchiato, mocha
@@ -33,7 +33,6 @@ return {
           types = {},
           operators = {},
         },
-        color_overrides = { },
         custom_highlights = function(C)
           return {
             CmpItemKindSnippet = { fg = C.base, bg = C.mauve },

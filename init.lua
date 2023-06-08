@@ -206,7 +206,7 @@ local SplitAndFocus = function(dir)
   else
     vim.cmd.wincmd('v')
   end
-  WinMove(dir)
+  vim.cmd.wincmd(dir)
 end
 
 vim.g.SplitInDirection = function(dir, fn, opts)
@@ -280,8 +280,19 @@ end)
 
 map('n', '<A-a>', '<cmd>tabprevious<cr>')
 map('n', '<A-d>', '<cmd>tabnext<cr>')
-map('n', '<A-t>', '<cmd>tabnew<CR>')
 map('n', '<A-C>', '<cmd>tabclose<CR>')
+map('n', '<A-t>', function()
+  vim.g.FnNewTab(nil, { zz = true })
+end, {desc = 'Open New Tab'})
+
+map('n', '<A-C-a>', '<cmd>cprev<CR>')
+map('n', '<A-C-d>', '<cmd>cnext<CR>')
+map('n', '<A-q>c', '<cmd>cclose<CR>')
+map('n', '<A-q>o', '<cmd>copen<CR>')
+map('n', '<A-A>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+map('n', '<A-D>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+
+
 map('t', '<A-n>', [[<C-\><C-n>]])
 
 map('n', '<C-M-h>', function()
@@ -422,10 +433,6 @@ CR = function()
 end
 map('i', '<cr>', 'v:lua.CR()', exp)
 
-map('n', '<space>T', function()
-  vim.g.FnNewTab(nil, { zz = true })
-end, {desc = 'Open New Tab'})
-
 map('n', '<Space>hv', ':vert help ')
 map('n', '<Space>ht', ':tab help ')
 map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))
@@ -452,12 +459,6 @@ map('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 
 map('v', 'ss', [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 map('v', 'sS', [[:s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 
-map('n', '<Space>qp', '<cmd>cprev<CR>')
-map('n', '<Space>qn', '<cmd>cnext<CR>')
-map('n', '<Space>qc', '<cmd>cclose<CR>')
-map('n', '<Space>qo', '<cmd>copen<CR>')
-map('n', '<A-[>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
-map('n', '<A-]>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 map('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
 map('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
 
