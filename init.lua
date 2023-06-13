@@ -470,3 +470,7 @@ defcommand("Mktmpf", function (args)
   exec('cd ' .. dname)
   exec('e ' .. fname)
 end, { nargs = 1 })
+
+vim.cmd([[
+    cnoreabbrev SPL s/\ /\ \\\r/g
+]])
