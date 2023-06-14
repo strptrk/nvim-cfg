@@ -32,6 +32,13 @@ pip install "python-lsp-server[all]"
 sudo pacman -S gopls
 ```
 
+### latex
+```sh
+sudo pacman -S texlab
+# or
+cargo install texlab
+```
+
 ### CMake
 ```
 pip install cmake-language-server

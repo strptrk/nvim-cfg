@@ -5,7 +5,8 @@ return {
       'python',
       'lua',
       'go',
-      'cmake'
+      'cmake',
+      'tex'
     },
     lazy = true,
     dependencies = {
@@ -40,6 +41,7 @@ return {
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
       lsp.cmake.setup({ capabilities = capabilities })
+      lsp.texlab.setup({ capabilities = capabilities })
       lsp.lua_ls.setup({
         capabilities = capabilities,
         settings = {
