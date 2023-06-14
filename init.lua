@@ -266,6 +266,7 @@ end
 ------------------
 
 map({ 'x', 'n' }, 'gA', 'ga')
+map({ 'x', 'n' }, 'gs', '<Nop>')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
 
 for k, _ in string.gmatch('\'"[](){}<>`', '.') do
@@ -438,8 +439,9 @@ map('n', '<Space>ht', ':tab help ')
 map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))
 map('n', '<Space>N', "<cmd>Notifications<cr>")
 map('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
+map('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
 map('n', '<Space>a', vim.lsp.buf.code_action, { desc = "Code Action" })
-map('n', 'gs', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
+map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
 
 local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
 

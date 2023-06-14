@@ -147,8 +147,11 @@ return {
           navigation = {
             enable = true,
             keymaps = {
-              goto_next_usage = '<C-.>',
-              goto_previous_usage = '<C-,>',
+              goto_definition= "gsd",
+              goto_next_usage = 'gsn',
+              goto_previous_usage = 'gsp',
+              list_definitions = "gso",
+              list_definitions_toc = "gsO",
             },
           },
           highlight_definitions = {
