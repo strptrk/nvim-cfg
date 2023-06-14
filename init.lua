@@ -365,6 +365,10 @@ map('x', '.', ':norm.<CR>')
 map('i', '<C-v>', '<C-r>+')
 map('n', '<M-=>', '<cmd>wincmd =<CR>')
 map('n', 'J', 'mzJ`z')
+map('n', 'M', ':make ')
+-- should remap in future, never used
+-- map('n', 'H', ':make ')
+-- map('n', 'L', ':make ')
 
 local CC = true
 map('n', '<A-i>', function()
