@@ -41,7 +41,20 @@ return {
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
       lsp.cmake.setup({ capabilities = capabilities })
-      lsp.texlab.setup({ capabilities = capabilities })
+      lsp.texlab.setup({
+        capabilities = capabilities,
+        settings = {
+          texlab = {
+            diagnostics = {
+              ignoredPatterns = {
+                "^Underfull \\\\[vh]box.*", -- lua escape + regex escape
+                "^Overfull \\\\[vh]box.*",
+                "^Unused global option\\(s\\):$",
+              }
+            }
+          },
+        }
+      })
       lsp.lua_ls.setup({
         capabilities = capabilities,
         settings = {
