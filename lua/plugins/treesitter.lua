@@ -35,7 +35,7 @@ return {
         buftype_exclude = { 'terminal', 'nofile', 'norg', 'text', '' },
         use_treesitter = true,
         enabled = false,
-        show_current_context = false,
+        show_current_context = true,
         char_highlight_list = {
           'Comment',
         },

@@ -129,11 +129,16 @@ return {
     },
     config = function()
       vim.g.Get_langserv = function()
-        return (vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })[1] or { name = '' })['name']
+        local client = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })[1]
+        if client ~= nil and client.name ~= '' then
+          return ' ' .. client.name
+        else
+          return ''
+        end
       end
       vim.g.Get_treesitter = function()
         if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil then
-          return ' TS'
+          return '󰄵 ts'
         else
           return ''
         end
