@@ -133,6 +133,15 @@ return {
             -- default: {}
             symbol_map = {
               Text = "",
+              PunctuationSpecial = "",
+              TextUri = "",
+              TextReference = "",
+              TextEnvironment = "󰅩",
+              TextEnvironmentName = "󰅩",
+              TextEmphasis = "",
+              TextStrong = "",
+              Spell = "",
+              Nospell = "",
               String = "",
               Comment = "󰆉",
               Method = "",
