@@ -49,6 +49,9 @@ return {
     build = ':TSUpdate',
     cmd = 'TSInstall',
     ft = vim.g.ts_ft,
+    keys = {
+      { '<A-S>', '<cmd>TSToggle refactor.highlight_current_scope<cr>', desc = 'Toggle Current Scope' },
+    },
     lazy = true,
     dependencies = {
       { 'nvim-treesitter/playground', lazy = true },
@@ -108,6 +111,9 @@ return {
       {
         'simrat39/symbols-outline.nvim',
         lazy = true,
+        keys = {
+          { 'so', '<cmd>SymbolsOutline<CR>' },
+        },
         config = function()
           require('symbols-outline').setup()
           vim.api.nvim_create_autocmd('FileType', {
@@ -116,7 +122,6 @@ return {
               vim.wo.cursorline = true
             end,
           })
-          vim.keymap.set('n', 'so', '<cmd>SymbolsOutline<CR>')
         end,
       },
       {
