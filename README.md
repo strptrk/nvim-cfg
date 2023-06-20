@@ -2,7 +2,7 @@
 
 ## get started
 ```sh
-git clone git@github.com:strptrk/nvim-cfg.git ~/.config/nvim
+git clone https://github.com/strptrk/nvim-cfg.git ~/.config/nvim
 nvim --headless "+Lazy! sync" +qa
 ```
 ## tree-sitter cli for certain parsers
@@ -67,7 +67,7 @@ OR
 ```sh
 mkdir -p ~/.clones/vscode-lldb ~/.local/bin
 cd ~/.clones/vscode-lldb
-wget $(curl -s https://api.github.com/repositories/49407251/releases | \
+curl -LO $(curl -s https://api.github.com/repositories/49407251/releases | \
   jq '.[0].assets[] | select(.name == "codelldb-x86_64-linux.vsix").browser_download_url' -r)
 unzip codelldb-x86_64-linux.vsix
 ln -s $PWD/extension/adapter/codelldb ~/.local/bin
@@ -77,8 +77,8 @@ ln -s $PWD/extension/adapter/codelldb ~/.local/bin
 ```sh
 mkdir -p ~/.clones/cpptools ~/.local/bin
 cd ~/.clones/cpptools
-wget $(curl -s https://api.github.com/repos/microsoft/vscode-cpptools/releases | \
-  jq '.[0].assets[] | select(.name == "cpptools-linux.vsix").browser_download_url' -r)
+curl -LO $(curl -s https://api.github.com/repos/microsoft/vscode-cpptools/releases | \
+  jq -r '[.[].assets[] | select(.name == "cpptools-linux.vsix").browser_download_url][0]')
 unzip cpptools-linux.vsix
 chmod +x extension/debugAdapters/bin/OpenDebugAD7
 ln -s $PWD/extension/debugAdapters/bin/OpenDebugAD7 ~/.local/bin

@@ -47,7 +47,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    cmd = 'TSInstall',
+    cmd = { 'TSInstall', 'TSUpdate' },
     ft = vim.g.ts_ft,
     keys = {
       { '<A-S>', '<cmd>TSToggle refactor.highlight_current_scope<cr>', desc = 'Toggle Current Scope' },
