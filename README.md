@@ -4,6 +4,7 @@
 ```sh
 git clone https://github.com/strptrk/nvim-cfg.git ~/.config/nvim
 nvim --headless "+Lazy! sync" +qa
+nvim --headless "+Lazy! load nvim-treesitter" # to install parsers
 ```
 ## tree-sitter cli for certain parsers
 ```sh
