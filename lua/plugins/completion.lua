@@ -133,6 +133,8 @@ return {
             -- default: {}
             symbol_map = {
               Text = "",
+              None = "",
+              Error = "",
               PunctuationSpecial = "",
               TextUri = "",
               TextReference = "",
