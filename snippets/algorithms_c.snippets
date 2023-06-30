@@ -1,0 +1,13 @@
+snippet egcd extended gcd
+    long extended_gcd(long a, long b, long *x, long *y) {
+        if (b == 0) {
+            *x = 1;
+            *y = 0;
+            return a;
+        }
+        long x0, y0;
+        long gcd = extended_gcd(b, a % b, &x0, &y0);
+        *x = y0;
+        *y = x0 - (a / b) * y0;
+        return gcd;
+    }

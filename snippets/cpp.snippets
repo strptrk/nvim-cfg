@@ -1,18 +1,7 @@
-snippet egcd extended_gcd
-    ll extended_gcd(ll a, ll b, ll *x, ll *y) {
-        if (b == 0) {
-            *x = 1;
-            *y = 0;
-            return a;
-        }
-        ll x0, y0;
-        ll gcd = extended_gcd(b, a % b, &x0, &y0);
-        *x = y0;
-        *y = x0 - (a / b) * y0;
-        return gcd;
-    }
+extends algorithms_cpp
+# will include c and algorithms_c as well
 
-snippet mainlib mainlib
+snippet maincpp maincpp
     #include <bits/stdc++.h>
 
     int main(int argc, char * argv[]){
@@ -20,8 +9,4 @@ snippet mainlib mainlib
         return 0;
     }
 
-snippet main main
-    int main(int argc, char * argv[]){
-        $0
-        return 0;
-    }
+

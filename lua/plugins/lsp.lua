@@ -22,6 +22,7 @@ return {
       },
       {
         'j-hui/fidget.nvim',
+        tag = 'legacy',
         lazy = true,
         config = function()
           require('fidget').setup({

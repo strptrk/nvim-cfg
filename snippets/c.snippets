@@ -1,4 +1,6 @@
-snippet mainlib mainlib
+extends algorithms_c
+
+snippet mainc mainc
     #include <stdio.h>
     #include <stdlib.h>
     #include <unistd.h>
@@ -14,4 +16,9 @@ snippet main main
     int main(int argc, char * argv[]){
         $0
         return 0;
+    }
+
+snippet for for
+    for(int $1 = 0; $1 < $2; ++$1){
+    	$0
     }
