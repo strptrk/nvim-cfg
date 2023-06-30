@@ -9,4 +9,24 @@ snippet maincpp maincpp
         return 0;
     }
 
+snippet class
+  class $1 {
+      $0
+  };
 
+snippet map
+  unordered_map<$1, $2> $0;
+
+snippet vv
+  vector<vector<$1>> $0;
+
+snippet vvv
+  vector<vector<vector<$1>>> $0;
+
+snippet sortall
+  sort($0.begin(), $0.end());
+
+snippet each
+    for(auto $1: $2){
+    	$0
+    }
