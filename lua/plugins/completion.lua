@@ -135,6 +135,7 @@ return {
               Text = "",
               None = "",
               Error = "",
+              Symbol = "",
               PunctuationSpecial = "",
               TextUri = "",
               TextReference = "",
