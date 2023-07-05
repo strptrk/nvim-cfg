@@ -30,3 +30,13 @@ snippet afor
     for(auto $1: $2){
     	$0
     }
+
+snippet itfor
+	for(auto $1 = $2.begin(); $1 != $2.end(); ++$1){
+    	$0
+    }
+
+snippet itrev
+	for(auto $1 = $2.rbegin(); $1 != $2.rend(); ++$1){
+		$0
+	}

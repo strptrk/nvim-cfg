@@ -146,6 +146,8 @@ return {
               Spell = "",
               Nospell = "",
               String = "",
+              StringEscape = "󱔁",
+              Character = "",
               Comment = "󰆉",
               Method = "",
               Function = "",
