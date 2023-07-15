@@ -31,6 +31,11 @@ snippet afor
     	$0
     }
 
+snippet sfor
+    for(size_t $1 = 0, size = $2.size(); $1 < size; ++$1){
+    	$0
+    }
+
 snippet itfor
 	for(auto $1 = $2.begin(); $1 != $2.end(); ++$1){
 		$0
