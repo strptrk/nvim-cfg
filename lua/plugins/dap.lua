@@ -18,6 +18,10 @@ return {
           { '<BS>o', function() require('dap').step_over() end, desc = 'Debug: Step Over' },
           { '<BS>r', function() require('dap').repl.open() end, desc = 'Debug: Open REPL' },
           { '<BS>u', function() require('dapui').toggle() end, desc = 'Debug: Toggle UI' },
+          { '<BS>t', function()
+            vim.g.FnNewTab(nil, { zz = true })
+            require('dapui').toggle()
+          end, desc = 'Debug: Toggle UI' },
           { '<BS>h', function() require('dap.ui.widgets').hover() end, desc = 'Debug: Hover Symbol' },
           { '<BS>e', function() require('dapui').eval() end, desc = 'Debug: Eval Expression' },
         },

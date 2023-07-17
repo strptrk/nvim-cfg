@@ -1,5 +1,66 @@
 return {
   {
+    "folke/edgy.nvim",
+    event = "VeryLazy",
+    opts = {
+      animate = {
+        fps = 120,
+        cps = 240,
+      },
+      bottom = {
+        {
+          ft = "toggleterm",
+          size = { height = 0.28 },
+          -- exclude floating windows
+          filter = function(_, win)
+            return vim.api.nvim_win_get_config(win).relative == ""
+          end,
+        },
+        { ft = "qf", title = "QuickFix" },
+      },
+      left = {
+        -- Neo-tree filesystem always takes half the screen height
+        {
+          title = "Neo-Tree",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "filesystem"
+          end,
+          size = { height = 0.4 },
+        },
+        {
+          title = "Neo-Tree Git",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "git_status"
+          end,
+          pinned = true,
+          open = "Neotree position=right git_status",
+          size = { height = 0.3 },
+        },
+        {
+          title = "Neo-Tree Buffers",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "buffers"
+          end,
+          pinned = true,
+          open = "Neotree position=top buffers",
+          size = { height = 0.3 },
+        },
+        -- any other neo-tree windows
+        -- "neo-tree",
+      },
+      right = {
+        {
+          ft = "Outline",
+          pinned = true,
+          open = "SymbolsOutlineOpen",
+        },
+      },
+    },
+  },
+  {
     'b0o/incline.nvim',
     lazy = true,
     event = 'VeryLazy',
@@ -58,7 +119,7 @@ return {
           local buffer = {
             { filetype_icon, guifg = color },
             { ' ' },
-            { filename, gui = modified },
+            { filename,      gui = modified },
           }
           if #diagnostics > 0 then
             table.insert(diagnostics, { '| ', guifg = 'grey' })
@@ -207,7 +268,7 @@ return {
             enabled = false,
           },
           always_show_bufferline = false,
-          separator_style = {'|', '|'}
+          separator_style = { '|', '|' }
         },
       })
     end,

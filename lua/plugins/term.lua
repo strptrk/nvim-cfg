@@ -42,7 +42,8 @@ return {
         insert_mappings = true,
         terminal_mappings = true,
         persist_size = true,
-        direction = 'float',
+        persist_mode = true,
+        direction = 'horizontal',
         close_on_exit = true,
         autochdir = true,
         autoscroll = true,
@@ -74,7 +75,7 @@ return {
         Term.Terminals[num] = {
           term = Terminal:new({
             -- cmd = vim.o.shell,
-            direction = dir or 'float',
+            direction = dir or 'horizontal',
             count = num,
             on_exit = Term.delete_term,
           }),

@@ -64,6 +64,7 @@ o.showmatch = true
 w.colorcolumn = '0'
 w.signcolumn = 'yes'
 o.splitright = true
+o.splitkeep = "screen"
 o.splitbelow = true
 o.ignorecase = true
 o.smartcase = true
