@@ -111,6 +111,7 @@ return {
       {
         'simrat39/symbols-outline.nvim',
         lazy = true,
+        cmd = { 'SymbolsOutlineOpen', 'SymbolsOutline' },
         keys = {
           { 'so', '<cmd>SymbolsOutline<CR>' },
         },
