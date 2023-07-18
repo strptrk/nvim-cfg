@@ -10,7 +10,7 @@ return {
       bottom = {
         {
           ft = "toggleterm",
-          size = { height = 0.28 },
+          size = { height = 0.25 },
           -- exclude floating windows
           filter = function(_, win)
             return vim.api.nvim_win_get_config(win).relative == ""
@@ -36,7 +36,7 @@ return {
           end,
           pinned = true,
           open = "Neotree position=right git_status",
-          size = { height = 0.3 },
+          size = { height = 0.32 },
         },
         {
           title = "Neo-Tree Buffers",
@@ -46,7 +46,7 @@ return {
           end,
           pinned = true,
           open = "Neotree position=top buffers",
-          size = { height = 0.3 },
+          size = { height = 0.28 },
         },
         -- any other neo-tree windows
         -- "neo-tree",
