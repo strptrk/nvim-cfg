@@ -20,11 +20,8 @@ require('lazy').setup('plugins', {
     cache = { enabled = true },
     rtp = {
       disabled_plugins = {
-        'gzip',
-        'tarPlugin',
         'tohtml',
         'tutor',
-        'zipPlugin',
       },
     },
   },
