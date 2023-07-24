@@ -9,6 +9,7 @@ return {
       },
       bottom = {
         {
+          title = "Terminal",
           ft = "toggleterm",
           size = { height = 0.25 },
           -- exclude floating windows
@@ -21,7 +22,7 @@ return {
       left = {
         -- Neo-tree filesystem always takes half the screen height
         {
-          title = "Neo-Tree",
+          title = "Files",
           ft = "neo-tree",
           filter = function(buf)
             return vim.b[buf].neo_tree_source == "filesystem"
@@ -29,7 +30,7 @@ return {
           size = { height = 0.4 },
         },
         {
-          title = "Neo-Tree Git",
+          title = "Git",
           ft = "neo-tree",
           filter = function(buf)
             return vim.b[buf].neo_tree_source == "git_status"
@@ -39,7 +40,7 @@ return {
           size = { height = 0.32 },
         },
         {
-          title = "Neo-Tree Buffers",
+          title = "Buffers",
           ft = "neo-tree",
           filter = function(buf)
             return vim.b[buf].neo_tree_source == "buffers"
