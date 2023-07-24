@@ -153,6 +153,7 @@ return {
               Storageclass = "",
               Method = "",
               Function = "",
+              FunctionKeyword = "",
               FunctionCall = "",
               Constructor = "",
               Field = "ﰠ",

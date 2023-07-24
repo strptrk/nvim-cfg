@@ -5,6 +5,7 @@ return {
     cmd = { 'TermExec', 'ToggleTerm', 'Lazygit' },
     keys = {
       { '<A-f>', nil, desc = 'Open Terminal' },
+      { '<A-F>', nil, desc = 'Open Terminal (floating)' },
       { '<A-b>', nil, desc = 'Select Terminal' },
       { '<A-n>', nil, desc = 'Set Terminal Name' },
       { '<A-r>', nil, desc = 'Run Command in Terminal' },
@@ -61,7 +62,7 @@ return {
         cmd = 'lazygit',
         direction = 'tab',
         hidden = true,
-        count = 1000,
+        count = 1001,
       })
       Term.lazygit_toggle = function()
         lazygit:toggle()
@@ -283,6 +284,10 @@ return {
       vim.keymap.set({ 'n', 'v', 't' }, [[<A-n>]], function()
         Term.rename_term()
       end, { desc = 'Set Terminal Name' })
+
+      vim.keymap.set({ 'n', 'v', 't' }, [[<A-F>]], function()
+        Term.focus_term(1000, 'float')
+      end, { desc = 'Open Terminal (floating)' })
 
       local directions = {
         f = 'float',
