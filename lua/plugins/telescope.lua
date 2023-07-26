@@ -45,19 +45,10 @@ return {
     },
     dependencies = {
       { 'nvim-lua/plenary.nvim', lazy = true },
-      {
-        'ThePrimeagen/harpoon',
-        lazy = true,
-        keys = {
-          { '<Space>hm', "<cmd>Telescope harpoon marks theme=ivy<cr>", 'Harpoon Telescope' },
-          { '<Space>ha', function() require("harpoon.mark").add_file() end, 'Harpoon Add File' },
-          { '<Space>hM', function() require("harpoon.ui").toggle_quick_menu() end, 'Harpoon Menu' },
-        }
-      },
     },
     config = function()
       local telescope = require('telescope')
-      telescope.load_extension('harpoon')
+      -- telescope.load_extension('harpoon')
       telescope.setup({
         pickers = {
           find_files = { theme = 'ivy' },

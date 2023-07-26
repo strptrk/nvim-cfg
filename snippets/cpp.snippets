@@ -45,3 +45,19 @@ snippet itrev
 	for(auto $1 = $2.rbegin(); $1 != $2.rend(); ++$1){
 		$0
 	}
+
+snippet time_measurement
+	#define measure_time std::chrono::system_clock::time_point ___t1, ___t2;
+	#define startclock ___t1 = std::chrono::high_resolution_clock::now()
+	#define endclock ___t2 = std::chrono::high_resolution_clock::now()
+	#define printduration                                                          \
+		std::cout << std::fixed;                                                   \
+		std::cout << "execution time: "                                            \
+				  << "\033[31m"                                                    \
+				  << std::chrono::duration_cast<std::chrono::microseconds>(___t2 - \
+																		   ___t1)  \
+							 .count() /                                            \
+						 1000000.0                                                 \
+				  << "\033[0m"                                                     \
+				  << " seconds\n";                                                 \
+		std::cout << std::scientific;

@@ -154,6 +154,7 @@ return {
               Method = "",
               Function = "",
               FunctionKeyword = "",
+              KeywordFunction = "",
               FunctionCall = "",
               Constructor = "",
               Field = "ﰠ",
