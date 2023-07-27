@@ -268,8 +268,8 @@ map({ 'x', 'n' }, 'gs', '<Nop>')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
 
 for k, _ in string.gmatch('\'"[](){}<>`', '.') do
-  map('n', [[<Space>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
-  map('x', [[<Space>]] .. k, [[<Plug>(sandwich-add)]] .. k)
+  map('n', [[<CR>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
+  map('x', [[<CR>]] .. k, [[<Plug>(sandwich-add)]] .. k)
 end
 
 map('i', '<A-s>', '<Plug>luasnip-expand-or-jump')
@@ -286,8 +286,8 @@ end, {desc = 'Open New Tab'})
 
 map('n', '<A-C-a>', '<cmd>cprev<CR>')
 map('n', '<A-C-d>', '<cmd>cnext<CR>')
-map('n', '<A-q>c', '<cmd>cclose<CR>')
-map('n', '<A-q>o', '<cmd>copen<CR>')
+-- map('n', '<A-q>c', '<cmd>cclose<CR>')
+-- map('n', '<A-q>o', '<cmd>copen<CR>')
 map('n', '<A-A>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
 map('n', '<A-D>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 

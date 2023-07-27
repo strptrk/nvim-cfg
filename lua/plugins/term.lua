@@ -6,8 +6,8 @@ return {
     keys = {
       { '<A-f>', nil, desc = 'Open Terminal' },
       { '<A-F>', nil, desc = 'Open Terminal (floating)' },
-      { '<A-b>', nil, desc = 'Select Terminal' },
-      { '<A-n>', nil, desc = 'Set Terminal Name' },
+      { '<A-B>', nil, desc = 'Select Terminal' },
+      { '<A-N>', nil, desc = 'Set Terminal Name' },
       { '<A-r>', nil, desc = 'Run Command in Terminal' },
       { '<A-C-r>', nil, desc = 'Set Command to Run' },
       { '<A-R>', nil, desc = 'Toggle Run Terminal' },
@@ -277,11 +277,11 @@ return {
         end
       end, { desc = 'Open terminal' })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-b>]], function()
+      vim.keymap.set({ 'n', 'v', 't' }, [[<A-B>]], function()
         Term.select_open_term()
       end, { desc = 'Select Terminal' })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-n>]], function()
+      vim.keymap.set({ 'n', 'v', 't' }, [[<A-N>]], function()
         Term.rename_term()
       end, { desc = 'Set Terminal Name' })
 
