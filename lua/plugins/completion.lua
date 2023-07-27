@@ -188,6 +188,7 @@ return {
               Struct = "פּ",
               Event = "",
               Operator = "",
+              KeywordOperator = "",
               Define = "",
               Include = "󰼢",
               TypeParameter = "",
