@@ -97,6 +97,11 @@ g.move_map_keys = 0
 
 g.c_syntax_for_h = 1
 
+-- abbreviations
+vim.cmd([[
+  cnoreabbrev qt tabclose
+]])
+
 -- highlight on yank
 local yankhl = augroup('YankHL', { clear = true })
 autocmd('TextYankPost', {

@@ -32,7 +32,7 @@ return {
       local gitsigns = require('gitsigns')
       local hint = [[
    _J_: next hunk   _s_: stage hunk        _d_: show deleted      _D_: diffview
-   _K_: prev hunk   _u_: undo last stage   _p_: preview hunk      _C_: commit diffview ^ ^ ^
+   _K_: prev hunk   _u_: undo last stage   _p_: preview hunk      _C_: commit history ^ ^ ^
    ^ ^              _S_: stage buffe       _P_: preview hunk (il) _F_: file history
    ^ ^              _R_: reset hunk        _b_: blame line       
    ^ ^
