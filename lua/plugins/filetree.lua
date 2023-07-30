@@ -4,8 +4,17 @@ return {
     branch = 'v2.x',
     lazy = true,
     keys = {
-      { 'sc', '<cmd>Neotree reveal<cr>', desc = 'Neotree' },
-      { 'su',
+      {
+        'sc',
+        function()
+          vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
+          vim.api.nvim_exec([[Neotree show buffers position=top]], false)
+          vim.api.nvim_exec([[Neotree show git_status position=right]], false)
+        end,
+        desc = 'Neotree',
+      },
+      {
+        'su',
         function()
           vim.api.nvim_exec([[SymbolsOutlineOpen]], false)
           vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
@@ -14,7 +23,7 @@ return {
           vim.api.nvim_exec([[Lazy load toggleterm.nvim]], false)
           Term.focus_last()
         end,
-        desc = 'Neotree reveal all'
+        desc = 'Open UI'
       },
     },
     dependencies = {
@@ -124,7 +133,7 @@ return {
           git_status = {
             symbols = {
               -- Change type
-              added = '',    -- or "✚", but this is redundant info if you use git_status_colors on the name
+              added = '', -- or "✚", but this is redundant info if you use git_status_colors on the name
               modified = '', -- or "", but this is redundant info if you use git_status_colors on the name
               deleted = '✖', -- this can only be used in the git_status source
               renamed = '', -- this can only be used in the git_status source
