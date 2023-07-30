@@ -272,10 +272,10 @@ map({ 'x', 'n' }, 'gA', 'ga')
 map({ 'x', 'n' }, 'gs', '<Nop>')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
 
-for k, _ in string.gmatch('\'"[](){}<>`', '.') do
-  map('n', [[<CR>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
-  map('x', [[<CR>]] .. k, [[<Plug>(sandwich-add)]] .. k)
-end
+-- for k, _ in string.gmatch('\'"[](){}<>`', '.') do
+--   map('n', [[<CR>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
+--   map('x', [[<CR>]] .. k, [[<Plug>(sandwich-add)]] .. k)
+-- end
 
 map('i', '<A-s>', '<Plug>luasnip-expand-or-jump')
 map('i', '<A-a>', function()
