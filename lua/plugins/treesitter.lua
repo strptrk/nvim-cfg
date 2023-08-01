@@ -18,16 +18,7 @@ vim.g.ts_ft = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-vim.g.file_too_big = function(size)
-  return function(_, buf)            -- language, buffers
-    local max_filesize = size * 1024 -- in KiB
-    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-    if ok and stats and stats.size > max_filesize then
-      return true
-    end
-    return false
-  end
-end
+local max_filesize = 300;
 
 return {
   {
@@ -149,13 +140,13 @@ return {
         ensure_installed = vim.g.ts_installed,
         highlight = {
           enable = true,
-          disable = vim.g.file_too_big(300)
+          disable = vim.g.file_too_big(max_filesize)
         },
         indent = { enable = false },
         autopairs = { enable = true },
         rainbow = { enable = false, extended_mode = true },
         refactor = {
-          disable = vim.g.file_too_big(300),
+          disable = vim.g.file_too_big(max_filesize),
           navigation = {
             enable = true,
             keymaps = {
@@ -168,7 +159,7 @@ return {
           },
           highlight_definitions = {
             enable = true,
-            disable = vim.g.file_too_big(300),
+            disable = vim.g.file_too_big(max_filesize),
             clear_on_cursor_move = true,
           },
           highlight_current_scope = {
@@ -176,7 +167,7 @@ return {
           },
           smart_rename = {
             enable = true,
-            disable = vim.g.file_too_big(300),
+            disable = vim.g.file_too_big(max_filesize),
             keymaps = {
               smart_rename = 'sT',
             },
@@ -185,6 +176,7 @@ return {
         textobjects = {
           select = {
             enable = true,
+            disable = vim.g.file_too_big(max_filesize),
             lookahead = true,
             keymaps = {
               ['af'] = '@function.outer',
@@ -256,7 +248,7 @@ return {
         },
         playground = {
           enable = true,
-          disable = {},
+          disable = vim.g.file_too_big(max_filesize),
           updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {
