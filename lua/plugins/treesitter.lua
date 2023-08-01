@@ -18,6 +18,17 @@ vim.g.ts_ft = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
+local file_too_big = function(size)
+  return function(_, buf)            -- language, buffers
+    local max_filesize = size * 1024 -- in KiB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+    if ok and stats and stats.size > max_filesize then
+      return true
+    end
+    return false
+  end
+end
+
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -54,7 +65,7 @@ return {
     },
     lazy = true,
     dependencies = {
-      { 'nvim-treesitter/playground', lazy = true },
+      { 'nvim-treesitter/playground',                  lazy = true },
       {
         'andymass/vim-matchup',
         lazy = true,
@@ -138,14 +149,7 @@ return {
         ensure_installed = vim.g.ts_installed,
         highlight = {
           enable = true,
-          disable = function(_, buf) -- language, buffer
-            local max_filesize = 200 * 1024 -- 200 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true
-            end
-          end,
-          additional_vim_regex_highlighting = false,
+          disable = file_too_big(300)
         },
         indent = { enable = false },
         autopairs = { enable = true },
@@ -154,7 +158,7 @@ return {
           navigation = {
             enable = true,
             keymaps = {
-              goto_definition= "gsd",
+              goto_definition = "gsd",
               goto_next_usage = 'gsn',
               goto_previous_usage = 'gsp',
               list_definitions = "gso",
@@ -187,8 +191,8 @@ return {
               ['ic'] = '@class.inner',
               ['ai'] = '@block.outer',
               ['ii'] = '@block.inner',
-              ['ij'] = { query = '@scope', query_group = 'locals'},
-              ['aj'] = { query = '@scope', query_group = 'locals'},
+              ['ij'] = { query = '@scope', query_group = 'locals' },
+              ['aj'] = { query = '@scope', query_group = 'locals' },
               ['ak'] = '@comment.outer',
               ['ik'] = '@comment.outer',
               ['iP'] = { query = '@parameter.inner' },
@@ -248,7 +252,7 @@ return {
         playground = {
           enable = true,
           disable = {},
-          updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+          updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {
             toggle_query_editor = 'o',

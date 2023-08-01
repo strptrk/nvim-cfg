@@ -1,0 +1,106 @@
+diff --git a/lua/plugins/treesitter.lua b/lua/plugins/treesitter.lua
+index 1b06159..fe4a126 100644
+--- a/lua/plugins/treesitter.lua
++++ b/lua/plugins/treesitter.lua
+@@ -21,6 +21,17 @@ vim.g.ts_ft = {
+   'comment', 'awk', 'cmake',
+ }
+ 
++local file_too_big = function(size)
++  return function(_, buf) -- language, buffers
++    local max_filesize = size * 1024 -- in KiB
++    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
++    if ok and stats and stats.size > max_filesize then
++      return true
++    end
++    return false
++  end
++end
++
+ return {
+   {
+     'lukas-reineke/indent-blankline.nvim',
+@@ -141,13 +152,7 @@ return {
+         ensure_installed = vim.g.ts_installed,
+         highlight = {
+           enable = true,
+-          disable = function(_, buf) -- language, buffer
+-            local max_filesize = 200 * 1024 -- 200 KB
+-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+-            if ok and stats and stats.size > max_filesize then
+-              return true
+-            end
+-          end,
++          disable = file_too_big(300),
+           additional_vim_regex_highlighting = false,
+         },
+         indent = { enable = false },
+@@ -268,7 +273,6 @@ return {
+         },
+         matchup = {
+           enable = true,
+-          disable = {},
+         },
+       })
+     end,
+diff --git a/lua/plugins/ui.lua b/lua/plugins/ui.lua
+index 6d5257e..5f06545 100644
+--- a/lua/plugins/ui.lua
++++ b/lua/plugins/ui.lua
+@@ -66,28 +66,15 @@ return {
+     lazy = true,
+     event = 'VeryLazy',
+     config = function()
+-      local get_diagnostic_label = function(props)
+-        local icons = {
+-          Error = '',
+-          Warn = '',
+-          Info = '',
+-          Hint = '',
+-        }
+-        local label = {}
+-        for severity, icon in pairs(icons) do
+-          local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
+-          if n > 0 then
+-            table.insert(label, { icon .. ' ' .. n .. ' ', group = 'DiagnosticSign' .. severity })
+-          end
+-        end
+-        return label
+-      end
+       require('incline').setup({
+-        debounce_threshold = { falling = 500, rising = 250 },
++        debounce_threshold = {
++          falling = 500,
++          rising = 250,
++        },
+         hide = {
+           cursorline = false,
+           focused_win = false,
+-          only_win = false,
++          only_win = true,
+         },
+         highlight = {
+           groups = {
+@@ -114,7 +101,6 @@ return {
+           if not filename or (filename == '') then
+             filename = '[No Name]'
+           end
+-          local diagnostics = get_diagnostic_label(props)
+           local modified = vim.api.nvim_buf_get_option(props.buf, 'modified') and 'bold,italic' or 'None'
+           local filetype_icon, color = require('nvim-web-devicons').get_icon_color(filename)
+           local buffer = {
+@@ -122,13 +108,7 @@ return {
+             { ' ' },
+             { filename,      gui = modified },
+           }
+-          if #diagnostics > 0 then
+-            table.insert(diagnostics, { '| ', guifg = 'grey' })
+-          end
+-          for _, buffer_ in ipairs(buffer) do
+-            table.insert(diagnostics, buffer_)
+-          end
+-          return diagnostics
++          return buffer
+         end,
+         window = {
+           margin = {
