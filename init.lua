@@ -179,6 +179,18 @@ end, {
 --- FUNCTIONS ----
 ------------------
 
+vim.g.file_too_big = function(size)
+  return function(_, buf)            -- language, buffers
+    local max_filesize = size * 1024 -- in KiB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+    if ok and stats and stats.size > max_filesize then
+      return true
+    end
+    return false
+  end
+end
+
+
 local WinMove = function(key)
   local curwin = vim.fn.winnr()
   vim.cmd.wincmd(key)

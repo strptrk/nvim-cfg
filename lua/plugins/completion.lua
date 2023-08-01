@@ -13,7 +13,8 @@ return {
       end
       cmp.setup({
         enabled = function()
-          return vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
+          local not_too_big = not vim.g.file_too_big(800)(nil, 0)
+          return not_too_big and vim.api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' or require('cmp_dap').is_dap_buffer()
         end,
         view = {
           entries = 'custom',

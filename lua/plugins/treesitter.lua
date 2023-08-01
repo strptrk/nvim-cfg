@@ -18,7 +18,7 @@ vim.g.ts_ft = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-local file_too_big = function(size)
+vim.g.file_too_big = function(size)
   return function(_, buf)            -- language, buffers
     local max_filesize = size * 1024 -- in KiB
     local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -149,12 +149,13 @@ return {
         ensure_installed = vim.g.ts_installed,
         highlight = {
           enable = true,
-          disable = file_too_big(300)
+          disable = vim.g.file_too_big(300)
         },
         indent = { enable = false },
         autopairs = { enable = true },
         rainbow = { enable = false, extended_mode = true },
         refactor = {
+          disable = vim.g.file_too_big(300),
           navigation = {
             enable = true,
             keymaps = {
@@ -167,11 +168,15 @@ return {
           },
           highlight_definitions = {
             enable = true,
+            disable = vim.g.file_too_big(300),
             clear_on_cursor_move = true,
           },
-          highlight_current_scope = { enable = false },
+          highlight_current_scope = {
+            enable = false,
+          },
           smart_rename = {
             enable = true,
+            disable = vim.g.file_too_big(300),
             keymaps = {
               smart_rename = 'sT',
             },
