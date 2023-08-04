@@ -309,12 +309,14 @@ map('n', '<A-t>', function()
   vim.g.FnNewTab(nil, { zz = true })
 end, {desc = 'Open New Tab'})
 
-map('n', '<A-C-a>', '<cmd>cprev<CR>')
-map('n', '<A-C-d>', '<cmd>cnext<CR>')
+map('n', '[q', '<cmd>cprev<CR>')
+map('n', ']q', '<cmd>cnext<CR>')
 -- map('n', '<A-q>c', '<cmd>cclose<CR>')
 -- map('n', '<A-q>o', '<cmd>copen<CR>')
 map('n', '<A-A>', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
 map('n', '<A-D>', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+map('n', '[a', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
+map('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 
 
 map('t', '<A-n>', [[<C-\><C-n>]])
@@ -371,8 +373,8 @@ map({ 'n', 'x' }, 'sf', vim.lsp.buf.format, { desc = 'Format document (lsp)' })
 map('n', 'sj', ':a<CR><CR>.<CR>', { desc = 'Append newline under', silent = true })
 map('n', 'sk', ':i<CR><CR>.<CR>', { desc = 'Append newline above', silent = true })
 
-map('n', 's]', '<cmd>bnext<CR>')
-map('n', 's[', '<cmd>bprevious<CR>')
+map('n', ']s', '<cmd>bnext<CR>')
+map('n', '[s', '<cmd>bprevious<CR>')
 map('n', '<Space><Space>', '<C-^>')
 
 ----------------------------------------------------
