@@ -202,7 +202,9 @@ local WinMove = function(key)
         ['k'] = '-U',
         ['l'] = '-R',
       }
-      vim.fn.system('tmux select-pane ' .. dir[key])
+      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}' | tr -d '\n']]) == '0' then
+        vim.fn.system('tmux select-pane ' .. dir[key])
+      end
     elseif os.getenv('TERM_PROGRAM') == 'WezTerm' then
       local dir = {
         ['h'] = 'Left',
@@ -210,7 +212,9 @@ local WinMove = function(key)
         ['k'] = 'Up',
         ['l'] = 'Right',
       }
-      vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
+      if vim.fn.system([[wezterm cli list --format json | jq ".[] | select(.pane_id == $WEZTERM_PANE).is_zoomed" | tr -d '\n']]) == 'false' then
+        vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
+      end
     end
   end
 end
