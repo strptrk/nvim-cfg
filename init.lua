@@ -270,7 +270,11 @@ end
 vim.g.FnNewTab = function(fn, opts)
   opts = opts or {}
   exec('norm m1')
-  exec('tabedit %')
+  if api.nvim_buf_get_name(0) == "" then
+    exec('tabnew')
+  else
+    exec('tabedit %')
+  end
   exec('norm `1')
   if type(fn) == 'function' then
     fn()
