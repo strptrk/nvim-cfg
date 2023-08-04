@@ -77,6 +77,7 @@ return {
           filetypes = { 'TelescopePrompt' },
         },
       })
+      vim.keymap.set('n', ',', "<cmd>WhichKey ,<cr>")
     end,
   },
 }
