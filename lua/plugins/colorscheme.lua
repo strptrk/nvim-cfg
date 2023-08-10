@@ -8,7 +8,7 @@ return {
       local transparent = os.getenv('TRANSPARENT') and true or false
       vim.o.termguicolors = true
       require('catppuccin').setup({
-        flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+        flavour = 'mocha', -- latte, frappe, macchiato, mocha
         transparent_background = transparent,
         show_end_of_buffer = true, -- show the '~' characters after the end of buffers
         term_colors = false,
