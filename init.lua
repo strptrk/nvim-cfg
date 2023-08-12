@@ -100,6 +100,7 @@ g.c_syntax_for_h = 1
 -- abbreviations
 vim.cmd([[
   cnoreabbrev qt tabclose
+  cnoreabbrev SPL s/\ /\ \\\r/g
 ]])
 
 -- highlight on yank
@@ -212,7 +213,7 @@ local WinMove = function(key)
         ['k'] = 'Up',
         ['l'] = 'Right',
       }
-      if vim.fn.system([[wezterm cli list --format json | jq ".[] | select(.pane_id == $WEZTERM_PANE).is_zoomed" | tr -d '\n']]) == 'false' then
+      if vim.fn.system([[wezterm cli list --format json | jq -j ".[] | select(.pane_id == $WEZTERM_PANE).is_zoomed"]]) == 'false' then
         vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
       end
     end
@@ -500,7 +501,3 @@ defcommand("Mktmpf", function (args)
   exec('cd ' .. dname)
   exec('e ' .. fname)
 end, { nargs = 1 })
-
-vim.cmd([[
-    cnoreabbrev SPL s/\ /\ \\\r/g
-]])
