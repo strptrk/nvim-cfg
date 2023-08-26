@@ -8,6 +8,13 @@ return {
         'sc',
         function()
           vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
+        end,
+        desc = 'Neotree',
+      },
+      {
+        'sC',
+        function()
+          vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
           vim.api.nvim_exec([[Neotree show buffers position=top]], false)
           vim.api.nvim_exec([[Neotree show git_status position=right]], false)
         end,
