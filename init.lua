@@ -100,7 +100,7 @@ g.c_syntax_for_h = 1
 -- abbreviations
 vim.cmd([[
   cnoreabbrev qt tabclose
-  cnoreabbrev SPL s/\ /\ \\\r/g
+  cnoreabbrev SL s/\ /\ \\\r/g
 ]])
 
 -- highlight on yank
@@ -491,7 +491,7 @@ map('n', 'sS', ts_rename, { desc = "Treesitter Rename" })
 map('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (line)" })
 map('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (file)" })
 map('n', 'sv', [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
-map('n', 's/', [[:%s///gI<Left><Left><Left>]], { desc = "Substitute" })
+map('n', 's/', [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
 
 map('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
 map('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
