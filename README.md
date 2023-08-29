@@ -8,6 +8,7 @@ nvim --headless "+Lazy! load nvim-treesitter" # to install parsers
 ```
 ## tree-sitter cli for certain parsers
 ```sh
+sudo pacman -S rust
 cargo install tree-sitter-cli --git https://github.com/tree-sitter/tree-sitter.git
 ```
 
@@ -25,7 +26,9 @@ sudo pacman -S lua-language-server
 
 ### python
 ```sh
-pip install "python-lsp-server[all]"
+sudo pacman -S python-lsp-server yapf python-whatthepatch flake8 \
+               python-pylint python-pyflakes autopep8 \
+               python-pydocstyle python-pycodestyle
 ```
 
 ### go
@@ -41,8 +44,9 @@ cargo install texlab
 ```
 
 ### CMake
-```
-pip install cmake-language-server
+```sh
+sudo pacman -S python-pipx
+pipx install cmake-language-server
 ```
 
 ## debugger adapters
