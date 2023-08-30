@@ -42,6 +42,7 @@ return {
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
       lsp.cmake.setup({ capabilities = capabilities })
+      lsp.clangd.setup({ capabilities = capabilities })
       lsp.texlab.setup({
         capabilities = capabilities,
         settings = {
@@ -87,9 +88,6 @@ return {
     ft = { 'c', 'cpp' },
     config = function()
       require('clangd_extensions').setup({
-        server = {
-          capabilities = require('cmp_nvim_lsp').default_capabilities(),
-        }, -- options to pass to nvim-lspconfig
         extensions = {
           -- defaults:
           -- Automatically set inlay hints (type hints)
