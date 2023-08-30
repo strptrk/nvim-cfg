@@ -5,6 +5,7 @@ return {
       'python',
       'lua',
       'go',
+      'c', 'cpp',
       'cmake',
       'tex'
     },
