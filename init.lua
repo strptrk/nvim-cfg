@@ -215,7 +215,17 @@ local WinMove = function(key)
         ['k'] = 'Up',
         ['l'] = 'Right',
       }
-      if vim.fn.system([[wezterm cli list --format json | jq -j ".[] | select(.pane_id == $WEZTERM_PANE).is_zoomed"]]) == 'false' then
+      local function is_zoomed()
+        local pane_info = vim.json.decode(vim.fn.system([[wezterm cli list --format json]]))
+        local pane_id = tonumber(os.getenv("WEZTERM_PANE"))
+        for _, pane in ipairs(pane_info) do
+          if pane.pane_id == pane_id then
+            return pane.is_zoomed
+          end
+        end
+        return false
+      end
+      if not is_zoomed() then
         vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
       end
     end
