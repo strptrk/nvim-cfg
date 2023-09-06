@@ -5,7 +5,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      local transparent = os.getenv('TRANSPARENT') and true or false
+      local transparent = os.getenv('TRANSPARENT') == "1"
       vim.o.termguicolors = true
       require('catppuccin').setup({
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
