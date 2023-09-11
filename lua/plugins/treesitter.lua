@@ -127,6 +127,25 @@ return {
           })
         end,
       },
+      -- {
+      --   'stevearc/aerial.nvim',
+      --   lazy = true,
+      --   cmd = { 'AerialOpen', 'AerialToggle', 'AerialNavToggle', 'AerialNavOpen' },
+      --   keys = {
+      --     { 'so', '<cmd>AerialOpen<CR>' },
+      --   },
+      --   config = function()
+      --     require('aerial').setup({
+      --       backends = { "treesitter", "lsp", "markdown", "man" },
+      --     })
+      --     vim.api.nvim_create_autocmd('FileType', {
+      --       pattern = 'aerial',
+      --       callback = function()
+      --         vim.wo.cursorline = true
+      --       end,
+      --     })
+      --   end,
+      -- },
       {
         'nvim-treesitter/nvim-treesitter-refactor',
         lazy = true,

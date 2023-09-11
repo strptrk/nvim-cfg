@@ -180,4 +180,25 @@ return {
       })
     end,
   },
+  {
+    'kosayoda/nvim-lightbulb',
+    lazy = true,
+    ft = {
+      'python',
+      'lua',
+      'go',
+      'c', 'cpp',
+      'cmake',
+      'tex',
+      'rust'
+    },
+    config = function()
+      require("nvim-lightbulb").setup({
+        autocmd = { enabled = true },
+        sign = {
+          text = "",
+        }
+      })
+    end
+  }
 }

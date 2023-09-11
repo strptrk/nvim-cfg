@@ -23,12 +23,12 @@ return {
       {
         'su',
         function()
-          vim.api.nvim_exec([[SymbolsOutlineOpen]], false)
+          -- vim.api.nvim_exec([[SymbolsOutlineOpen]], false)
           vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
-          vim.api.nvim_exec([[Neotree show buffers position=top]], false)
+          -- vim.api.nvim_exec([[Neotree show buffers position=top]], false)
           vim.api.nvim_exec([[Neotree show git_status position=right]], false)
-          vim.api.nvim_exec([[Lazy load toggleterm.nvim]], false)
-          Term.focus_last()
+          -- vim.api.nvim_exec([[Lazy load toggleterm.nvim]], false)
+          -- Term.focus_last()
         end,
         desc = 'Open UI'
       },

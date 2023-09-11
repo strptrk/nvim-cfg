@@ -55,8 +55,13 @@ return {
       right = {
         {
           ft = "Outline",
-          pinned = true,
+          pinned = false,
           open = "SymbolsOutlineOpen",
+        },
+        {
+          ft = "aerial",
+          pinned = false,
+          open = "AerialOpen",
         },
       },
     },
