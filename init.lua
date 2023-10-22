@@ -160,13 +160,6 @@ autocmd('FileType', {
   end,
 })
 
-autocmd('BufRead', {
-  pattern = 'COMMIT_EDITMSG',
-  callback = function()
-    vim.api.nvim_buf_set_option(0, 'bufhidden', 'delete')
-  end,
-})
-
 autocmd('BufReadPost', {
   pattern = '/tmp/zsh*',
   callback = function()
