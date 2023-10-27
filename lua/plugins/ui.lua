@@ -49,19 +49,13 @@ return {
           open = "Neotree position=top buffers",
           size = { height = 0.28 },
         },
-        -- any other neo-tree windows
-        -- "neo-tree",
       },
       right = {
         {
-          ft = "Outline",
+          title = 'Outline',
+          ft = "sagaoutline",
           pinned = false,
-          open = "SymbolsOutlineOpen",
-        },
-        {
-          ft = "aerial",
-          pinned = false,
-          open = "AerialOpen",
+          open = "Lspsaga outline",
         },
       },
     },
@@ -172,7 +166,7 @@ return {
       'BufNewFile', 'BufReadPost'
     },
     dependencies = {
-      { 'kyazdani42/nvim-web-devicons' },
+      { 'nvim-tree/nvim-web-devicons' },
     },
     config = function()
       vim.g.Get_langserv = function()
@@ -220,7 +214,7 @@ return {
     end,
   },
   {
-    'kyazdani42/nvim-web-devicons',
+    'nvim-tree/nvim-web-devicons',
     lazy = true,
     event = 'VeryLazy',
     config = function()

@@ -114,6 +114,8 @@ g.c_syntax_for_h = 1
 -- abbreviations
 vim.cmd([[
   cnoreabbrev qt tabclose
+  cnoreabbrev qq q!
+  cnoreabbrev qqa qa!
   cnoreabbrev SL s/\ /\ \\\r/g
 ]])
 
@@ -477,7 +479,7 @@ map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))
 map('n', '<Space>N', "<cmd>Notifications<cr>")
 map('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
 map('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
-map('n', '<Space>a', vim.lsp.buf.code_action, { desc = "Code Action" })
+-- map('n', '<Space>a', vim.lsp.buf.code_action, { desc = "Code Action" })
 map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
 
 local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]

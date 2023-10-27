@@ -23,26 +23,27 @@ vim.g.max_filesize = 300;
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     lazy = true, -- no config, has to be loaded after TS
     ft = vim.g.ts_ft,
     keys = {
-      { '<A-I>', '<cmd>IndentBlanklineToggle<cr>', desc = 'Toggle Indent Lines' },
+      { '<A-I>', '<cmd>IBLToggle<cr>', desc = 'Toggle Indent Lines' },
     },
     cmd = {
-      'IndentBlanklineToggle',
+      'IBLToggle',
+      'IBLToggleScope',
     },
     config = function()
-      require('indent_blankline').setup({
-        -- char = '·',
-        buftype_exclude = { 'terminal', 'nofile', 'norg', 'text', '' },
-        use_treesitter = true,
-        enabled = false,
-        show_current_context = true,
-        show_current_context_start = false,
-        char_highlight_list = {
-          'Comment',
+      require('ibl').setup({
+        indent = {
+          char = '│'
         },
-        show_trailing_blankline_indent = false,
+        scope = {
+          enabled = false,
+        },
+        exclude = {
+          filetypes = { "help", "alpha", "dashboard", "Trouble", "lazy", "neo-tree", 'terminal', 'nofile', 'norg', 'text', '' },
+        },
       })
     end,
   },
@@ -110,42 +111,6 @@ return {
           })
         end,
       },
-      {
-        'simrat39/symbols-outline.nvim',
-        lazy = true,
-        cmd = { 'SymbolsOutlineOpen', 'SymbolsOutline' },
-        keys = {
-          { 'so', '<cmd>SymbolsOutline<CR>' },
-        },
-        config = function()
-          require('symbols-outline').setup()
-          vim.api.nvim_create_autocmd('FileType', {
-            pattern = 'Outline',
-            callback = function()
-              vim.wo.cursorline = true
-            end,
-          })
-        end,
-      },
-      -- {
-      --   'stevearc/aerial.nvim',
-      --   lazy = true,
-      --   cmd = { 'AerialOpen', 'AerialToggle', 'AerialNavToggle', 'AerialNavOpen' },
-      --   keys = {
-      --     { 'so', '<cmd>AerialOpen<CR>' },
-      --   },
-      --   config = function()
-      --     require('aerial').setup({
-      --       backends = { "treesitter", "lsp", "markdown", "man" },
-      --     })
-      --     vim.api.nvim_create_autocmd('FileType', {
-      --       pattern = 'aerial',
-      --       callback = function()
-      --         vim.wo.cursorline = true
-      --       end,
-      --     })
-      --   end,
-      -- },
       {
         'nvim-treesitter/nvim-treesitter-refactor',
         lazy = true,
@@ -266,12 +231,12 @@ return {
             },
           },
           lsp_interop = {
-            enable = true,
+            enable = false,
             border = 'single',
             floating_preview_opts = {},
             peek_definition_code = {
-              ["<Space>pf"] = "@function.outer",
-              ["<Space>pc"] = "@class.outer",
+              -- ["<Space>pf"] = "@function.outer",
+              -- ["<Space>pc"] = "@class.outer",
             },
           },
         },

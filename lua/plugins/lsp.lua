@@ -12,16 +12,6 @@ return {
     lazy = true,
     dependencies = {
       {
-        'ray-x/lsp_signature.nvim',
-        lazy = true,
-        config = function()
-          require('lsp_signature').setup({
-            floating_window = false,
-            hint_prefix = ' ',
-          })
-        end,
-      },
-      {
         'j-hui/fidget.nvim',
         tag = 'legacy',
         lazy = true,
@@ -181,24 +171,99 @@ return {
     end,
   },
   {
-    'kosayoda/nvim-lightbulb',
+    'nvimdev/lspsaga.nvim',
     lazy = true,
-    ft = {
-      'python',
-      'lua',
-      'go',
-      'c', 'cpp',
-      'cmake',
-      'tex',
-      'rust'
+    event = { 'LspAttach' },
+    keys = {
+      {
+        '<Space>w',
+        '<cmd>Lspsaga finder<cr>',
+        desc = 'LSP Finder',
+      },
+      {
+        '<Space>ic',
+        '<cmd>Lspsaga incoming_calls<cr>',
+        desc = 'LSP Incoming Calls',
+      },
+      {
+        '<Space>oc',
+        '<cmd>Lspsaga outgoing_calls<cr>',
+        desc = 'LSP Outgoing Calls',
+      },
+      {
+        '<Space>a',
+        '<cmd>Lspsaga code_action<cr>',
+        desc = 'LSP Code Action',
+      },
+      {
+        '<Space>p',
+        '<cmd>Lspsaga peek_definition<cr>',
+        desc = 'LSP Peek Definition',
+      },
+      {
+        '<Space>k',
+        '<cmd>Lspsaga hover_doc<cr>',
+        desc = 'LSP Hover',
+      },
+      {
+        'so',
+        '<cmd>Lspsaga outline<cr>',
+        desc = 'LSP Outline',
+      },
     },
     config = function()
-      require("nvim-lightbulb").setup({
-        autocmd = { enabled = true },
-        sign = {
-          text = "",
+      require('lspsaga').setup({
+        finder = {
+          max_height = 0.75,
+          left_width = 0.35,
+          right_width = 0.35,
+          default = 'tyd+def+imp+ref',
+          methods = {
+            ['tyd'] = 'textDocument/typeDefinition'
+          },
+          layout = 'float',
+          keys = {
+            ['shuttle'] = 'S',
+            ['split'] = 's',
+            ['vsplit'] = 'v',
+            ['toggle_or_open'] = '<cr>',
+            ['tabe'] = 't',
+            ['tabnew'] = 'n',
+            ['quit'] = 'q',
+            ['clone'] = '<C-c><C-c>',
+          }
+        },
+        symbol_in_winbar = {
+          enable = false
+        },
+        callhierarchy = {
+          keys = {
+            ['toggle_or_req'] = 'u',
+            ['edit'] = '<CR>',
+            ['split'] = 's',
+            ['vsplit'] = 'v',
+            ['tabe'] = 't',
+            ['quit'] = 'q',
+            ['shuttle'] = 'S',
+            ['close'] = '<C-c><C-c>',
+          }
+        },
+        outline = {
+          auto_preview = false,
+          keys = {
+            ['toggle_or_jump'] = '<CR>',
+            ['edit'] = 'e'
+          },
+        },
+        ui = {
+          devicon = false,
+          code_action = ' '
         }
       })
-    end
+    end,
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons'
+    }
   }
 }
