@@ -255,6 +255,9 @@ return {
             ['edit'] = 'e'
           },
         },
+        lightbulb = {
+          virtual_text = false,
+        },
         ui = {
           devicon = false,
           code_action = ' '
