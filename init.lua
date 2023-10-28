@@ -87,7 +87,7 @@ o.softtabstop = 4
 o.shiftwidth = 4
 o.expandtab = true
 
-vim.opt.conceallevel = 1
+vim.opt.conceallevel = 2
 
 o.sidescrolloff = 1
 o.scrolloff = 1

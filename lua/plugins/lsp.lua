@@ -260,7 +260,7 @@ return {
         },
         ui = {
           devicon = false,
-          code_action = ' '
+          code_action = ''
         }
       })
     end,

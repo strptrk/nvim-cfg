@@ -76,7 +76,7 @@ return {
         Term.Terminals[num] = {
           term = Terminal:new({
             -- cmd = vim.o.shell,
-            direction = dir or 'horizontal',
+            direction = dir or 'float',
             count = num,
             on_exit = Term.delete_term,
           }),
