@@ -9,28 +9,44 @@ return {
         function()
           vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
         end,
-        desc = 'Neotree',
+        desc = 'Neotree Files',
       },
       {
-        'sC',
+        'su',
         function()
           vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
           vim.api.nvim_exec([[Neotree show buffers position=top]], false)
           vim.api.nvim_exec([[Neotree show git_status position=right]], false)
         end,
-        desc = 'Neotree',
+        desc = 'Neotree Files, Git, Buffers',
       },
       {
-        'su',
+        'sg',
         function()
-          -- vim.api.nvim_exec([[SymbolsOutlineOpen]], false)
-          vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
-          -- vim.api.nvim_exec([[Neotree show buffers position=top]], false)
           vim.api.nvim_exec([[Neotree show git_status position=right]], false)
-          -- vim.api.nvim_exec([[Lazy load toggleterm.nvim]], false)
-          -- Term.focus_last()
         end,
-        desc = 'Open UI'
+        desc = 'Neotree Git'
+      },
+      {
+        ',g',
+        function()
+          vim.api.nvim_exec([[Neotree focus git_status position=right]], false)
+        end,
+        desc = 'Neotree Focus Git'
+      },
+      {
+        ',b',
+        function()
+          vim.api.nvim_exec([[Neotree focus buffers position=top]], false)
+        end,
+        desc = 'Neotree Focus Buffers'
+      },
+      {
+        ',f',
+        function()
+          vim.api.nvim_exec([[Neotree focus filesystem position=left]], false)
+        end,
+        desc = 'Neotree Focus Files'
       },
     },
     dependencies = {
