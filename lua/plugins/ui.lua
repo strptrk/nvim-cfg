@@ -1,3 +1,9 @@
+local SmartResizeEdgy = function(edgy_win, direction, size)
+  local dimension = (direction == 'h' or direction == 'l') and 'width' or 'height'
+  local on_edge = (vim.fn.winnr(direction) == vim.fn.winnr()) and -1 or 1
+  edgy_win:resize(dimension, on_edge * size)
+end
+
 return {
   {
     "folke/edgy.nvim",
@@ -6,6 +12,12 @@ return {
       animate = {
         fps = 120,
         cps = 240,
+      },
+      keys = {
+        ["<A-C-h>"] = function(win) SmartResizeEdgy(win, 'h', 2) end,
+        ["<A-C-j>"] = function(win) SmartResizeEdgy(win, 'j', 2) end,
+        ["<A-C-k>"] = function(win) SmartResizeEdgy(win, 'k', 2) end,
+        ["<A-C-l>"] = function(win) SmartResizeEdgy(win, 'l', 2) end,
       },
       bottom = {
         -- {
