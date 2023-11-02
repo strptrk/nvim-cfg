@@ -78,7 +78,7 @@ return {
             'J',
             function()
               if vim.wo.diff then
-                return ']c'
+                return ']v'
               end
               vim.schedule(function()
                 gitsigns.next_hunk()
@@ -91,7 +91,7 @@ return {
             'K',
             function()
               if vim.wo.diff then
-                return '[c'
+                return '[v'
               end
               vim.schedule(function()
                 gitsigns.prev_hunk()

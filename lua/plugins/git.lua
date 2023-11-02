@@ -209,18 +209,18 @@ return {
             opts.buffer = bufnr
             vim.keymap.set(mode, l, r, opts)
           end
-          maploc('n', ']c', function()
+          maploc('n', ']v', function()
             if vim.wo.diff then
-              return ']c'
+              return ']v'
             end
             vim.schedule(function()
               gs.next_hunk()
             end)
             return '<Ignore>'
           end, { expr = true })
-          maploc('n', '[c', function()
+          maploc('n', '[v', function()
             if vim.wo.diff then
-              return '[c'
+              return '[v'
             end
             vim.schedule(function()
               gs.prev_hunk()
