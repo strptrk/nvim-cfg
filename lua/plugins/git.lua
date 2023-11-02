@@ -231,7 +231,7 @@ return {
             end)
             return '<Ignore>'
           end, { expr = true })
-          maploc('n', ',,', ':Gitsigns', { desc = "Gitsigns" })
+          maploc('n', ',,', '<cmd>Gitsigns<cr>', { desc = "Gitsigns" })
           maploc({ 'n', 'v' }, ',s', ':Gitsigns stage_hunk<CR>', { desc = "Stage Hunk" })
           maploc({ 'n', 'v' }, ',r', ':Gitsigns reset_hunk<CR>', { desc = "Reset Hunk" })
           maploc('n', ',S', gs.stage_buffer, { desc = 'Stage Buffer' })
