@@ -3,6 +3,11 @@ return {
     'sindrets/diffview.nvim',
     lazy = true,
     dependencies = 'nvim-lua/plenary.nvim',
+    keys = {
+      { ',do', '<cmd>DiffviewOpen<cr>', desc = 'Diffview'},
+      { ',dc', '<cmd>DiffviewFileHistory<cr>', desc = 'Diffview Commit History'},
+      { ',df', '<cmd>DiffviewFileHistory %<cr>', desc = 'Diffview File History'}
+    },
     cmd = {
       'DiffviewOpen',
       'DiffviewToggleFiles',
@@ -192,7 +197,6 @@ return {
         status_formatter = nil,
         max_file_length = 40000,
         preview_config = {
-
           border = 'single',
           style = 'minimal',
           relative = 'cursor',
@@ -227,17 +231,19 @@ return {
             end)
             return '<Ignore>'
           end, { expr = true })
+          maploc('n', ',,', ':Gitsigns', { desc = "Gitsigns" })
           maploc({ 'n', 'v' }, ',s', ':Gitsigns stage_hunk<CR>', { desc = "Stage Hunk" })
           maploc({ 'n', 'v' }, ',r', ':Gitsigns reset_hunk<CR>', { desc = "Reset Hunk" })
           maploc('n', ',S', gs.stage_buffer, { desc = 'Stage Buffer' })
           maploc('n', ',u', gs.undo_stage_hunk, { desc = 'Undo Stage Hunk' })
           maploc('n', ',R', gs.reset_buffer, { desc = 'Reset Buffer' })
           maploc('n', ',P', gs.preview_hunk, { desc = 'Preview Hunk' })
+          maploc('n', ',t', gs.toggle_deleted, { desc = 'Toggle deleted lines' })
           maploc('n', ',p', gs.preview_hunk_inline, { desc = 'Preview Hunk Inline' })
           maploc('n', ',q', gs.setqflist, { desc = 'QuickFix List of Hunks' })
           maploc('n', ',w', ":Gitsigns show", { desc = 'Show Revision of file' })
           maploc('n', ',d', ":tabedit % | Gitsigns diffthis", { desc = 'Show Diff of file' })
-          maploc('n', ',b', function()
+          maploc('n', ',B', function()
             gs.blame_line({ full = true })
           end, { desc = 'Blame Line' })
           maploc({ 'o', 'x' }, 'ih', '<cmd><C-U>Gitsigns select_hunk<cr>', { desc = "Select Hunk" })
