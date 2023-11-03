@@ -71,6 +71,20 @@ return {
           },
         },
       })
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+        callback = function(ev)
+          local methods = vim.lsp.protocol.Methods
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.supports_method(methods.textDocument_inlayHint) then
+            -- toggle inlay hints
+            vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
+              { desc = "Toggle inlay hints" })
+            -- enable inlay hints be default
+            vim.lsp.inlay_hint(ev.buf, true)
+          end
+        end,
+      })
     end,
   },
   {
@@ -162,6 +176,7 @@ return {
         },
         tools = {
           inlay_hints = {
+            auto = false,
             parameter_hints_prefix = "<- ",
             other_hints_prefix = "=> ",
             highlight = "InlayHint"
