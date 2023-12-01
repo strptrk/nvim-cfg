@@ -28,6 +28,7 @@ return {
       { '<Space>D', function() vim.diagnostic.setqflist() end, desc = 'Diagnostics to qflist' },
       { '<Space>/', function() require('telescope.builtin').current_buffer_fuzzy_find() end, desc = 'Grep current buffer' },
       { '<Space>#', function() require('telescope.builtin').grep_string() end, desc = 'Grep current word' },
+      { '<Space>n', function() require('telescope.builtin').grep_string() end, desc = 'Grep current word' },
       { '<Space>vo', function() require('telescope.builtin').vim_options() end, desc = 'Vim options' },
       { '<Space>K', function() require('telescope.builtin').keymaps() end, desc = 'Keymaps' },
       { '<Space>J', function() require('telescope.builtin').jumplist() end, desc = 'Jumplist' },
