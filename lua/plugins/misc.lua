@@ -1,5 +1,6 @@
 return {
   {
+    -- TODO: maybe replace?
     lazy = true,
     event = { 'VeryLazy' },
     'machakann/vim-sandwich',
@@ -10,18 +11,12 @@ return {
     'junegunn/vim-easy-align',
   },
   {
-    lazy = true,
-    event = { 'VeryLazy' },
-    'matze/vim-move',
-  },
-  {
     'Shatur/neovim-session-manager',
     lazy = true,
     cmd = { 'SessionManager' },
     config = function()
-      local Path = require('plenary.path')
       require('session_manager').setup({
-        sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
+        sessions_dir = require('plenary.path'):new(vim.fn.stdpath('data'), 'sessions'),
         path_replacer = '__',
         colon_replacer = '++',
         autoload_mode = require('session_manager.config').AutoloadMode.Disabled,
@@ -39,26 +34,25 @@ return {
     'numToStr/Comment.nvim',
     lazy = true,
     event = 'VeryLazy',
-    config = function()
-      require('Comment').setup({
-        padding = true,
-        sticky = true,
-        ignore = '^$',
-        toggler = { line = '<Space>cc', block = '<Space>cx' },
-        opleader = { line = '<Space>c', block = '<Space>x' },
-        extra = { above = '<Space>O', below = '<Space>o', eol = '<Space>e' },
-        mappings = { basic = true, extra = true, extended = false },
-        pre_hook = function() end,
-        post_hook = function() end,
-      })
-    end
-
+    opts = {
+      padding = true,
+      sticky = true,
+      ignore = '^$',
+      toggler = { line = '<Space>cc', block = '<Space>cx' },
+      opleader = { line = '<Space>c', block = '<Space>x' },
+      extra = { above = '<Space>O', below = '<Space>o', eol = '<Space>e' },
+      mappings = { basic = true, extra = true, extended = false },
+      pre_hook = function() end,
+      post_hook = function() end,
+    }
   },
   {
     'samjwill/nvim-unception',
     lazy = false,
     init = function()
+      ---@diagnostic disable-next-line: inject-field
       vim.g.unception_open_buffer_in_new_tab = true
+      ---@diagnostic disable-next-line: inject-field
       vim.g.unception_enable_flavor_text = false
     end,
   },
@@ -124,34 +118,4 @@ return {
     lazy = true,
     ft = "yuck"
   },
-  {
-    'strptrk/clangwarningparser.nvim',
-    lazy = true,
-    config = function()
-      require('clangwarningparser').setup({
-        float_opts = {
-          width_percentage = 90,
-          height_percentage = 75,
-          border = 'rounded',
-        },
-        open_on_load = true,
-        center_on_select = true,
-        root_env = 'WS_ROOT',
-        root_cd = true,
-        map_defaults = false,
-        keymaps = {
-          preview = 'o',
-          select_entry = '<CR>',
-          toggle_win = '<leader>w',
-          quit_preview = 'q',
-          toggle_done = { 'd', '<tab>' },
-        },
-      })
-    end,
-    init = function()
-      vim.keymap.set('n', '<leader>w', function()
-        require('clangwarningparser').Open()
-      end)
-    end
-  }
 }

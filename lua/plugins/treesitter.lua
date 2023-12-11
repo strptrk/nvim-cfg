@@ -1,4 +1,4 @@
-vim.g.ts_installed = {
+local ts_installed = {
   'bash', 'norg', 'c', 'cpp', 'rust', 'python',
   'lua', 'json', 'markdown', 'markdown_inline',
   'comment', 'awk', 'cmake',
@@ -8,24 +8,29 @@ vim.g.ts_installed = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-vim.g.ts_ft = {
+local ts_ft = {
   'bash', 'norg', 'c', 'cpp', 'rust', 'python',
-  'lua', 'json', 'markdown', 'markdown_inline',
+  'lua', 'json', 'markdown',
   'comment', 'awk', 'cmake',
   "css", "diff", "dockerfile", "fennel",
   "git_rebase", "gitcommit", "gitignore", "gitattributes",
-  "go", "jq", "latex", "tex", "make", "meson", "ninja", "perl",
+  "go", "latex", "tex", "make", "meson", "ninja", "perl",
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-vim.g.max_filesize = 300;
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = ts_ft,
+  callback = function()
+    vim.api.nvim_set_option_value("number", true, { scope = "local" })
+  end,
+})
 
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     lazy = true, -- no config, has to be loaded after TS
-    ft = vim.g.ts_ft,
+    ft = ts_ft,
     keys = {
       { '<A-I>', '<cmd>IBLToggle<cr>', desc = 'Toggle Indent Lines' },
     },
@@ -33,25 +38,23 @@ return {
       'IBLToggle',
       'IBLToggleScope',
     },
-    config = function()
-      require('ibl').setup({
-        indent = {
-          char = '│'
-        },
-        scope = {
-          enabled = false,
-        },
-        exclude = {
-          filetypes = { "help", "alpha", "dashboard", "Trouble", "lazy", "neo-tree", 'terminal', 'nofile', 'norg', 'text', '' },
-        },
-      })
-    end,
+    opts = {
+      indent = {
+        char = '│',
+      },
+      scope = {
+        enabled = false,
+      },
+      exclude = {
+        filetypes = { "help", "alpha", "dashboard", "Trouble", "lazy", "neo-tree", 'terminal', 'nofile', 'norg', 'text', '' },
+      },
+    }
   },
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     cmd = { 'TSInstall', 'TSUpdate' },
-    ft = vim.g.ts_ft,
+    ft = ts_ft,
     keys = {
       { '<A-S>', '<cmd>TSToggle refactor.highlight_current_scope<cr>', desc = 'Toggle Current Scope' },
     },
@@ -62,6 +65,7 @@ return {
         'andymass/vim-matchup',
         lazy = true,
         init = function()
+          ---@diagnostic disable-next-line: inject-field
           vim.g.matchup_matchparen_offscreen = { method = 'popup' }
         end,
       },
@@ -121,16 +125,21 @@ return {
     },
     config = function()
       require('nvim-treesitter.configs').setup({
-        ensure_installed = vim.g.ts_installed,
+        ensure_installed = ts_installed,
         highlight = {
           enable = true,
-          disable = vim.g.file_too_big(vim.g.max_filesize)
+          disable = function (_, buf)
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > 1024 * 1024 then
+              return true
+            end
+            return false
+          end,
         },
         indent = { enable = false },
         autopairs = { enable = true },
         rainbow = { enable = false, extended_mode = true },
         refactor = {
-          disable = vim.g.file_too_big(vim.g.max_filesize),
           navigation = {
             enable = true,
             keymaps = {
@@ -143,7 +152,6 @@ return {
           },
           highlight_definitions = {
             enable = true,
-            disable = vim.g.file_too_big(vim.g.max_filesize),
             clear_on_cursor_move = true,
           },
           highlight_current_scope = {
@@ -151,7 +159,6 @@ return {
           },
           smart_rename = {
             enable = true,
-            disable = vim.g.file_too_big(vim.g.max_filesize),
             keymaps = {
               smart_rename = 'st',
             },
@@ -160,7 +167,6 @@ return {
         textobjects = {
           select = {
             enable = true,
-            disable = vim.g.file_too_big(vim.g.max_filesize),
             lookahead = true,
             keymaps = {
               ['af'] = '@function.outer',
@@ -242,7 +248,6 @@ return {
         },
         playground = {
           enable = true,
-          disable = vim.g.file_too_big(vim.g.max_filesize),
           updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {

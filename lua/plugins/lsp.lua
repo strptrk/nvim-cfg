@@ -15,16 +15,14 @@ return {
         'j-hui/fidget.nvim',
         tag = 'legacy',
         lazy = true,
-        config = function()
-          require('fidget').setup({
-            window = {
-              blend = 0,
-            },
-            text = {
-              spinner = 'dots',
-            },
-          })
-        end,
+        opts = {
+          window = {
+            blend = 0,
+          },
+          text = {
+            spinner = 'dots',
+          },
+        },
       },
     },
     config = function()
@@ -74,14 +72,16 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
+          _G.lsp_name = vim.lsp.get_client_by_id(ev.data.client_id).name
           local methods = vim.lsp.protocol.Methods
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
           if client and client.supports_method(methods.textDocument_inlayHint) then
-            -- toggle inlay hints
             vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
               { desc = "Toggle inlay hints" })
-            -- enable inlay hints be default
             vim.lsp.inlay_hint(ev.buf, true)
+          end
+          if client and client.supports_method(methods.textDocument_rename) then
+            vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
           end
         end,
       })
@@ -91,72 +91,70 @@ return {
     'p00f/clangd_extensions.nvim',
     lazy = true,
     ft = { 'c', 'cpp' },
-    config = function()
-      require('clangd_extensions').setup({
-        extensions = {
-          -- defaults:
-          -- Automatically set inlay hints (type hints)
-          autoSetHints = true,
-          -- These apply to the default ClangdSetInlayHints command
-          inlay_hints = {
-            -- Only show inlay hints for the current line
-            only_current_line = false,
-            -- Event which triggers a refersh of the inlay hints.
-            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-            -- not that this may cause  higher CPU usage.
-            -- This option is only respected when only_current_line and
-            -- autoSetHints both are true.
-            only_current_line_autocmd = 'CursorHold',
-            -- whether to show parameter hints with the inlay hints or not
-            show_parameter_hints = true,
-            -- prefix for parameter hints
-            parameter_hints_prefix = '<- ',
-            -- prefix for all the other hints (type, chaining)
-            other_hints_prefix = '=> ',
-            -- whether to align to the length of the longest line in the file
-            max_len_align = false,
-            -- padding from the left if max_len_align is true
-            max_len_align_padding = 1,
-            -- whether to align to the extreme right or not
-            right_align = false,
-            -- padding from the right if right_align is true
-            right_align_padding = 7,
-            -- The color of the hints
-            highlight = 'InlayHint',
-            -- The highlight group priority for extmark
-            priority = 100,
+    opts = {
+      extensions = {
+        -- defaults:
+        -- Automatically set inlay hints (type hints)
+        autoSetHints = true,
+        -- These apply to the default ClangdSetInlayHints command
+        inlay_hints = {
+          -- Only show inlay hints for the current line
+          only_current_line = false,
+          -- Event which triggers a refersh of the inlay hints.
+          -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+          -- not that this may cause  higher CPU usage.
+          -- This option is only respected when only_current_line and
+          -- autoSetHints both are true.
+          only_current_line_autocmd = 'CursorHold',
+          -- whether to show parameter hints with the inlay hints or not
+          show_parameter_hints = true,
+          -- prefix for parameter hints
+          parameter_hints_prefix = '<- ',
+          -- prefix for all the other hints (type, chaining)
+          other_hints_prefix = '=> ',
+          -- whether to align to the length of the longest line in the file
+          max_len_align = false,
+          -- padding from the left if max_len_align is true
+          max_len_align_padding = 1,
+          -- whether to align to the extreme right or not
+          right_align = false,
+          -- padding from the right if right_align is true
+          right_align_padding = 7,
+          -- The color of the hints
+          highlight = 'InlayHint',
+          -- The highlight group priority for extmark
+          priority = 100,
+        },
+        ast = {
+          role_icons = {
+            type = '',
+            declaration = '',
+            expression = '',
+            specifier = '',
+            statement = '',
+            ['template argument'] = '',
           },
-          ast = {
-            role_icons = {
-              type = '',
-              declaration = '',
-              expression = '',
-              specifier = '',
-              statement = '',
-              ['template argument'] = '',
-            },
-            kind_icons = {
-              Compound = '',
-              Recovery = '',
-              TranslationUnit = '',
-              PackExpansion = '',
-              TemplateTypeParm = '',
-              TemplateTemplateParm = '',
-              TemplateParamObject = '',
-            },
-            highlights = {
-              detail = 'Comment',
-            },
+          kind_icons = {
+            Compound = '',
+            Recovery = '',
+            TranslationUnit = '',
+            PackExpansion = '',
+            TemplateTypeParm = '',
+            TemplateTemplateParm = '',
+            TemplateParamObject = '',
           },
-          memory_usage = {
-            border = 'rounded',
-          },
-          symbol_info = {
-            border = 'rounded',
+          highlights = {
+            detail = 'Comment',
           },
         },
-      })
-    end,
+        memory_usage = {
+          border = 'rounded',
+        },
+        symbol_info = {
+          border = 'rounded',
+        },
+      },
+    },
   },
   {
     'simrat39/rust-tools.nvim',
@@ -226,59 +224,57 @@ return {
         desc = 'LSP Outline',
       },
     },
-    config = function()
-      require('lspsaga').setup({
-        finder = {
-          max_height = 0.75,
-          left_width = 0.35,
-          right_width = 0.35,
-          default = 'tyd+def+imp+ref',
-          methods = {
-            ['tyd'] = 'textDocument/typeDefinition'
-          },
-          layout = 'float',
-          keys = {
-            ['shuttle'] = 'S',
-            ['split'] = 's',
-            ['vsplit'] = 'v',
-            ['toggle_or_open'] = '<cr>',
-            ['tabe'] = 't',
-            ['tabnew'] = 'n',
-            ['quit'] = 'q',
-            ['clone'] = '<C-c><C-c>',
-          }
+    opts = {
+      finder = {
+        max_height = 0.75,
+        left_width = 0.35,
+        right_width = 0.35,
+        default = 'tyd+def+imp+ref',
+        methods = {
+          ['tyd'] = 'textDocument/typeDefinition'
         },
-        symbol_in_winbar = {
-          enable = false
-        },
-        callhierarchy = {
-          keys = {
-            ['toggle_or_req'] = 'u',
-            ['edit'] = '<CR>',
-            ['split'] = 's',
-            ['vsplit'] = 'v',
-            ['tabe'] = 't',
-            ['quit'] = 'q',
-            ['shuttle'] = 'S',
-            ['close'] = '<C-c><C-c>',
-          }
-        },
-        outline = {
-          auto_preview = false,
-          keys = {
-            ['toggle_or_jump'] = '<CR>',
-            ['edit'] = 'e'
-          },
-        },
-        lightbulb = {
-          virtual_text = false,
-        },
-        ui = {
-          devicon = false,
-          code_action = ''
+        layout = 'float',
+        keys = {
+          ['shuttle'] = 'S',
+          ['split'] = 's',
+          ['vsplit'] = 'v',
+          ['toggle_or_open'] = '<cr>',
+          ['tabe'] = 't',
+          ['tabnew'] = 'n',
+          ['quit'] = 'q',
+          ['clone'] = '<C-c><C-c>',
         }
-      })
-    end,
+      },
+      symbol_in_winbar = {
+        enable = false
+      },
+      callhierarchy = {
+        keys = {
+          ['toggle_or_req'] = 'u',
+          ['edit'] = '<CR>',
+          ['split'] = 's',
+          ['vsplit'] = 'v',
+          ['tabe'] = 't',
+          ['quit'] = 'q',
+          ['shuttle'] = 'S',
+          ['close'] = '<C-c><C-c>',
+        }
+      },
+      outline = {
+        auto_preview = false,
+        keys = {
+          ['toggle_or_jump'] = '<CR>',
+          ['edit'] = 'e'
+        },
+      },
+      lightbulb = {
+        virtual_text = false,
+      },
+      ui = {
+        devicon = false,
+        code_action = ''
+      },
+    },
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
       'nvim-tree/nvim-web-devicons'

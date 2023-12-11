@@ -4,6 +4,40 @@ local SmartResizeEdgy = function(edgy_win, direction, size)
   edgy_win:resize(dimension, on_edge * size)
 end
 
+local colors = {
+  blue   = '#61afef',
+  green  = '#98c379',
+  purple = '#c678dd',
+  cyan   = '#56b6c2',
+  red1   = '#e06c75',
+  red2   = '#be5046',
+  yellow = '#e5c07b',
+  fg     = '#abb2bf',
+  bg     = '#282c34',
+  gray1  = '#828997',
+  gray2  = '#2c323c',
+  gray3  = '#3e4452',
+}
+
+local colorscheme = {
+  normal = {
+    a = { fg = colors.bg, bg = colors.blue, gui = 'bold' },
+    b = { fg = colors.fg, bg = colors.gray3 },
+    c = { fg = colors.fg, bg = colors.gray2 },
+  },
+  command = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
+  insert = { a = { fg = colors.bg, bg = colors.green, gui = 'bold' } },
+  visual = { a = { fg = colors.bg, bg = colors.yellow, gui = 'bold' } },
+  terminal = { a = { fg = colors.bg, bg = colors.green, gui = 'bold' } },
+  replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
+  inactive = {
+    a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
+    b = { fg = colors.gray1, bg = colors.bg },
+    c = { fg = colors.gray1, bg = colors.gray2 },
+  },
+}
+
+
 return {
   {
     "folke/edgy.nvim",
@@ -180,93 +214,41 @@ return {
     dependencies = {
       { 'nvim-tree/nvim-web-devicons' },
     },
-    config = function()
-      vim.g.Get_langserv = function()
-        local client = vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() })[1]
-        if client ~= nil and client.name ~= '' then
-          return ' ' .. client.name
-        else
-          return ''
-        end
-      end
-      vim.g.Get_treesitter = function()
-        if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil then
-          return '󰄵 ts'
-        else
-          return ''
-        end
-      end
-      local colors = {
-        blue   = '#61afef',
-        green  = '#98c379',
-        purple = '#c678dd',
-        cyan   = '#56b6c2',
-        red1   = '#e06c75',
-        red2   = '#be5046',
-        yellow = '#e5c07b',
-        fg     = '#abb2bf',
-        bg     = '#282c34',
-        gray1  = '#828997',
-        gray2  = '#2c323c',
-        gray3  = '#3e4452',
-      }
-
-      local colorscheme = {
-        normal = {
-          a = { fg = colors.bg, bg = colors.blue, gui = 'bold' },
-          b = { fg = colors.fg, bg = colors.gray3 },
-          c = { fg = colors.fg, bg = colors.gray2 },
+    opts = {
+      options = {
+        icons_enabled = true,
+        theme = colorscheme,
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {},
+        always_divide_middle = false,
+        globalstatus = true
+      },
+      sections = {
+        lualine_a = { 'mode' },
+        lualine_b = {
+          'branch',
+          'diff',
+          { 'diagnostics', sources = { 'nvim_diagnostic' } },
         },
-        command = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
-        insert = { a = { fg = colors.bg, bg = colors.green, gui = 'bold' } },
-        visual = { a = { fg = colors.bg, bg = colors.yellow, gui = 'bold' } },
-        terminal = { a = { fg = colors.bg, bg = colors.green, gui = 'bold' } },
-        replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
-        inactive = {
-          a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
-          b = { fg = colors.gray1, bg = colors.bg },
-          c = { fg = colors.gray1, bg = colors.gray2 },
-        },
-      }
-
-      require('lualine').setup({
-        options = {
-          icons_enabled = true,
-          theme = colorscheme,
-          component_separators = { left = '', right = '' },
-          section_separators = { left = '', right = '' },
-          disabled_filetypes = {},
-          always_divide_middle = false,
-          globalstatus = true
-        },
-        sections = {
-          lualine_a = { 'mode' },
-          lualine_b = {
-            'branch',
-            'diff',
-            { 'diagnostics', sources = { 'nvim_diagnostic' } },
-          },
-          lualine_c = { 'filename' },
-          lualine_x = { 'vim.g.Get_langserv()', 'vim.g.Get_treesitter()', 'filetype' },
-          lualine_y = { 'fileformat', 'encoding', 'filesize' },
-          lualine_z = { 'progress', 'location' },
-        },
-        inactive_sections = {},
-        tabline = {},
-        extensions = { 'toggleterm', 'quickfix', 'symbols-outline' },
-      })
-    end,
+        lualine_c = { 'filename' },
+        lualine_x = { 'filetype' },
+        lualine_y = { 'fileformat', 'encoding', 'filesize' },
+        lualine_z = { 'progress', 'location' },
+      },
+      inactive_sections = {},
+      tabline = {},
+      extensions = { 'toggleterm', 'quickfix', 'symbols-outline' },
+    },
   },
   {
     'nvim-tree/nvim-web-devicons',
     lazy = true,
     event = 'VeryLazy',
-    config = function()
-      require('nvim-web-devicons').setup({
-        override = { zsh = { icon = '', color = '#428850', name = 'Zsh' } },
-        default = true,
-      })
-    end,
+    opts = {
+      override = { zsh = { icon = '', color = '#428850', name = 'Zsh' } },
+      default = true,
+    }
   },
   {
     'akinsho/bufferline.nvim',
@@ -274,36 +256,32 @@ return {
     event = {
       'BufNewFile', 'BufReadPost'
     },
-    config = function()
-      require('bufferline').setup({
-        -- highlights = require("catppuccin.groups.integrations.bufferline").get(),
-        options = {
-          mode = 'tabs',
-          themable = true,
-          offsets = {
-            {
-              filetype = 'neo-tree',
-              text = 'File Explorer',
-              separator = true
-            },
+    opts = {
+      -- highlights = require("catppuccin.groups.integrations.bufferline").get(),
+      options = {
+        mode = 'tabs',
+        themable = true,
+        offsets = {
+          {
+            filetype = 'neo-tree',
+            text = 'File Explorer',
+            separator = true
           },
-          show_duplicate_prefix = false,
-          hover = {
-            enabled = false,
-          },
-          always_show_bufferline = false,
-          separator_style = { '|', '|' }
         },
-      })
-    end,
+        show_duplicate_prefix = false,
+        hover = {
+          enabled = false,
+        },
+        always_show_bufferline = false,
+        separator_style = { '|', '|' }
+      },
+
+    }
   },
   {
     'stevearc/dressing.nvim',
     lazy = true,
     event = 'VeryLazy',
-    config = function()
-      require('dressing').setup()
-    end,
     dependencies = {
       {
         'rcarriga/nvim-notify',
