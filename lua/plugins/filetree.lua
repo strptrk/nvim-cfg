@@ -50,23 +50,26 @@ return {
       },
     },
     dependencies = {
-      'MunifTanjim/nui.nvim',
+      {
+        'MunifTanjim/nui.nvim',
+        lazy = true,
+      },
       {
         's1n7ax/nvim-window-picker',
-        config = function()
-          require('window-picker').setup({
-            autoselect_one = true,
-            include_current = false,
-            filter_rules = {
-              -- filter using buffer options
-              bo = {
-                filetype = { 'neo-tree', 'neo-tree-popup', 'notify' },
-                buftype = { 'terminal', 'quickfix' },
-              },
+        main = 'window-picker',
+        lazy = true,
+        opts = {
+          autoselect_one = true,
+          include_current = false,
+          filter_rules = {
+            -- filter using buffer options
+            bo = {
+              filetype = { 'neo-tree', 'neo-tree-popup', 'notify' },
+              buftype = { 'terminal', 'quickfix' },
             },
-            other_win_hl_color = '#e35e4f',
-          })
-        end,
+          },
+          other_win_hl_color = '#e35e4f',
+        }
       },
     },
     init = function()

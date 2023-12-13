@@ -10,21 +10,6 @@ return {
       'tex'
     },
     lazy = true,
-    dependencies = {
-      {
-        'j-hui/fidget.nvim',
-        tag = 'legacy',
-        lazy = true,
-        opts = {
-          window = {
-            blend = 0,
-          },
-          text = {
-            spinner = 'dots',
-          },
-        },
-      },
-    },
     config = function()
       local lsp = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -189,7 +174,7 @@ return {
     event = { 'LspAttach' },
     keys = {
       {
-        '<Space>w',
+        'gw',
         '<cmd>Lspsaga finder<cr>',
         desc = 'LSP Finder',
       },
@@ -209,7 +194,7 @@ return {
         desc = 'LSP Code Action',
       },
       {
-        '<Space>p',
+        'gp',
         '<cmd>Lspsaga peek_definition<cr>',
         desc = 'LSP Peek Definition',
       },
@@ -241,7 +226,7 @@ return {
           ['toggle_or_open'] = '<cr>',
           ['tabe'] = 't',
           ['tabnew'] = 'n',
-          ['quit'] = 'q',
+          ['quit'] = {'q', '<esc>'},
           ['clone'] = '<C-c><C-c>',
         }
       },
@@ -255,7 +240,7 @@ return {
           ['split'] = 's',
           ['vsplit'] = 'v',
           ['tabe'] = 't',
-          ['quit'] = 'q',
+          ['quit'] = {'q', '<esc>'},
           ['shuttle'] = 'S',
           ['close'] = '<C-c><C-c>',
         }
@@ -264,7 +249,7 @@ return {
         auto_preview = false,
         keys = {
           ['toggle_or_jump'] = '<CR>',
-          ['edit'] = 'e'
+          ['edit'] = 'e',
         },
       },
       lightbulb = {
