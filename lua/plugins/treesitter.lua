@@ -189,8 +189,8 @@ return {
           },
           swap = {
             enable = true,
-            swap_next = { ['<C-l>'] = '@parameter.inner' },
-            swap_previous = { ['<C-h>'] = '@parameter.inner' },
+            swap_next = { ['L'] = '@parameter.inner' },
+            swap_previous = { ['H'] = '@parameter.inner' },
           },
           move = {
             enable = true,

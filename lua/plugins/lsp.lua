@@ -57,7 +57,11 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(ev)
-          _G.lsp_name = vim.lsp.get_client_by_id(ev.data.client_id).name
+          vim.keymap.set('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
+          vim.keymap.set('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
+          vim.keymap.set('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
+          vim.keymap.set('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
+          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
           local methods = vim.lsp.protocol.Methods
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
           if client and client.supports_method(methods.textDocument_inlayHint) then

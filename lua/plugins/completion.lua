@@ -50,6 +50,16 @@ return {
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<A-Tab>'] = cmp.mapping.abort(),
+          ['<C-h>'] = function()
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end,
+          ['<C-l>'] = function()
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end,
           ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then

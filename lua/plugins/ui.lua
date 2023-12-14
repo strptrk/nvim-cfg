@@ -232,13 +232,20 @@ return {
           { 'diagnostics', sources = { 'nvim_diagnostic' } },
         },
         lualine_c = { 'filename' },
-        lualine_x = { 'filetype' },
+        lualine_x = {
+          {
+            function() return require("noice").api.status.search.get() end,
+            cond = function() return require("noice").api.status.search.has() end,
+            color = { fg = "#FF9E64" },
+          },
+          'filetype',
+        },
         lualine_y = { 'fileformat', 'encoding', 'filesize' },
         lualine_z = { 'progress', 'location' },
       },
       inactive_sections = {},
       tabline = {},
-      extensions = { 'toggleterm', 'quickfix', 'symbols-outline' },
+      extensions = { 'toggleterm', 'quickfix' },
     },
   },
   {
@@ -299,7 +306,11 @@ return {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
+    lazy = true,
     opts = {
+      messages = {
+        view_search = false, -- view for search count messages. Set to `false` to disable
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -321,17 +332,47 @@ return {
         },
       },
       presets = {
-        bottom_search = true,
+        bottom_search = false,
         command_palette = true,
         long_message_to_split = true,
         inc_rename = true,
       },
+      views = {
+        cmdline_popup = {
+          position = {
+            row = -2,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = "auto",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = {
+            row = 8,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = 10,
+          },
+          border = {
+            style = "rounded",
+            padding = { 0, 1 },
+          },
+          win_options = {
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          },
+        },
+      },
     },
-    -- stylua: ignore
     keys = {
-      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
-      { "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, desc = "Scroll forward", mode = {"i", "n", "s"} },
-      { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll backward", mode = {"i", "n", "s"}},
+      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end,                 mode = "c",    desc = "Redirect Cmdline" },
+      { "<c-f>",     function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,  silent = true, expr = true,              desc = "Scroll forward",  mode = { "i", "n", "s" } },
+      { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true,              desc = "Scroll backward", mode = { "i", "n", "s" } },
+      { ",n",        function() require("noice").cmd("dismiss") end,                                silent = true, desc = "Clear Noice",     mode = "n" },
     },
   },
 }

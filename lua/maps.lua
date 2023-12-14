@@ -34,16 +34,16 @@ map('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 map('t', '<A-n>', [[<C-\><C-n>]])
 
 map('n', '<C-M-h>', function()
-  Utils.SmartResize('h', 1)
+  require('utils').SmartResize('h', 1)
 end)
 map('n', '<C-M-j>', function()
-  Utils.SmartResize('j', 1)
+  require('utils').SmartResize('j', 1)
 end)
 map('n', '<C-M-k>', function()
-  Utils.SmartResize('k', 1)
+  require('utils').SmartResize('k', 1)
 end)
 map('n', '<C-M-l>', function()
-  Utils.SmartResize('l', 1)
+  require('utils').SmartResize('l', 1)
 end)
 
 map('n', '<C-s>', '<cmd>update<CR>')
@@ -62,12 +62,12 @@ map('x', '<Up>', '<C-Y>k')
 map('x', '<Down>', '<C-E>j')
 
 -- Move Lines
-map("n", "<C-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
-map("n", "<C-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
-map("i", "<C-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
-map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
-map("v", "<C-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
-map("v", "<C-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+map("n", "<C-j>", "<cmd>m .+1<cr>==", { silent = true, desc = "Move down" })
+map("n", "<C-k>", "<cmd>m .-2<cr>==", { silent = true, desc = "Move up" })
+map("i", "<C-j>", "<esc><cmd>m .+1<cr>==gi", { silent = true, desc = "Move down" })
+map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { silent = true, desc = "Move up" })
+map("v", "<C-j>", ":m '>+1<cr>gv=gv", { silent = true, desc = "Move down" })
+map("v", "<C-k>", ":m '<-2<cr>gv=gv", { silent = true, desc = "Move up" })
 
 -- better indenting
 map("v", "<", "<gv")
@@ -144,8 +144,8 @@ map('i', '<A-b>', '<C-o>b')
 map({ 'x', 'n' }, '<Left>', '^')
 map({ 'x', 'n' }, '<Right>', '$')
 
-map('i', '<A-;>', '<C-o>mz<C-o>:norm A;<CR><C-o>`z')
-map('n', '<A-;>', 'mz:norm A;<CR>`z')
+map('i', '<C-;>', '<C-o>mz<C-o>:norm A;<CR><C-o>`z')
+map('n', '<C-;>', 'mz:norm A;<CR>`z')
 
 -- paste last yanked thing, not deleted
 map('n', 'sp', '"0P', { desc = 'Paste before cursor', silent = true })
@@ -155,29 +155,29 @@ map('x', 'sp', '"0P', { desc = 'Paste', silent = true })
 map({ 'n', 'x' }, 'ga', '<Plug>(EasyAlign)')
 
 map({ 'n', 'i', 't', 'v' }, '<A-h>', function()
-  Utils.WinMove('h')
+  require('utils').WinMove('h')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-j>', function()
-  Utils.WinMove('j')
+  require('utils').WinMove('j')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-k>', function()
-  Utils.WinMove('k')
+  require('utils').WinMove('k')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-l>', function()
-  Utils.WinMove('l')
+  require('utils').WinMove('l')
 end)
 
 map({ 'n', 'i', 't', 'v' }, '<A-H>', function()
-  Utils.SplitAndFocus('h')
+  require('utils').SplitAndFocus('h')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-J>', function()
-  Utils.SplitAndFocus('j')
+  require('utils').SplitAndFocus('j')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-K>', function()
-  Utils.SplitAndFocus('k')
+  require('utils').SplitAndFocus('k')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-L>', function()
-  Utils.SplitAndFocus('l')
+  require('utils').SplitAndFocus('l')
 end)
 
 CR = function()
@@ -197,15 +197,11 @@ map('n', '<Space>hv', ':vert help ')
 map('n', '<Space>ht', ':tab help ')
 map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))
 map('n', '<Space>N', "<cmd>Notifications<cr>")
-map('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
-map('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
--- map('n', '<Space>a', vim.lsp.buf.code_action, { desc = "Code Action" })
-map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
 
 local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
 
 local smart_rename = function()
-  if Utils.get_treesitter() then
+  if require('utils').get_treesitter() then
     return ts_rename
   else
     return [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
@@ -217,7 +213,3 @@ map('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 
 map('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (file)" })
 map('n', 'sV', [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 map('n', 's/', [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
-
-map('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
-map('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
-

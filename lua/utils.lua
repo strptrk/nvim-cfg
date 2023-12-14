@@ -78,7 +78,7 @@ Utils.SplitInDirection = function(dir, fn, opts)
     fn(opts.args)
   end
   if opts.zz then
-    vim.api.nvim_exec([[norm zz]], false)
+    vim.cmd([[norm zz]])
   end
 end
 
@@ -101,13 +101,13 @@ end
 
 Utils.FnNewTab = function(fn, opts)
   opts = opts or {}
-  vim.cmd('norm m1')
+  vim.cmd('norm mz')
   if api.nvim_buf_get_name(0) == "" then
     vim.cmd('tabnew')
   else
     vim.cmd('tabedit %')
   end
-  vim.cmd('norm `1')
+  vim.cmd('norm `z')
   if type(fn) == 'function' then
     fn()
   end
