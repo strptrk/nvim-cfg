@@ -66,7 +66,6 @@ return {
         pattern = '<buffer>',
         callback = function()
           vim.opt.showtabline = 2
-          vim.opt.showmode = true
           vim.opt.showcmd = true
           vim.opt.ruler = true
           vim.cmd([[Lazy load lualine.nvim]])

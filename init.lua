@@ -65,6 +65,7 @@ opt.hidden = true
 opt.history = 100
 opt.lazyredraw = false
 opt.synmaxcol = 240
+opt.showmode = false
 
 -- revert back to vim's block cursor in insert mode as a default
 opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"

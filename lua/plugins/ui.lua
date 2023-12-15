@@ -231,12 +231,19 @@ return {
           'diff',
           { 'diagnostics', sources = { 'nvim_diagnostic' } },
         },
-        lualine_c = { 'filename' },
+        lualine_c = {
+          'filename',
+          {
+            function() return require("noice").api.status.mode.get() end,
+            cond = function() return require("noice").api.status.mode.has() end,
+            color = { fg = colors.yellow },
+          },
+        },
         lualine_x = {
           {
             function() return require("noice").api.status.search.get() end,
             cond = function() return require("noice").api.status.search.has() end,
-            color = { fg = "#FF9E64" },
+            color = { fg = colors.cyan },
           },
           'filetype',
         },
