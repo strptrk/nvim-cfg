@@ -121,11 +121,11 @@ Utils.get_langserv = function()
   local ret = ""
   local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
   local b = false
-  for _, v in ipairs(clients) do
+  for _, name in ipairs(clients) do
     if b then
-      ret = ret .. ' | ' .. v.name
+      ret = ret .. ' | ' .. name.name
     else
-    ret = ' ' .. v.name
+    ret = ' ' .. name.name
     end
     b = false
   end

@@ -62,15 +62,19 @@ return {
           vim.keymap.set('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
           vim.keymap.set('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
           vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
-          local methods = vim.lsp.protocol.Methods
-          local client = vim.lsp.get_client_by_id(ev.data.client_id)
-          if client and client.supports_method(methods.textDocument_inlayHint) then
-            vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
-              { desc = "Toggle inlay hints" })
-            vim.lsp.inlay_hint(ev.buf, true)
-          end
-          if client and client.supports_method(methods.textDocument_rename) then
-            vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
+          if vim.fn.has('nvim-0.10') > 0 then
+              local methods = vim.lsp.protocol.Methods
+              local client = vim.lsp.get_client_by_id(ev.data.client_id)
+              if client and client.supports_method(methods.textDocument_inlayHint) then
+                  vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
+                  { desc = "Toggle inlay hints" })
+                  vim.lsp.inlay_hint(ev.buf, true)
+              end
+              if client and client.supports_method(methods.textDocument_rename) then
+                  vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
+              end
+          else
+              vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
           end
         end,
       })
