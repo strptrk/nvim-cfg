@@ -1,5 +1,3 @@
-local CPP_ADAPTER = 'cppdbg'
-
 return {
   {
     'mfussenegger/nvim-dap',
@@ -103,18 +101,23 @@ return {
       local dap = require('dap')
       local defcommand = vim.api.nvim_create_user_command
       local map = vim.keymap.set
-      local Executable = nil
+      local state = {
+        executable = nil,
+        args = nil,
+        host = nil
+      }
       local findcmd = function()
-        if 1 == vim.fn.executable('find') then
-          return { 'find', '.', '-executable', '-type', 'f' }
-        elseif 1 == vim.fn.executable('fd') then
+        if 1 == vim.fn.executable('fd') then
           return { 'fd', '--type', 'x', '--color', 'never' }
         elseif 1 == vim.fn.executable('fdfind') then
           return { 'fdfind', '--type', 'x', '--color', 'never' }
+        elseif 1 == vim.fn.executable('find') then
+          return { 'find', '.', '-executable', '-type', 'f' }
         end
         return {}
       end
-      local getpath = function(program, fallback)
+
+      local get_path = function(program, fallback)
         if type(program) ~= 'table' then
           program = { program }
         end
@@ -126,6 +129,14 @@ return {
         end
         return fallback
       end
+      local ADAPTER = get_path({
+        "codelldb", -- codelldb
+        "lldb-vscode", -- lldb-vscode
+        "lldb-dap", -- lldb-vscode
+        "lldb-mi", -- lldb-vscode
+        "OpenDebugAD7", -- cppdbg
+      }, nil)
+      -- vim.notify("adapter: "..ADAPTER, vim.log.levels.INFO)
       local select_executable = function(opts, fn)
         opts = opts or {}
         pickers
@@ -136,7 +147,7 @@ return {
             attach_mappings = function(prompt_bufnr, _)
               actions.select_default:replace(function()
                 actions.close(prompt_bufnr)
-                Executable = action_state.get_selected_entry()
+                state.executable = vim.fn.getcwd() .. '/' .. action_state.get_selected_entry()[1];
                 if fn then
                   fn()
                 end
@@ -147,97 +158,180 @@ return {
           :find()
       end
 
-      defcommand('DBGSelectExecutable', function()
+      defcommand('DapSelectExecutable', function()
         select_executable(require('telescope.themes').get_dropdown({}))
       end, { force = true })
+
       local get_exec = function()
-        if Executable ~= nil and Executable[1] ~= nil then
-          return vim.fn.getcwd() .. '/' .. Executable[1]
+        if state.executable ~= nil then
+          return state.executable
         else
-          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          state.executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          return state.executable
         end
       end
+      local get_exec_modify = function()
+        state.executable = nil
+        return get_exec()
+      end
+
+      local get_exec_env = function()
+        if state.executable ~= nil then
+          return state.executable
+        else
+          local exec_string = os.getenv("DEBUG_EXECUTABLE")
+          if exec_string then
+            state.executable = exec_string
+          else
+            state.executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end
+          return state.executable
+        end
+      end
+
       local get_args = function()
-        return vim.split(vim.fn.input('Arguments: '), ' ')
+        if state.args == nil then
+          state.args = vim.split(vim.fn.input('Arguments: '), ' ')
+        end
+        return state.args
       end
+      local get_args_modify = function()
+        state.args = nil
+        return get_args()
+      end
+
+      local get_args_env = function()
+        if state.args ~= nil then
+          return state.args
+        else
+          local arg_string = os.getenv("DEBUG_ARGS")
+          if arg_string then
+            state.args = vim.split(arg_string, ' ')
+          else
+            state.args = vim.split(vim.fn.input('Arguments: '), ' ')
+          end
+        end
+        return state.args
+      end
+
       local get_host = function()
-        return vim.fn.input('Hostname: ', 'localhost:')
+        if state.host == nil then
+          state.host = vim.fn.input('Hostname: ', 'localhost:')
+        end
+        return state.host
       end
-      if CPP_ADAPTER == 'codelldb' then
+
+      local get_host_modify = function()
+        state.host = nil
+        return get_host()
+      end
+
+      local configurations = {
+        codelldb = {
+          type = "codelldb",
+          request = 'launch',
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+        },
+        cppdbg = {
+          type = "cppdbg",
+          request = 'launch',
+          cwd = '${workspaceFolder}',
+          stopAtEntry = true,
+          setupCommands = {
+            {
+              text = '-enable-pretty-printing',
+              description = 'enable pretty printing',
+              ignoreFailures = false,
+            },
+          },
+        },
+        lldb = {
+          type = "lldb",
+          request = 'launch',
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+          env = function()
+            local variables = {}
+            for k, v in pairs(vim.fn.environ()) do
+              table.insert(variables, string.format('%s=%s', k, v))
+            end
+            return variables
+          end,
+        },
+        common = {
+          {
+            name = 'Launch (without arguments)',
+            program = get_exec,
+            args = {}
+          },
+          {
+            name = 'Launch (modify executable)',
+            program = get_exec_modify,
+            args = {}
+          },
+          {
+            name = 'Launch (with arguments)',
+            program = get_exec,
+            args = get_args,
+          },
+          {
+            name = 'Launch (modify arguments)',
+            program = get_exec,
+            args = get_args_modify,
+          },
+          {
+            name = 'Launch (modify executable and arguments)',
+            program = get_exec_modify,
+            args = get_args_modify,
+          },
+          {
+            name = 'Launch (using environmental variables)',
+            program = get_exec_env,
+            args = get_args_env
+          },
+        }
+      }
+      dap.configurations.cpp = {}
+      if string.match(ADAPTER, "codelldb$") then
         dap.adapters.codelldb = {
           type = 'server',
           port = '${port}',
           executable = {
-            command = getpath({ 'codelldb' }, '/usr/bin/codelldb'),
+            command = get_path({ 'codelldb' }, '/usr/bin/codelldb'),
             args = { '--port', '${port}' },
           },
         }
-        dap.configurations.cpp = {
-          {
-            name = 'Launch',
-            type = 'codelldb',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            stopOnEntry = false,
-          },
-          {
-            name = 'Launch (with arguments)',
-            type = 'codelldb',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            stopOnEntry = false,
-            args = get_args,
-          },
-        }
-      elseif CPP_ADAPTER == 'cppdbg' then
-        local gdbpath = getpath({ 'gdb' }, '/usr/bin/gdb')
-        local opendbgpath = getpath({ 'OpenDebugAD7' }, os.getenv('HOME') .. '/.local/bin/OpenDebugAD7')
+        for _, v in ipairs(configurations.common) do
+          local configuration = vim.tbl_deep_extend("force", configurations.codelldb, v)
+          table.insert(dap.configurations.cpp, configuration)
+        end
+      elseif string.match(ADAPTER, "lldb%-mi$") then -- macos bullshit :/
         dap.adapters.cppdbg = {
           id = 'cppdbg',
           type = 'executable',
-          command = opendbgpath,
+          command = get_path({ 'OpenDebugAD7' }, nil),
+        }
+        dap.configurations.cpp = {}
+        for _, v in ipairs(configurations.common) do
+          v.miDebuggerPath = get_path('lldb-mi', nil)
+          local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, v)
+          table.insert(dap.configurations.cpp, configuration)
+        end
+      elseif string.match(ADAPTER, "OpenDebugAD7$") then
+        dap.adapters.cppdbg = {
+          id = 'cppdbg',
+          type = 'executable',
+          command = get_path({ 'OpenDebugAD7' }, os.getenv('HOME') .. '/.local/bin/OpenDebugAD7'),
         }
         dap.configurations.cpp = {
-          {
-            name = 'Launch',
-            type = 'cppdbg',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            stopAtEntry = true,
-            setupCommands = {
-              {
-                text = '-enable-pretty-printing',
-                description = 'enable pretty printing',
-                ignoreFailures = false,
-              },
-            },
-          },
-          {
-            name = 'Launch (with arguments)',
-            type = 'cppdbg',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            args = get_args,
-            stopAtEntry = true,
-            setupCommands = {
-              {
-                text = '-enable-pretty-printing',
-                description = 'enable pretty printing',
-                ignoreFailures = false,
-              },
-            },
-          },
           {
             name = 'Attach to gdbserver',
             type = 'cppdbg',
             request = 'launch',
             MIMode = 'gdb',
             miDebuggerServerAddress = get_host,
-            miDebuggerPath = gdbpath,
+            miDebuggerPath = get_path({ 'gdb' }, '/usr/bin/gdb'),
             cwd = '${workspaceFolder}',
             program = get_exec,
             setupCommands = {
@@ -248,51 +342,66 @@ return {
               },
             },
           },
+          {
+            name = 'Attach to gdbserver (modify address)',
+            type = 'cppdbg',
+            request = 'launch',
+            MIMode = 'gdb',
+            miDebuggerServerAddress = get_host_modify,
+            miDebuggerPath = get_path({ 'gdb' }, '/usr/bin/gdb'),
+            cwd = '${workspaceFolder}',
+            program = get_exec,
+            setupCommands = {
+              {
+                text = '-enable-pretty-printing',
+                description = 'enable pretty printing',
+                ignoreFailures = false,
+              },
+            },
+          },
+          {
+            name = 'Attach to gdbserver (modify executable)',
+            type = 'cppdbg',
+            request = 'launch',
+            MIMode = 'gdb',
+            miDebuggerServerAddress = get_host,
+            miDebuggerPath = get_path({ 'gdb' }, '/usr/bin/gdb'),
+            cwd = '${workspaceFolder}',
+            program = get_exec_modify,
+            setupCommands = {
+              {
+                text = '-enable-pretty-printing',
+                description = 'enable pretty printing',
+                ignoreFailures = false,
+              },
+            },
+          },
         }
-      elseif CPP_ADAPTER == 'lldb-vscode' then
-        local lldbpath = getpath({ 'lldb-vscode-14', 'lldb-vscode' }, '/usr/bin/lldb-vscode')
+        for _, v in ipairs(configurations.common) do
+          local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, v)
+          table.insert(dap.configurations.cpp, configuration)
+        end
+      elseif string.match(ADAPTER, "lldb%-")  then
         dap.adapters.lldb = {
           type = 'executable',
-          command = lldbpath,
+          command = get_path({
+            'lldb-vscode',
+            'lldb-dap',
+            'lldb-mi',
+          }, '/usr/bin/lldb-dap'),
           name = 'lldb',
         }
-        dap.configurations.cpp = {
-          {
-            name = 'Launch',
-            type = 'lldb',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            stopOnEntry = false,
-            args = {},
-            env = function()
-              local variables = {}
-              for k, v in pairs(vim.fn.environ()) do
-                table.insert(variables, string.format('%s=%s', k, v))
-              end
-              return variables
-            end,
-          },
-          {
-            name = 'Launch (with arguments)',
-            type = 'lldb',
-            request = 'launch',
-            program = get_exec,
-            cwd = '${workspaceFolder}',
-            stopOnEntry = false,
-            args = get_args,
-            env = function()
-              local variables = {}
-              for k, v in pairs(vim.fn.environ()) do
-                table.insert(variables, string.format('%s=%s', k, v))
-              end
-              return variables
-            end,
-          },
-        }
+        dap.configurations.cpp = {}
+        for _, v in ipairs(configurations.common) do
+          local configuration = vim.tbl_deep_extend("force", configurations.lldb, v)
+          table.insert(dap.configurations.cpp, configuration)
+        end
+      else
+        vim.notify("No debugger adapter found for cpp", vim.log.levels.INFO)
       end
       dap.configurations.c = dap.configurations.cpp
       dap.configurations.rust = dap.configurations.cpp
+
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#Python
       dap.adapters.python = {
         type = 'executable',
@@ -315,7 +424,7 @@ return {
               return cwd .. '/.venv/bin/python'
             else
               local venv = os.getenv('VIRTUAL_ENV')
-              return getpath({ venv and (venv .. '/bin/python') or 'python' }, '/usr/bin/python')
+              return get_path({ venv and (venv .. '/bin/python') or 'python' }, '/usr/bin/python')
             end
           end,
         },
