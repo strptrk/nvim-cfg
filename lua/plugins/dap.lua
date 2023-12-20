@@ -396,8 +396,6 @@ return {
           local configuration = vim.tbl_deep_extend("force", configurations.lldb, v)
           table.insert(dap.configurations.cpp, configuration)
         end
-      else
-        vim.notify("No debugger adapter found for cpp", vim.log.levels.INFO)
       end
       dap.configurations.c = dap.configurations.cpp
       dap.configurations.rust = dap.configurations.cpp
