@@ -74,7 +74,7 @@ opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
 -- swapfile directory changed to ramfs to avoid excessive disk writes
 -- but nvim will not be able to recover after a power outage
 opt.updatetime = 750
-vim.api.nvim_set_option('directory', '/tmp/nvimswap//')
+vim.api.nvim_set_option_value('directory', '/tmp/nvimswap//', { scope = "global" })
 
 ---@diagnostic disable-next-line: inject-field
 vim.g.c_syntax_for_h = 1

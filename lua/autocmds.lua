@@ -33,7 +33,7 @@ autocmd('TermOpen', {
 autocmd('FileType', {
   pattern = { 'sh', 'zsh' },
   callback = function()
-    vim.api.nvim_buf_set_option(0, 'filetype', 'bash')
+    vim.api.nvim_set_option_value('filetype', 'bash', { buf = 0 })
   end,
 })
 

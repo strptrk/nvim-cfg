@@ -114,7 +114,7 @@ return {
         local from = -1 * (api.nvim_win_get_height(status.preview_win) + 1)
         local lines = api.nvim_buf_get_lines(entry.value.term.bufnr, from, -1, false)
         api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines or {})
-        api.nvim_win_set_option(status.preview_win, 'wrap', false)
+        api.nvim_set_option_value('wrap', false, { win = status.preview_win })
       end
 
       Term.select_open_term = function(opts, title)

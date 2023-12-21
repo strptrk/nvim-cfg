@@ -13,7 +13,14 @@ return {
   {
     'Shatur/neovim-session-manager',
     lazy = true,
-    cmd = { 'SessionManager' },
+    cmd = {
+      'SessionManager',
+    },
+    init = function()
+      vim.api.nvim_create_user_command('SaveSession', "SessionManager save_current_session", { force = true })
+      vim.api.nvim_create_user_command('LoadSession', "SessionManager load_session", { force = true })
+      vim.api.nvim_create_user_command('LastSession', "SessionManager load_last_session", { force = true })
+    end,
     config = function()
       require('session_manager').setup({
         sessions_dir = require('plenary.path'):new(vim.fn.stdpath('data'), 'sessions'),
@@ -108,10 +115,6 @@ return {
     config = function()
       require('hop').setup()
     end
-  },
-  {
-    'AllenDang/nvim-expand-expr',
-    lazy = true,
   },
   {
     "elkowar/yuck.vim",

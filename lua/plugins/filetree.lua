@@ -7,44 +7,44 @@ return {
       {
         'sc',
         function()
-          vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
+          vim.cmd([[Neotree show filesystem position=left]])
         end,
         desc = 'Neotree Files',
       },
       {
         'su',
         function()
-          vim.api.nvim_exec([[Neotree show filesystem position=left]], false)
-          vim.api.nvim_exec([[Neotree show buffers position=top]], false)
-          vim.api.nvim_exec([[Neotree show git_status position=right]], false)
+          vim.cmd([[Neotree show filesystem position=left]])
+          vim.cmd([[Neotree show buffers position=top]])
+          vim.cmd([[Neotree show git_status position=right]])
         end,
         desc = 'Neotree Files, Git, Buffers',
       },
       {
         'sg',
         function()
-          vim.api.nvim_exec([[Neotree show git_status position=right]], false)
+          vim.cmd([[Neotree show git_status position=right]])
         end,
         desc = 'Neotree Git'
       },
       {
         ',g',
         function()
-          vim.api.nvim_exec([[Neotree focus git_status position=right]], false)
+          vim.cmd([[Neotree focus git_status position=right]])
         end,
         desc = 'Neotree Focus Git'
       },
       {
         ',b',
         function()
-          vim.api.nvim_exec([[Neotree focus buffers position=top]], false)
+          vim.cmd([[Neotree focus buffers position=top]])
         end,
         desc = 'Neotree Focus Buffers'
       },
       {
         ',f',
         function()
-          vim.api.nvim_exec([[Neotree focus filesystem position=left]], false)
+          vim.cmd([[Neotree focus filesystem position=left]])
         end,
         desc = 'Neotree Focus Files'
       },
@@ -76,10 +76,10 @@ return {
       vim.g.neo_tree_remove_legacy_commands = 1
     end,
     config = function()
-      vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
-      vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
-      vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
-      vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
+      vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
+      vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
+      vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
+      vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
       require('neo-tree').setup({
         source_selector = {
           winbar = false,
@@ -88,15 +88,15 @@ return {
           sources = {
             {
               source = "filesystem",
-              display_name = "  Files "
+              display_name = " 󱏒 Files "
             },
             {
               source = "buffers",
-              display_name = "  Buffers"
+              display_name = "  Buffers"
             },
             {
               source = "git_status",
-              display_name = "  Git "
+              display_name = "  Git "
             },
           },
           content_layout = 'start',
@@ -162,12 +162,12 @@ return {
               added = '', -- or "✚", but this is redundant info if you use git_status_colors on the name
               modified = '', -- or "", but this is redundant info if you use git_status_colors on the name
               deleted = '✖', -- this can only be used in the git_status source
-              renamed = '', -- this can only be used in the git_status source
+              renamed = '', -- this can only be used in the git_status source
               -- Status type
-              untracked = '',
+              untracked = '',
               ignored = '',
-              unstaged = '',
-              staged = '',
+              unstaged = '󰛲',
+              staged = '󰱒',
               conflict = '',
             },
           },
@@ -237,7 +237,7 @@ return {
         nesting_rules = {},
         filesystem = {
           filtered_items = {
-            visible = false, -- when true, they will just be displayed differently than normal items
+            visible = true, -- when true, they will just be displayed differently than normal items
             hide_dotfiles = true,
             hide_gitignored = true,
             hide_hidden = true, -- only works on Windows for hidden files/directories
@@ -252,14 +252,14 @@ return {
               --".gitignored",
             },
             never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
-              --".DS_Store",
-              --"thumbs.db"
+              ".DS_Store",
+              "thumbs.db"
             },
             never_show_by_pattern = { -- uses glob style patterns
               --".null-ls_*",
             },
           },
-          follow_current_file = false,            -- This will find and focus the file in the active buffer every
+          follow_current_file = true,            -- This will find and focus the file in the active buffer every
           -- time the current file is changed while the tree is open.
           group_empty_dirs = false,               -- when true, empty folders will be grouped together
           hijack_netrw_behavior = 'open_default', -- netrw disabled, opening a directory opens neo-tree
@@ -274,14 +274,15 @@ return {
               ['<bs>'] = 'navigate_up',
               ['.'] = 'set_root',
               ['H'] = 'toggle_hidden',
-              ['/'] = 'fuzzy_finder',
+              ['<C-/>'] = 'fuzzy_finder',
+              ['/'] = false,
               ['D'] = 'fuzzy_finder_directory',
               ['#'] = 'fuzzy_sorter', -- fuzzy sorting using the fzy algorithm
               -- ["D"] = "fuzzy_sorter_directory",
               ['f'] = 'filter_on_submit',
               ['<c-x>'] = 'clear_filter',
-              ['[g'] = 'prev_git_modified',
-              [']g'] = 'next_git_modified',
+              ['[v'] = 'prev_git_modified',
+              [']v'] = 'next_git_modified',
             },
           },
         },

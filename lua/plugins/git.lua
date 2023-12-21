@@ -78,10 +78,11 @@ return {
           DiffviewFileHistory = {},
         },
         hooks = {
-          diff_buf_read = function(_)
-            vim.opt_local.wrap = false
-            vim.opt_local.list = false
-            vim.opt_local.number = false
+          diff_buf_win_enter = function(_, win)
+            vim.api.nvim_set_option_value("wrap", false, {win = win})
+            vim.api.nvim_set_option_value("list", false, {win = win})
+            vim.api.nvim_set_option_value("number", false, {win = win})
+            vim.api.nvim_set_option_value("cursorline", true, {win = win})
           end,
         },
         keymaps = {
@@ -232,8 +233,8 @@ return {
             return '<Ignore>'
           end, { expr = true })
           maploc('n', ',,', '<cmd>Gitsigns<cr>', { desc = "Gitsigns" })
-          maploc({ 'n', 'v' }, ',s', ':Gitsigns stage_hunk<CR>', { desc = "Stage Hunk" })
-          maploc({ 'n', 'v' }, ',r', ':Gitsigns reset_hunk<CR>', { desc = "Reset Hunk" })
+          maploc({ 'n', 'v' }, ',s', '<cmd>Gitsigns stage_hunk<CR>', { desc = "Stage Hunk" })
+          maploc({ 'n', 'v' }, ',r', '<cmd>Gitsigns reset_hunk<CR>', { desc = "Reset Hunk" })
           maploc('n', ',S', gs.stage_buffer, { desc = 'Stage Buffer' })
           maploc('n', ',u', gs.undo_stage_hunk, { desc = 'Undo Stage Hunk' })
           maploc('n', ',R', gs.reset_buffer, { desc = 'Reset Buffer' })
@@ -242,7 +243,7 @@ return {
           maploc('n', ',p', gs.preview_hunk_inline, { desc = 'Preview Hunk Inline' })
           maploc('n', ',q', gs.setqflist, { desc = 'QuickFix List of Hunks' })
           maploc('n', ',w', ":Gitsigns show", { desc = 'Show Revision of file' })
-          maploc('n', ',d', ":tabedit % | Gitsigns diffthis", { desc = 'Show Diff of file' })
+          maploc('n', ',d', "<cmd>tabedit % | Gitsigns diffthis<CR>", { desc = 'Show Diff of file' })
           maploc('n', ',B', function()
             gs.blame_line({ full = true })
           end, { desc = 'Blame Line' })
