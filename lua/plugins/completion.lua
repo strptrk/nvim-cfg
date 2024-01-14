@@ -43,7 +43,6 @@ return {
             col_offset = -3,
             side_padding = 0,
           },
-          documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -126,86 +125,10 @@ return {
     end,
     dependencies = {
       {
-        'onsails/lspkind.nvim',
+        'strptrk/lspkinder.nvim',
         config = function()
-          require('lspkind').init({
-            -- defines how annotations are shown
-            -- default: symbol
-            -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
-            mode = 'symbol_text',
-            -- default symbol map
-            -- can be either 'default' (requires nerd-fonts font) or
-            -- 'codicons' for codicon preset (requires vscode-codicons font)
-            --
-            -- default: 'default'
-            -- preset = 'codicons',
-            -- override preset symbols
-            --
-            -- default: {}
-            symbol_map = {
-              Text = "",
-              None = "",
-              Error = "",
-              Symbol = "󱄑",
-              PunctuationSpecial = "",
-              TextUri = "",
-              TextReference = "",
-              TextEnvironment = "󰅩",
-              TextEnvironmentName = "󰅩",
-              TextEmphasis = "",
-              TextStrong = "",
-              Spell = "",
-              Nospell = "",
-              String = "",
-              StringRegex = "󰑑",
-              StringEscape = "󱔁",
-              Character = "",
-              Comment = "󰆉",
-              Storageclass = "",
-              Method = "",
-              Function = "",
-              FunctionKeyword = "",
-              KeywordFunction = "",
-              FunctionCall = "",
-              Constructor = "",
-              Field = "ﰠ",
-              Variable = "",
-              Class = "ﴯ",
-              _Parent = "ﴯ",
-              Interface = "",
-              Module = "",
-              Property = "ﰠ",
-              FunctionMacro = "",
-              Repeat = "󰑖",
-              Unit = "塞",
-              Type = "",
-              Boolean = "",
-              TypeBuiltin = "",
-              Value = "",
-              Number = "",
-              Enum = "",
-              Conditional = "",
-              Keyword = "",
-              KeywordReturn = "󰌑",
-              Namespace = "",
-              Snippet = "",
-              Color = "",
-              File = "",
-              Reference = "",
-              Folder = "",
-              EnumMember = "",
-              Constant = "",
-              ConstantBuiltin = "",
-              Struct = "פּ",
-              Event = "",
-              Operator = "",
-              KeywordOperator = "",
-              Define = "",
-              Include = "󰼢",
-              TypeParameter = "",
-              Parameter = "",
-              TypeQualifier = "󰉺",
-            },
+          require('lspkind').setup({
+            symbol_map = {},
           })
         end
       },

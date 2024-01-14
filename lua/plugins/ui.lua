@@ -355,6 +355,28 @@ return {
             height = "auto",
           },
         },
+        hover = {
+          view = "popup",
+          relative = "cursor",
+          zindex = 45,
+          enter = false,
+          anchor = "auto",
+          size = {
+            width = "auto",
+            height = "auto",
+            max_height = 20,
+            max_width = 120,
+          },
+          border = {
+            style = "none",
+            padding = { 0, 2 },
+          },
+          position = { row = 1, col = 0 },
+          win_options = {
+            wrap = true,
+            linebreak = true,
+          },
+        },
         popupmenu = {
           relative = "editor",
           position = {

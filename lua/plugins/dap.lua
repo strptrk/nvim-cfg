@@ -130,11 +130,11 @@ return {
         return fallback
       end
       local ADAPTER = get_path({
+        "OpenDebugAD7", -- cppdbg
         "codelldb", -- codelldb
         "lldb-vscode", -- lldb-vscode
         "lldb-dap", -- lldb-vscode
         "lldb-mi", -- lldb-vscode
-        "OpenDebugAD7", -- cppdbg
       }, nil)
       -- vim.notify("adapter: "..ADAPTER, vim.log.levels.INFO)
       local select_executable = function(opts, fn)

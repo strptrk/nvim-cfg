@@ -66,9 +66,9 @@ return {
               local methods = vim.lsp.protocol.Methods
               local client = vim.lsp.get_client_by_id(ev.data.client_id)
               if client and client.supports_method(methods.textDocument_inlayHint) then
-                  vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint.enable(ev.buf, nil) end,
+                  vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
                   { desc = "Toggle inlay hints" })
-                  vim.lsp.inlay_hint.enable(ev.buf, true)
+                  vim.lsp.inlay_hint(ev.buf, true)
               end
               if client and client.supports_method(methods.textDocument_rename) then
                   vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
