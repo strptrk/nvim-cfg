@@ -16,7 +16,23 @@ return {
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
       lsp.cmake.setup({ capabilities = capabilities })
-      lsp.clangd.setup({ capabilities = capabilities })
+      lsp.clangd.setup({
+        capabilities = capabilities,
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+      })
       lsp.texlab.setup({
         capabilities = capabilities,
         settings = {

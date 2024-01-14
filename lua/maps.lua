@@ -177,19 +177,6 @@ map({ 'n', 'i', 't', 'v' }, '<A-L>', function()
   require('utils').SplitAndFocus('l')
 end)
 
-CR = function()
-  if vim.fn.pumvisible() ~= 0 then
-    if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
-      return '<c-y>'
-    else
-      return '<c-e>' .. [[<cmd>lua require'pairs.enter'.type()<CR>]]
-    end
-  else
-    return [[<cmd>lua require'pairs.enter'.type()<CR>]]
-  end
-end
-map('i', '<cr>', 'v:lua.CR()', { expr = true, noremap = true })
-
 map('n', '<Space>hv', ':vert help ')
 map('n', '<Space>ht', ':tab help ')
 map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))

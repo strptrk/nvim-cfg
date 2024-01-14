@@ -292,14 +292,23 @@ return {
           },
         }
       }
-      dap.configurations.cpp = {}
       if string.match(ADAPTER, "codelldb$") then
         dap.adapters.codelldb = {
           type = 'server',
+          host = "localhost",
           port = '${port}',
           executable = {
             command = get_path({ 'codelldb' }, '/usr/bin/codelldb'),
             args = { '--port', '${port}' },
+          },
+        }
+        dap.configurations.cpp = {
+          {
+            type = "codelldb",
+            request = "attach",
+            name = "Attach to process",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
           },
         }
         for _, v in ipairs(configurations.common) do

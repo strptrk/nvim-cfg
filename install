@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+
+NO_SUDO=0
+INSTALL=
+IS_INSTALLED=
+get_pkg_mgr(){
+    opsys="$(uname -o)"
+    case "$opsys" in
+        "Android") # android termux
+            OS_TYPE=Android
+            INSTALL="pkg install"
+            IS_INSTALLED="dpkg -s"
+            NO_SUDO=1
+            ;;
+        "GNU/Linux")
+            source /etc/os-release
+            case "$NAME" in
+                "Arch Linux")
+                    OS_TYPE="$NAME"
+                    INSTALL="pacman --noconfirm -S"
+                    IS_INSTALLED="pacman -Q"
+                    ;;
+                *) ;;
+            esac
+            ;;
+        *)
+            ;;
+    esac
+}
+get_pkg_mgr
+
+cmd_exists(){
+    command -v $1 >/dev/null 2>&1
+}
+
+SUDO=
+get_sudo(){
+    if [ "$NO_SUDO" -eq 1 ]; then
+        SUDO=
+        return
+    fi
+    if [ $(id -u) -eq 0 ]; then
+        SUDO=
+    elif cmd_exists doas; then
+        SUDO=doas
+    elif cmd_exists sudo; then
+        SUDO=sudo
+    else
+        echo "no way to get superuser, install sudo, doas or run the script as root"
+        exit 0
+    fi
+}
+get_sudo
+
+# declare -A packages_arch=(
+#     [git]="git"
+#     [base]="base"
+#     [base-devel]="base-devel"
+#     [tmux]="tmux"
+#     [sway]="sway"
+# )
+
+# package names used are arch-based
+get_pkg(){
+    case "$OS_TYPE" in
+        "Arch Linux")
+            echo "$1"
+            ;;
+        "Android") # WARN unfinished, not guaranteed to work
+            echo "$1"
+            ;;
+        *) ;;
+    esac
+}
+
+ensure_installed(){
+    [[ -z "$1" ]] && return 1
+    PACKAGES=""
+    for p in $@; do
+        if ! $IS_INSTALLED $(get_pkg $p) >/dev/null 2>&1; then
+            PACKAGES="$PACKAGES $p"
+        fi
+    done
+    [[ -n "$PACKAGES" ]] && $SUDO $INSTALL $PACKAGES || return 0
+}
+
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/strptrk/nvim-cfg/main/install)"
+# curl -SO https://raw.githubusercontent.com/strptrk/nvim-cfg/main/install
+# ./install
+install_config(){
+    ensure_installed git neovim gcc || return 1
+    if [ -e $HOME/.config/nvim ]; then
+        mv $HOME/.config/nvim $HOME/.config/nvim.bak
+    fi
+    git config --global core.editor "nvim --cmd 'let g:unception_block_while_host_edits=1'"
+    git clone --depth=1 https://github.com/strptrk/nvim-cfg.git ~/.config/nvim
+    nvim --headless "+Lazy! sync" +qa
+}
+
+install_lsp(){
+    ensure_installed clang || {
+        echo "clang could not be installed"
+    }
+    ensure_installed python-lsp-server yapf python-whatthepatch flake8 \
+                       python-pylint python-pyflakes autopep8 \
+                       python-pydocstyle python-pycodestyle || {
+                       echo "pylsp could not be installed"
+                   }
+    ensure_installed python-pipx || return 1
+    pipx install cmake-language-server
+    ensure_installed texlab || return 1
+
+    echo "--- LANGUAGE SERVERS INSTALLED ---"
+}
+
+install_debuggers(){
+    echo "--- INSTALLING DEBUGPY ---"
+    ensure_installed python-pip || return 1
+    mkdir -p ~/.clones/virtualenvs
+    cd ~/.clones/virtualenvs
+    python -m venv debugpy
+    debugpy/bin/python -m pip install --upgrade debugpy
+
+    echo "--- INSTALLING CPPDBG ---"
+    ensure_installed git jq unzip gdb || return 1
+    mkdir -p ~/.clones/cpptools ~/.local/bin
+    cd ~/.clones/cpptools
+    curl -LO $(curl -s https://api.github.com/repos/microsoft/vscode-cpptools/releases | \
+        jq -r '[.[].assets[] | select(.name == "cpptools-linux.vsix").browser_download_url][0]')
+    unzip -o cpptools-linux.vsix
+    chmod +x extension/debugAdapters/bin/OpenDebugAD7
+    ln -sf $PWD/extension/debugAdapters/bin/OpenDebugAD7 ~/.local/bin
+    echo "--- DEBUGGERS INSTALLED ---"
+}
+
+install_tools(){
+    ensure_installed wl-clipboard fd ripgrep || return 1
+    echo "--- TOOLS INSTALLED ---"
+}
+
+TARGETS="config lsp tools debuggers"
+if [ -n "$1" ]; then
+    case "$1" in
+        *)
+            TARGETS="$@"
+            ;;
+    esac
+fi
+
+if echo $TARGETS | grep config >/dev/null 2>&1 || ! [ -d $HOME/.config/nvim ]; then
+    echo "you should run the installer with config included"
+fi
+
+for target in $TARGETS; do
+    echo install_$target
+    install_$target
+done
+
+# vim: ft=bash

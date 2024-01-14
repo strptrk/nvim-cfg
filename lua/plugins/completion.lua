@@ -2,6 +2,7 @@ return {
   {
     'hrsh7th/nvim-cmp',
     lazy = true,
+    version = false,
     event = 'VeryLazy',
     config = function()
       local cmp = require('cmp')
@@ -19,6 +20,11 @@ return {
         view = {
           entries = 'custom',
         },
+        -- sorting = { -- undecided whether or not to include, needs some testing
+        --   comparators = {
+        --     require("clangd_extensions.cmp_scores")
+        --   }
+        -- },
         formatting = {
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
@@ -84,12 +90,11 @@ return {
           end, { 'i', 's' }),
         }),
         sources = cmp.config.sources({
-          { name = 'treesitter' },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-        }, {
-          { name = 'buffer' },
-          { name = 'path' },
+          { name = 'nvim_lsp',    priority = 1000 },
+          { name = 'luasnip',     priority = 990 },
+          { name = 'treesitter',  priority = 800 },
+          { name = 'path',        priority = 700 },
+          { name = 'buffer',      priority = 600 },
         }),
       })
 

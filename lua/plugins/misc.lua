@@ -68,11 +68,12 @@ return {
     lazy = true,
   },
   {
-    'ZhiyuanLck/smart-pairs',
+    'echasnovski/mini.pairs',
+    version = false,
     lazy = true,
     event = 'InsertEnter',
     config = function()
-      require('pairs'):setup({ enter = { enable_mapping = false } })
+      require('mini.pairs').setup()
     end
   },
   {

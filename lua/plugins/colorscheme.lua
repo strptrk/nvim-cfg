@@ -39,7 +39,7 @@ return {
         highlights = {
           CmpItemKindSnippet = { fg = "$bg0", bg = "$red" },
           CmpItemKindKeyword = { fg = "$bg0", bg = "$dark_red" },
-          CmpItemKindText = { fg = "$bg0", bg = "$cyan" },
+          CmpItemKindText = { fg = "$bg0", bg = "$green" },
           CmpItemKindMethod = { fg = "$bg0", bg = "$blue" },
           CmpItemKindConstructor = { fg = "$bg0", bg = "$blue" },
           CmpItemKindFunction = { fg = "$bg0", bg = "$blue" },
