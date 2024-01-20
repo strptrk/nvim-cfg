@@ -28,6 +28,7 @@ local function file_too_big(size) -- in kilobytes
       local fstats
       ok, fstats = pcall(vim.loop.fs_stat, filename)
       if not ok then return false end
+      if not fstats then return false end
       filesize_cache[filename] = fstats.size
     end
     return filesize_cache[filename] > size * 1024
@@ -138,7 +139,7 @@ return {
         ensure_installed = ts_installed,
         highlight = {
           enable = true,
-          disable = file_too_big(1024),
+          disable = file_too_big(128),
         },
         indent = {
             enable = false,
@@ -153,7 +154,7 @@ return {
         refactor = {
           navigation = {
             enable = true,
-            disable = file_too_big(386),
+            disable = file_too_big(128),
             keymaps = {
               goto_definition = "gsd",
               goto_next_usage = ']u',
@@ -164,14 +165,14 @@ return {
           },
           highlight_definitions = {
             enable = true,
-            disable = file_too_big(256),
+            disable = file_too_big(64),
             clear_on_cursor_move = true,
           },
           highlight_current_scope = {
             enable = false,
           },
           smart_rename = {
-            disable = file_too_big(1024),
+            disable = file_too_big(128),
             enable = true,
             keymaps = {
               smart_rename = 'st',
@@ -181,7 +182,7 @@ return {
         textobjects = {
           select = {
             enable = true,
-            disable = file_too_big(1024),
+            disable = file_too_big(128),
             lookahead = true,
             keymaps = {
               ['af'] = '@function.outer',
@@ -204,13 +205,13 @@ return {
           },
           swap = {
             enable = true,
-            disable = file_too_big(1024),
+            disable = file_too_big(128),
             swap_next = { ['L'] = '@parameter.inner' },
             swap_previous = { ['H'] = '@parameter.inner' },
           },
           move = {
             enable = true,
-            disable = file_too_big(1024),
+            disable = file_too_big(128),
             set_jumps = true,
             goto_next_start = {
               [']f'] = { query = '@function.outer', desc = 'Next function start' },
@@ -265,7 +266,7 @@ return {
         },
         playground = {
           enable = false,
-          disable = file_too_big(1024),
+          disable = file_too_big(128),
           updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {
