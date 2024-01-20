@@ -18,12 +18,21 @@ local ts_ft = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = ts_ft,
-  callback = function()
-    vim.api.nvim_set_option_value("number", true, { scope = "local" })
-  end,
-})
+local filesize_cache = {}
+local function file_too_big(size) -- in kilobytes
+  return function(_, bufnr)       -- lang, bufnr
+    local ok, filename
+    ok, filename = pcall(vim.api.nvim_buf_get_name, bufnr)
+    if not ok then return false end
+    if filesize_cache[filename] == nil then
+      local fstats
+      ok, fstats = pcall(vim.loop.fs_stat, filename)
+      if not ok then return false end
+      filesize_cache[filename] = fstats.size
+    end
+    return filesize_cache[filename] > size * 1024
+  end
+end
 
 return {
   {
@@ -129,20 +138,22 @@ return {
         ensure_installed = ts_installed,
         highlight = {
           enable = true,
-          disable = function (_, buf)
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > 1024 * 1024 then
-              return true
-            end
-            return false
-          end,
+          disable = file_too_big(1024),
         },
-        indent = { enable = false },
-        autopairs = { enable = true },
-        rainbow = { enable = false, extended_mode = true },
+        indent = {
+            enable = false,
+        },
+        autopairs = {
+            enable = false,
+        },
+        rainbow = {
+            enable = false,
+            extended_mode = true,
+        },
         refactor = {
           navigation = {
             enable = true,
+            disable = file_too_big(386),
             keymaps = {
               goto_definition = "gsd",
               goto_next_usage = ']u',
@@ -153,12 +164,14 @@ return {
           },
           highlight_definitions = {
             enable = true,
+            disable = file_too_big(256),
             clear_on_cursor_move = true,
           },
           highlight_current_scope = {
             enable = false,
           },
           smart_rename = {
+            disable = file_too_big(1024),
             enable = true,
             keymaps = {
               smart_rename = 'st',
@@ -168,6 +181,7 @@ return {
         textobjects = {
           select = {
             enable = true,
+            disable = file_too_big(1024),
             lookahead = true,
             keymaps = {
               ['af'] = '@function.outer',
@@ -190,11 +204,13 @@ return {
           },
           swap = {
             enable = true,
+            disable = file_too_big(1024),
             swap_next = { ['L'] = '@parameter.inner' },
             swap_previous = { ['H'] = '@parameter.inner' },
           },
           move = {
             enable = true,
+            disable = file_too_big(1024),
             set_jumps = true,
             goto_next_start = {
               [']f'] = { query = '@function.outer', desc = 'Next function start' },
@@ -248,7 +264,8 @@ return {
           },
         },
         playground = {
-          enable = true,
+          enable = false,
+          disable = file_too_big(1024),
           updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {
@@ -265,7 +282,7 @@ return {
           },
         },
         matchup = {
-          enable = true,
+          enable = false,
           disable = {},
         },
       })
