@@ -89,13 +89,24 @@ return {
             end
           end, { 'i', 's' }),
         }),
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp',    priority = 1000 },
-          { name = 'luasnip',     priority = 990 },
-          { name = 'treesitter',  priority = 800 },
-          { name = 'path',        priority = 700 },
-          { name = 'buffer',      priority = 600 },
-        }),
+      })
+      local default_cmp_sources = {
+        { name = 'nvim_lsp',   priority = 1000 },
+        { name = 'luasnip',    priority = 990 },
+        { name = 'path',       priority = 700 },
+      }
+      vim.api.nvim_create_autocmd('BufReadPre', {
+        callback = function(args)
+          local too_big = require('helper_utils').file_too_big(96)
+          local sources = default_cmp_sources
+          if not too_big(args.buf) then
+            table.insert(sources, {name = 'treesitter', priority = 800})
+            table.insert(sources, {name = 'buffer',     priority = 600})
+          end
+          cmp.setup.buffer({
+            sources = sources
+          })
+        end
       })
 
       cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {

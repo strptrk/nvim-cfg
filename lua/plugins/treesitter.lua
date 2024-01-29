@@ -18,23 +18,6 @@ local ts_ft = {
   "regex", "scss", "html", "sql", "toml", "yaml",
 }
 
-local filesize_cache = {}
-local function file_too_big(size) -- in kilobytes
-  return function(_, bufnr)       -- lang, bufnr
-    local ok, filename
-    ok, filename = pcall(vim.api.nvim_buf_get_name, bufnr)
-    if not ok then return false end
-    if filesize_cache[filename] == nil then
-      local fstats
-      ok, fstats = pcall(vim.loop.fs_stat, filename)
-      if not ok then return false end
-      if not fstats then return false end
-      filesize_cache[filename] = fstats.size
-    end
-    return filesize_cache[filename] > size * 1024
-  end
-end
-
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
@@ -139,7 +122,7 @@ return {
         ensure_installed = ts_installed,
         highlight = {
           enable = true,
-          disable = file_too_big(128),
+          disable = require("helper_utils").file_too_big(128, true),
         },
         indent = {
             enable = false,
@@ -154,7 +137,7 @@ return {
         refactor = {
           navigation = {
             enable = true,
-            disable = file_too_big(128),
+            disable = require("helper_utils").file_too_big(128, true),
             keymaps = {
               goto_definition = "gsd",
               goto_next_usage = ']u',
@@ -165,14 +148,14 @@ return {
           },
           highlight_definitions = {
             enable = true,
-            disable = file_too_big(64),
+            disable = require("helper_utils").file_too_big(64, true),
             clear_on_cursor_move = true,
           },
           highlight_current_scope = {
             enable = false,
           },
           smart_rename = {
-            disable = file_too_big(128),
+            disable = require("helper_utils").file_too_big(128, true),
             enable = true,
             keymaps = {
               smart_rename = 'st',
@@ -182,7 +165,7 @@ return {
         textobjects = {
           select = {
             enable = true,
-            disable = file_too_big(128),
+            disable = require("helper_utils").file_too_big(128, true),
             lookahead = true,
             keymaps = {
               ['af'] = '@function.outer',
@@ -205,13 +188,13 @@ return {
           },
           swap = {
             enable = true,
-            disable = file_too_big(128),
+            disable = require("helper_utils").file_too_big(128, true),
             swap_next = { ['L'] = '@parameter.inner' },
             swap_previous = { ['H'] = '@parameter.inner' },
           },
           move = {
             enable = true,
-            disable = file_too_big(128),
+            disable = require("helper_utils").file_too_big(128, true),
             set_jumps = true,
             goto_next_start = {
               [']f'] = { query = '@function.outer', desc = 'Next function start' },
@@ -266,7 +249,7 @@ return {
         },
         playground = {
           enable = false,
-          disable = file_too_big(128),
+          disable = require("helper_utils").file_too_big(128, true),
           updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {

@@ -2,14 +2,25 @@ local api = vim.api
 
 Utils = {}
 
-Utils.file_too_big = function(size)
-  return function(_, buf)            -- language, buffer
-    local max_filesize = size * 1024 -- in KiB
-    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-    if ok and stats and stats.size > max_filesize then
-      return true
+local filesize_cache = {} -- pitfall: if the filesize is around the limit, it will not change
+Utils.file_too_big = function(size, lang) -- in kilobytes
+  local too_big = function(bufnr)       -- lang, bufnr
+    local ok, filename
+    ok, filename = pcall(vim.api.nvim_buf_get_name, bufnr)
+    if not ok then return false end
+    if filesize_cache[filename] == nil then
+      local fstats
+      ok, fstats = pcall((vim.loop or vim.uv).fs_stat, filename)
+      if not ok then return false end
+      if not fstats then return false end
+      filesize_cache[filename] = fstats.size
     end
-    return false
+    return filesize_cache[filename] > size * 1024
+  end
+  if lang then
+    return function(_, bufnr) too_big(bufnr) end
+  else
+    return too_big
   end
 end
 
