@@ -25,6 +25,9 @@ return {
         --     require("clangd_extensions.cmp_scores")
         --   }
         -- },
+        performance = {
+          max_view_entries = 12,
+        },
         formatting = {
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
