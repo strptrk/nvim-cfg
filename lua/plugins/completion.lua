@@ -100,7 +100,7 @@ return {
       }
       vim.api.nvim_create_autocmd('BufReadPre', {
         callback = function(args)
-          local too_big = require('utils').file_too_big(96)
+          local too_big = require('cfg.utils').file_too_big(96)
           local sources = default_cmp_sources
           if not too_big(args.buf) then
             table.insert(sources, {name = 'treesitter', priority = 800})

@@ -18,8 +18,7 @@ autocmd('TextYankPost', {
 autocmd('FileType', {
   pattern = 'xml,html,xhtml,css,scss,javascript,lua,yaml',
   callback = function()
-    vim.wo.softtabstop = 2
-    vim.wo.shiftwidth = 2
+    vim.opt.shiftwidth = 2
   end,
 })
 
@@ -31,7 +30,7 @@ autocmd('TermOpen', {
 })
 
 autocmd('FileType', {
-  pattern = { 'sh', 'zsh' },
+  pattern = { 'sh' },
   callback = function()
     vim.api.nvim_set_option_value('filetype', 'bash', { buf = 0 })
   end,

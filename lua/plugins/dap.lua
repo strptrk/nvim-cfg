@@ -17,7 +17,7 @@ return {
           { '<BS>r', function() require('dap').repl.open() end, desc = 'Debug: Open REPL' },
           { '<BS>u', function() require('dapui').toggle() end, desc = 'Debug: Toggle UI' },
           { '<BS>t', function()
-            require('config.utils').FnNewTab(nil, { zz = true })
+            require('cfg.utils').fntab(nil, { zz = true })
             require('dapui').toggle()
           end, desc = 'Debug: Toggle UI' },
           { '<BS>h', function() require('dap.ui.widgets').hover() end, desc = 'Debug: Hover Symbol' },
