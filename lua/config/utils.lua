@@ -24,7 +24,7 @@ Utils.file_too_big = function(size, lang) -- in kilobytes
   end
 end
 
-Utils.WinMove = function(key)
+Utils.winmove = function(key)
   local curwin = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if curwin == vim.fn.winnr() then
@@ -62,7 +62,7 @@ Utils.WinMove = function(key)
   end
 end
 
-Utils.SplitAndFocus = function(dir)
+Utils.split_focus = function(dir)
   if string.match(dir, '[jk]') then
     vim.cmd.wincmd('s')
   else
@@ -71,7 +71,7 @@ Utils.SplitAndFocus = function(dir)
   vim.cmd.wincmd(dir)
 end
 
-Utils.SplitInDirection = function(dir, fn, opts)
+Utils.split = function(dir, fn, opts)
   opts = opts or {}
   local bufnr = api.nvim_win_get_buf(0)
   local pos = api.nvim_win_get_cursor(0)
@@ -82,7 +82,7 @@ Utils.SplitInDirection = function(dir, fn, opts)
       vim.cmd.wincmd('v')
     end
   end
-  Utils.WinMove(dir)
+  Utils.winmove(dir)
   api.nvim_win_set_buf(0, bufnr)
   api.nvim_win_set_cursor(0, pos)
   if type(fn) == 'function' then
@@ -93,7 +93,7 @@ Utils.SplitInDirection = function(dir, fn, opts)
   end
 end
 
-Utils.SmartResize = function(direction, size)
+Utils.resize = function(direction, size)
   if string.match('jk', direction) and (vim.fn.winnr('j') == vim.fn.winnr('k')) then
     return -- prevent horizontally resizing the viewport
   end
@@ -110,7 +110,7 @@ Utils.SmartResize = function(direction, size)
   end
 end
 
-Utils.FnNewTab = function(fn, opts)
+Utils.fntab = function(fn, opts)
   opts = opts or {}
   vim.cmd('norm mz')
   if api.nvim_buf_get_name(0) == "" then

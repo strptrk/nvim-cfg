@@ -18,15 +18,15 @@ autocmd('TextYankPost', {
 autocmd('FileType', {
   pattern = 'xml,html,xhtml,css,scss,javascript,lua,yaml',
   callback = function()
-    vim.o.softtabstop = 2
-    vim.o.shiftwidth = 2
+    vim.wo.softtabstop = 2
+    vim.wo.shiftwidth = 2
   end,
 })
 
 autocmd('TermOpen', {
   pattern = '*',
   callback = function()
-    vim.o.number = false
+    vim.wo.number = false
   end,
 })
 

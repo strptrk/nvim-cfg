@@ -90,9 +90,9 @@ vim.cmd([[
 vim.api.nvim_create_autocmd('User', {
   pattern = 'VeryLazy',
   callback = function()
-    require("utils")
-    require("autocmds")
-    require("maps")
+    require("config.utils")
+    require("config.autocmds")
+    require("config.maps")
   end,
 })
 

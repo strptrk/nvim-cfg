@@ -1,4 +1,4 @@
-local SmartResizeEdgy = function(edgy_win, direction, size)
+local resize_edgy = function(edgy_win, direction, size)
   local dimension = (direction == 'h' or direction == 'l') and 'width' or 'height'
   local on_edge = (vim.fn.winnr(direction) == vim.fn.winnr()) and -1 or 1
   edgy_win:resize(dimension, on_edge * size)
@@ -9,14 +9,14 @@ local colors = {
   green  = '#98c379',
   purple = '#c678dd',
   cyan   = '#56b6c2',
-  red1   = '#e06c75',
+  red1   = '#ea7272',
   red2   = '#be5046',
   yellow = '#e5c07b',
   fg     = '#abb2bf',
-  bg     = '#282c34',
-  gray1  = '#828997',
-  gray2  = '#2c323c',
-  gray3  = '#3e4452',
+  bg     = '#232323',
+  gray1  = '#302f2f',
+  gray2  = '#302f2f',
+  gray3  = '#444444',
 }
 
 local colorscheme = {
@@ -48,10 +48,10 @@ return {
         cps = 240,
       },
       keys = {
-        ["<A-C-h>"] = function(win) SmartResizeEdgy(win, 'h', 2) end,
-        ["<A-C-j>"] = function(win) SmartResizeEdgy(win, 'j', 2) end,
-        ["<A-C-k>"] = function(win) SmartResizeEdgy(win, 'k', 2) end,
-        ["<A-C-l>"] = function(win) SmartResizeEdgy(win, 'l', 2) end,
+        ["<A-C-h>"] = function(win) resize_edgy(win, 'h', 2) end,
+        ["<A-C-j>"] = function(win) resize_edgy(win, 'j', 2) end,
+        ["<A-C-k>"] = function(win) resize_edgy(win, 'k', 2) end,
+        ["<A-C-l>"] = function(win) resize_edgy(win, 'l', 2) end,
       },
       bottom = {
         -- {

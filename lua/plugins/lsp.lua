@@ -77,14 +77,15 @@ return {
           vim.keymap.set('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
           vim.keymap.set('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
           vim.keymap.set('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
+          vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code Actions' })
           vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
           if vim.fn.has('nvim-0.10') > 0 then
               local methods = vim.lsp.protocol.Methods
               local client = vim.lsp.get_client_by_id(ev.data.client_id)
               if client and client.supports_method(methods.textDocument_inlayHint) then
-                  vim.keymap.set('n', "gI", function() vim.lsp.inlay_hint(ev.buf, nil) end,
+                  vim.keymap.set('n', "gi", function() vim.lsp.inlay_hint.enable(ev.buf, not vim.lsp.inlay_hint.is_enabled()) end,
                   { desc = "Toggle inlay hints" })
-                  vim.lsp.inlay_hint(ev.buf, true)
+                  vim.lsp.inlay_hint.enable(ev.buf, false)
               end
               if client and client.supports_method(methods.textDocument_rename) then
                   vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
@@ -212,11 +213,11 @@ return {
         '<cmd>Lspsaga outgoing_calls<cr>',
         desc = 'LSP Outgoing Calls',
       },
-      {
-        '<Space>a',
-        '<cmd>Lspsaga code_action<cr>',
-        desc = 'LSP Code Action',
-      },
+      -- {
+      --   '<Space>a',
+      --   '<cmd>Lspsaga code_action<cr>',
+      --   desc = 'LSP Code Action',
+      -- },
       {
         'gp',
         '<cmd>Lspsaga peek_definition<cr>',

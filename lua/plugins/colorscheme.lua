@@ -16,6 +16,38 @@ return {
         -- toggle theme style ---
         toggle_style_key = nil, -- keybind to toggle theme style. Leave it nil to disable it, or set it to a string, for example "<leader>ts"
 
+        colors = {
+            black       = "#1C1C1C",
+            bg0         = "#232323",
+            bg1         = "#302f2f",
+            bg2         = "#1f1f1f",
+            bg3         = "#444444",
+            bg_d        = "#1C1C1C",
+            -- bg_blue     = "#61AFEF",
+            bg_yellow   = "#E8AE5B",
+            fg          = "#FCF9DE",
+
+            -- purple      = "#FB9BFE",
+            green       = "#99bc80",
+            orange      = "#f7a156",
+            -- blue        = "#64C3E5",
+            -- yellow      = "#E6DB74",
+            cyan        = "#8CDCF2",
+            red         = "#ea7272",
+        --     light_grey  = "#848B98",
+
+        --     grey        = "#5C6370",
+            lighter_cyan   = "#B0C4DE",
+        --     dark_red    = "#CD5C5C",
+            darker_yellow = "#E7C547",
+        --     dark_purple = "#A4799D",
+
+        --     diff_add    = "#31392B",
+        --     diff_delete = "#382B2C",
+        --     diff_change = "#1C3448",
+        --     diff_text   = "#2C5372",
+        },
+
         -- Change code style ---
         -- Options are italic, bold, underline, none
         -- You can configure multiple style with comma separated, For e.g., keywords = 'italic,bold'
@@ -35,7 +67,6 @@ return {
         lualine = {
           transparent = false, -- lualine center bar transparency
         },
-        colors = {},
         highlights = {
           CmpItemKindSnippet = { fg = "$bg0", bg = "$red" },
           CmpItemKindKeyword = { fg = "$bg0", bg = "$dark_red" },
@@ -62,11 +93,20 @@ return {
           CmpItemKindEvent = { fg = "$bg0", bg = "$blue" },
           CmpItemKindOperator = { fg = "$bg0", bg = "$blue" },
           CmpItemKindTypeParameter = { fg = "$bg0", bg = "$blue" },
-          HopNextKey = { fg = '#F72044', style = { 'bold' } },
-          HopNextKey1 = { fg = '#F72044', style = { 'bold' } },
+          HopNextKey = { fg = '#F72044', fmt =  'bold'  },
+          HopNextKey1 = { fg = '#F72044', fmt =  'bold'  },
           HopNextKey2 = { fg = '#f7a156' },
           Pmenu = { fg = "$fg", bg = "$bg3" },
-          InlayHint = { fg = "$bg_yellow", bg = "$bg1", style = { 'italic' } },
+          InlayHint = { fg = "$bg_yellow", bg = "$bg1", fmt =  'italic'  },
+          WinBar = { fg = "$fg", bg = "$bg2" },
+          WinBarNC = { fg = "$fg", bg = "$bg2" },
+          ["@number"] = { fg = "$lighter_cyan" },
+          ["@type"] = { fmt = 'bold' },
+          ["@type.builtin"] = { fmt = 'bold' },
+          ["@keyword.storage"] = { fg = "$purple", fmt = 'bold' },
+          ["@type.qualifier"] = { fg = "$yellow", fmt = 'bold' },
+          ["@constant.builtin"] = { fg = "$orange", fmt =  'italic' },
+          ["@lsp.type.macro"] = { fg = "$orange" },
         },
 
         -- Plugins Config --

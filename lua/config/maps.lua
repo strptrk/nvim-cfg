@@ -4,11 +4,6 @@ map({ 'x', 'n' }, 'gA', 'ga')
 map({ 'x', 'n' }, 'gs', '<Nop>')
 map({ 'x', 'n' }, 'g<Space>', ':EasyAlign<CR>*<Space>')
 
--- for k, _ in string.gmatch('\'"[](){}<>`', '.') do
---   map('n', [[<CR>]] .. k, [[<Plug>(sandwich-add)iW]] .. k)
---   map('x', [[<CR>]] .. k, [[<Plug>(sandwich-add)]] .. k)
--- end
-
 map('i', '<A-s>', '<Plug>luasnip-expand-or-jump')
 map('i', '<A-a>', function()
   require('luasnip').jump(-1)
@@ -18,7 +13,7 @@ map('n', '<A-a>', '<cmd>tabprevious<cr>')
 map('n', '<A-d>', '<cmd>tabnext<cr>')
 map('n', '<A-C>', '<cmd>tabclose<CR>')
 map('n', '<A-t>', function()
-  require('utils').FnNewTab(nil, { zz = true })
+  require('config.utils').FnNewTab(nil, { zz = true })
 end, {desc = 'Open New Tab'})
 
 map('n', '[q', '<cmd>cprevious<CR>')
@@ -34,16 +29,16 @@ map('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
 map('t', '<A-n>', [[<C-\><C-n>]])
 
 map('n', '<C-M-h>', function()
-  require('utils').SmartResize('h', 1)
+  require('config.utils').resize('h', 1)
 end)
 map('n', '<C-M-j>', function()
-  require('utils').SmartResize('j', 1)
+  require('config.utils').resize('j', 1)
 end)
 map('n', '<C-M-k>', function()
-  require('utils').SmartResize('k', 1)
+  require('config.utils').resize('k', 1)
 end)
 map('n', '<C-M-l>', function()
-  require('utils').SmartResize('l', 1)
+  require('config.utils').resize('l', 1)
 end)
 
 map('n', '<C-s>', '<cmd>update<CR>')
@@ -152,29 +147,29 @@ map('x', 'sp', '"0P', { desc = 'Paste', silent = true })
 map({ 'n', 'x' }, 'ga', '<Plug>(EasyAlign)')
 
 map({ 'n', 'i', 't', 'v' }, '<A-h>', function()
-  require('utils').WinMove('h')
+  require('config.utils').winmove('h')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-j>', function()
-  require('utils').WinMove('j')
+  require('config.utils').winmove('j')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-k>', function()
-  require('utils').WinMove('k')
+  require('config.utils').winmove('k')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-l>', function()
-  require('utils').WinMove('l')
+  require('config.utils').winmove('l')
 end)
 
 map({ 'n', 'i', 't', 'v' }, '<A-H>', function()
-  require('utils').SplitAndFocus('h')
+  require('config.utils').split_focus('h')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-J>', function()
-  require('utils').SplitAndFocus('j')
+  require('config.utils').split_focus('j')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-K>', function()
-  require('utils').SplitAndFocus('k')
+  require('config.utils').split_focus('k')
 end)
 map({ 'n', 'i', 't', 'v' }, '<A-L>', function()
-  require('utils').SplitAndFocus('l')
+  require('config.utils').split_focus('l')
 end)
 
 map('n', '<Space>hv', ':vert help ')
@@ -185,7 +180,7 @@ map('n', '<Space>N', "<cmd>Notifications<cr>")
 local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
 
 local smart_rename = function()
-  if require('utils').get_treesitter() then
+  if require('config.utils').get_treesitter() then
     return ts_rename
   else
     return [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]

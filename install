@@ -7,7 +7,7 @@ get_pkg_mgr(){
     opsys="$(uname -o)"
     case "$opsys" in
         "Android") # android termux
-            OS_TYPE=Android
+            PKGMGR=Android
             INSTALL="pkg install"
             IS_INSTALLED="dpkg -s"
             NO_SUDO=1
@@ -16,7 +16,17 @@ get_pkg_mgr(){
             source /etc/os-release
             case "$NAME" in
                 "Arch Linux")
-                    OS_TYPE="$NAME"
+                    PKGMGR="$NAME"
+                    INSTALL="pacman --noconfirm -S"
+                    IS_INSTALLED="pacman -Q"
+                    ;;
+                "Ubuntu" | "Debian GNU/Linux")
+                    PKGMGR="$NAME"
+                    INSTALL="apt install"
+                    IS_INSTALLED="dpkg -s"
+                    ;;
+                "Fedora Linux")
+                    PKGMGR="$NAME"
                     INSTALL="pacman --noconfirm -S"
                     IS_INSTALLED="pacman -Q"
                     ;;
@@ -62,11 +72,11 @@ get_sudo
 
 # package names used are arch-based
 get_pkg(){
-    case "$OS_TYPE" in
-        "Arch Linux")
+    case "$PKGMGR" in
+        "pacman")
             echo "$1"
             ;;
-        "Android") # WARN unfinished, not guaranteed to work
+        "apt")
             echo "$1"
             ;;
         *) ;;
