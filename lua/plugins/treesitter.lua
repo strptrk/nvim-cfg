@@ -5,7 +5,7 @@ local ts_installed = {
   "css", "diff", "dockerfile", "fennel",
   "git_rebase", "gitcommit", "gitignore", "gitattributes",
   "go", "jq", "latex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml",
+  "regex", "scss", "html", "sql", "toml", "yaml", "pkl",
 }
 
 local ts_ft = {
@@ -15,7 +15,7 @@ local ts_ft = {
   "css", "diff", "dockerfile", "fennel",
   "git_rebase", "gitcommit", "gitignore", "gitattributes",
   "go", "latex", "tex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml",
+  "regex", "scss", "html", "sql", "toml", "yaml", "pkl",
 }
 
 return {
@@ -53,7 +53,10 @@ return {
     },
     lazy = true,
     dependencies = {
-      { 'nvim-treesitter/playground',                  lazy = true },
+      {
+        'nvim-treesitter/playground',
+        lazy = true,
+      },
       {
         'andymass/vim-matchup',
         lazy = true,

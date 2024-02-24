@@ -13,7 +13,7 @@ map('n', '<A-a>', '<cmd>tabprevious<cr>')
 map('n', '<A-d>', '<cmd>tabnext<cr>')
 map('n', '<A-C>', '<cmd>tabclose<CR>')
 map('n', '<A-t>', function()
-  require('cfg.utils').FnNewTab(nil, { zz = true })
+  require('cfg.utils').fntab(nil, { zz = true })
 end, {desc = 'Open New Tab'})
 
 map('n', '[q', '<cmd>cprevious<CR>')

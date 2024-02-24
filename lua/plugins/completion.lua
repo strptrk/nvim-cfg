@@ -20,11 +20,6 @@ return {
         view = {
           entries = 'custom',
         },
-        -- sorting = { -- undecided whether or not to include, needs some testing
-        --   comparators = {
-        --     require("clangd_extensions.cmp_scores")
-        --   }
-        -- },
         performance = {
           max_view_entries = 12,
         },
