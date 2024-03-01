@@ -60,7 +60,7 @@ return {
       {
         'andymass/vim-matchup',
         lazy = true,
-        enabled = false, -- experiment
+        enabled = true, -- experiment
         init = function()
           ---@diagnostic disable-next-line: inject-field
           vim.g.matchup_matchparen_offscreen = { method = 'popup' }
@@ -269,7 +269,7 @@ return {
           },
         },
         matchup = {
-          enable = false,
+          enable = true,
           disable = {},
         },
       })

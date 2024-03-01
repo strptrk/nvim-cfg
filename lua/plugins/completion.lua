@@ -12,10 +12,33 @@ return {
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
       end
+
+      local get_bufnrs = function()
+        local bufs = vim.api.nvim_list_bufs()
+        local result = {}
+        for _, v in ipairs(bufs) do
+          local byte_size = vim.api.nvim_buf_get_offset(v, vim.api.nvim_buf_line_count(v))
+          if byte_size < 1024 * 1024 * 128 then result[#result+1] = v end
+        end
+
+        return result
+      end
       cmp.setup({
         enabled = function()
-          return vim.api.nvim_get_option_value('buftype', { buf = 0 }) ~= 'prompt' or
-              require('cmp_dap').is_dap_buffer()
+          if vim.api.nvim_get_option_value('buftype', { buf = 0 }) == 'prompt' then
+            return false
+          end
+          if require('cmp_dap').is_dap_buffer() then
+            return true
+          end
+
+          local context = require('cmp.config.context')
+          if vim.api.nvim_get_mode().mode == 'c' then
+            return true
+          else
+            return not context.in_treesitter_capture("comment")
+            and not context.in_syntax_group("Comment")
+          end
         end,
         view = {
           entries = 'custom',
@@ -23,6 +46,29 @@ return {
         performance = {
           max_view_entries = 12,
         },
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp',   priority = 1000 },
+          { name = 'luasnip',    priority = 990 },
+          { name = 'path',       priority = 700 },
+          {
+            name = 'treesitter',
+            priority = 800,
+            option = {
+              indexing_interval = 1000,
+              max_indexed_line_length = 512,
+              get_bufnrs = get_bufnrs
+            }
+          },
+          {
+            name = 'buffer',
+            priority = 600,
+            option = {
+              indexing_interval = 1000,
+              max_indexed_line_length = 512,
+              get_bufnrs = get_bufnrs
+            }
+          }
+        }),
         formatting = {
           fields = { 'kind', 'abbr', 'menu' },
           format = function(entry, vim_item)
@@ -42,11 +88,10 @@ return {
           end,
         },
         window = {
+          documentation = cmp.config.window.bordered(),
           completion = {
-            winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,Search:None',
-            col_offset = -3,
-            side_padding = 0,
-          },
+            side_padding = 0
+          }
         },
         mapping = cmp.mapping.preset.insert({
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -87,24 +132,6 @@ return {
             end
           end, { 'i', 's' }),
         }),
-      })
-      local default_cmp_sources = {
-        { name = 'nvim_lsp',   priority = 1000 },
-        { name = 'luasnip',    priority = 990 },
-        { name = 'path',       priority = 700 },
-      }
-      vim.api.nvim_create_autocmd('BufReadPre', {
-        callback = function(args)
-          local too_big = require('cfg.utils').file_too_big(96)
-          local sources = default_cmp_sources
-          if not too_big(args.buf) then
-            table.insert(sources, {name = 'treesitter', priority = 800})
-            table.insert(sources, {name = 'buffer',     priority = 600})
-          end
-          cmp.setup.buffer({
-            sources = sources
-          })
-        end
       })
 
       cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {

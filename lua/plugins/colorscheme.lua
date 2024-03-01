@@ -9,9 +9,9 @@ return {
       local transparent = os.getenv('TRANSPARENT') == "1"
       vim.o.termguicolors = true
       require('catppuccin').setup({
-        flavour = 'frappe',     -- latte, frappe, macchiato, mocha
+        flavour = 'frappe', -- latte, frappe, macchiato, mocha
         transparent_background = transparent,
-        show_end_of_buffer = true, -- show the '~' characters after the end of buffers
+        show_end_of_buffer = true,
         term_colors = false,
         dim_inactive = {
           enabled = not transparent,
@@ -64,8 +64,6 @@ return {
             HopNextKey = { fg = '#F72044', style = { 'bold' } },
             HopNextKey1 = { fg = '#F72044', style = { 'bold' } },
             HopNextKey2 = { fg = '#F7A156' },
-            Pmenu = { fg = C.text, bg = C.mantle },
-            InlayHint = { fg = C.lavender, bg = C.mantle, style = { 'italic' } },
           }
         end,
         integrations = {
@@ -77,10 +75,8 @@ return {
           treesitter_context = true,
           notify = true,
           harpoon = true,
-          dap = {
-            enabled = true,
-            enable_ui = true,
-          },
+          dap = true,
+          dap_ui = true,
           native_lsp = {
             enabled = true,
             virtual_text = {
@@ -94,6 +90,9 @@ return {
               hints = { 'underline' },
               warnings = { 'underline' },
               information = { 'underline' },
+            },
+            inlay_hints = {
+              background = true,
             },
           },
           sandwich = true,
