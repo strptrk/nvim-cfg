@@ -64,6 +64,14 @@ return {
             HopNextKey = { fg = '#F72044', style = { 'bold' } },
             HopNextKey1 = { fg = '#F72044', style = { 'bold' } },
             HopNextKey2 = { fg = '#F7A156' },
+            ["@lsp.typemod.function.defaultLibrary"] = { fg = C.sapphire },
+            ["@constant.builtin"] = { style = { "bold" } },
+            FloatBorder = { style = { "bold" } },
+            TelescopeBorder = {
+              fg = C.blue,
+              bg = transparent and 'none' or C.base,
+              style = { "bold" },
+            }
           }
         end,
         integrations = {
