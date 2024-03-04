@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ -z "$ENSURE_CHAOS" ]] && echo "unstable, WIP, dont use!" && exit 0
+
 NO_SUDO=0
 INSTALL=
 IS_INSTALLED=

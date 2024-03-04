@@ -2,23 +2,31 @@ local api = vim.api
 
 Utils = {}
 
-local filesize_cache = {} -- pitfall: if the filesize is around the limit, it will not change
-Utils.file_too_big = function(size, lang) -- in kilobytes
-  local too_big = function(bufnr)       -- lang, bufnr
+Utils.__filesize_cache = {} -- pitfall: if the filesize is around the limit, it will not change
+-- file_too_big(size, lang)
+--
+-- size: size limit in kibibytes (1024 bytes)
+-- ts: return a (lang, bufnr) kind of function to use in treesitter's disable field
+Utils.file_too_big = function(size, ts)
+  local too_big = function(bufnr)         -- lang, bufnr
     local ok, filename
     ok, filename = pcall(vim.api.nvim_buf_get_name, bufnr)
     if not ok then return false end
-    if filesize_cache[filename] == nil then
+    if Utils.__filesize_cache[filename] == nil then
       local fstats
       ok, fstats = pcall((vim.loop or vim.uv).fs_stat, filename)
-      if not ok then return false end
-      if not fstats then return false end
-      filesize_cache[filename] = fstats.size
+      if not ok or not fstats then -- buffer does not represent a file on disk
+        local byte_size = vim.api.nvim_buf_get_offset(bufnr, vim.api.nvim_buf_line_count(bufnr))
+        filename = "buf_" .. bufnr
+        Utils.__filesize_cache[filename] = byte_size
+      else
+        Utils.__filesize_cache[filename] = fstats.size
+      end
     end
-    return filesize_cache[filename] > size * 1024
+    return Utils.__filesize_cache[filename] > size * 1024
   end
-  if lang then
-    return function(_, bufnr) too_big(bufnr) end
+  if ts then
+    return function(_, bufnr) return too_big(bufnr) end
   else
     return too_big
   end
@@ -35,7 +43,7 @@ Utils.winmove = function(key)
         ['k'] = '-U',
         ['l'] = '-R',
       }
-      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}' | tr -d '\n']]) == '0' then
+      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']]) == '0' .. string.char(10) then
         vim.fn.system('tmux select-pane ' .. dir[key])
       end
     elseif os.getenv('TERM_PROGRAM') == 'WezTerm' then
@@ -110,17 +118,31 @@ Utils.resize = function(direction, size)
   end
 end
 
+Utils.fntab_ignored_ft = {
+  ["neo-tree"] = true,
+  ["toggleterm"] = true,
+  ["terminal"] = true,
+  ["help"] = true,
+  ["alpha"] = true,
+  ["dashboard"] = true,
+  ["Trouble"] = true,
+  ["lazy"] = true,
+  ["nofile"] = true,
+  [""] = true,
+}
+
 Utils.fntab = function(fn, opts)
   opts = opts or {}
-  vim.cmd('norm mz')
-  if api.nvim_buf_get_name(0) == "" then
+  local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  if not filetype or Utils.fntab_ignored_ft[filetype] then
     vim.cmd('tabnew')
   else
+    vim.cmd('norm mz')
     vim.cmd('tabedit %')
+    vim.cmd('norm `z')
   end
-  vim.cmd('norm `z')
   if type(fn) == 'function' then
-    fn()
+    fn(opts.args)
   end
   if opts.zz then
     vim.cmd('norm zz')

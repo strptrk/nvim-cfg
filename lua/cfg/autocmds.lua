@@ -16,7 +16,7 @@ autocmd('TextYankPost', {
 
 -- 2 spaces for selected filetypes
 autocmd('FileType', {
-  pattern = 'xml,html,xhtml,css,scss,javascript,lua,yaml',
+  pattern = { "xml", "html", "xhtml", "css", "scss", "javascript", "yaml", "lua" },
   callback = function()
     vim.opt.shiftwidth = 2
   end,

@@ -42,6 +42,7 @@ return {
       { '<BS>v',     function() require('telescope').extensions.dap.variables(require('telescope.themes').get_ivy({})) end, desc = 'Telescope DAP Variables' },
       { '<BS>f',     function() require('telescope').extensions.dap.frames(require('telescope.themes').get_ivy({})) end, desc = "Telescope DAP Frames" },
       { 'gdt',       function() require('cfg.utils').fntab(require('telescope.builtin').lsp_definitions, { zz = true }) end, desc = 'Go to Definition (new tab)' },
+      { 'gR',        function() require('cfg.utils').fntab(require('telescope.builtin').lsp_references) end, desc = 'Go to References (new tab)' },
       { 'gdh',       function() require('cfg.utils').split('h', require('telescope.builtin').lsp_definitions, { zz = true }) end, desc = 'Go to Definition (split left)' },
       { 'gdj',       function() require('cfg.utils').split('j', require('telescope.builtin').lsp_definitions, { zz = true }) end, desc = 'Go to Definition (split down)' },
       { 'gdk',       function() require('cfg.utils').split('k', require('telescope.builtin').lsp_definitions, { zz = true }) end, desc = 'Go to Definition (split up)' },
