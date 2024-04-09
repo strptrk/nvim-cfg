@@ -88,7 +88,7 @@ return {
                   vim.lsp.inlay_hint.enable(ev.buf, false)
               end
               if client and client.supports_method(methods.textDocument_rename) then
-                  vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
+                  vim.keymap.set('n', "ss", function() require('cfg.utils').smart_rename_lsp(client, ev.buf) end, { desc = "LSP rename", buffer = ev.buf })
               end
           else
               vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })

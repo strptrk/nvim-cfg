@@ -431,7 +431,7 @@ return {
               return cwd .. '/.venv/bin/python'
             else
               local venv = os.getenv('VIRTUAL_ENV')
-              return get_path({ venv and (venv .. '/bin/python') or 'python' }, '/usr/bin/python')
+              return get_path({ venv and (venv .. '/bin/python') or 'python', "python3" }, nil)
             end
           end,
         },

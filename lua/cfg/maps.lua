@@ -177,17 +177,7 @@ map('n', '<Space>ht', ':tab help ')
 map('n', '<Space>ho', ':help  | only' .. string.rep("<Left>", 7))
 map('n', '<Space>N', "<cmd>Notifications<cr>")
 
-local ts_rename = [[<cmd>lua require('nvim-treesitter-refactor.smart_rename').smart_rename(vim.api.nvim_win_get_buf(0))<cr>]]
-
-local smart_rename = function()
-  if require('cfg.utils').get_treesitter() then
-    return ts_rename
-  else
-    return [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
-  end
-end
-map('n', 'ss', smart_rename, { expr = true, desc = "Rename" })
-map('n', 'sm', smart_rename, { expr = true, desc = "Rename" })
+map('n', 'ss', function() require('cfg.utils').smart_rename_ts() end, { desc = "Rename" })
 map('n', 's.', [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (line)" })
 map('n', 's,', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (file)" })
 map('n', 'sv', [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })

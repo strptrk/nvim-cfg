@@ -1,38 +1,51 @@
 local api = vim.api
 
-Utils = {}
+local utils_local = {
+  rename_cmd = [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  default_rename_handler = nil
+}
 
-Utils.__filesize_cache = {} -- pitfall: if the filesize is around the limit, it will not change
--- file_too_big(size, lang)
---
--- size: size limit in kibibytes (1024 bytes)
--- ts: return a (lang, bufnr) kind of function to use in treesitter's disable field
-Utils.file_too_big = function(size, ts)
-  local too_big = function(bufnr)         -- lang, bufnr
-    local ok, filename
-    ok, filename = pcall(vim.api.nvim_buf_get_name, bufnr)
-    if not ok then return false end
-    if Utils.__filesize_cache[filename] == nil then
-      local fstats
-      ok, fstats = pcall((vim.loop or vim.uv).fs_stat, filename)
-      if not ok or not fstats then -- buffer does not represent a file on disk
-        local byte_size = vim.api.nvim_buf_get_offset(bufnr, vim.api.nvim_buf_line_count(bufnr))
-        filename = "buf_" .. bufnr
-        Utils.__filesize_cache[filename] = byte_size
+local M = {}
+
+M.split_ignore_ft = {
+  ["sagaoutline"] = true,
+  ["neo-tree"] = true,
+  ["lazy"] = true,
+  ["qf"] = true,
+  ["noice"] = true,
+  ["terminal"] = true
+}
+
+local filesize_cache = {}
+M.file_too_big = function(size)
+  -- treesitter's enable calls with (lang, buf)
+  -- others call with (buf)
+  return function(arg1, arg2)
+    local bufnr = arg2 or arg1
+    if filesize_cache[bufnr] == nil then
+      local bufsize = 0
+      -- normal case, the buffer is loaded from a file
+      local ok1, fname = pcall(vim.api.nvim_buf_get_name, bufnr)
+      ---@diagnostic disable-next-line: undefined-field
+      local ok2, stats = pcall((vim.uv or vim.loop).fs_stat, fname)
+      if ok1 and ok2 and stats ~= nil then
+        bufsize = stats.size
       else
-        Utils.__filesize_cache[filename] = fstats.size
+        -- buffer is not a file, but is loaded
+        local linenum = vim.fn.getbufinfo(bufnr)[1].linecount
+        bufsize = vim.api.nvim_buf_get_offset(bufnr, linenum)
+        if bufsize == -1 then
+          -- last hope
+          bufsize = vim.fn.wordcount().bytes
+        end
       end
+      filesize_cache[bufnr] = bufsize
     end
-    return Utils.__filesize_cache[filename] > size * 1024
-  end
-  if ts then
-    return function(_, bufnr) return too_big(bufnr) end
-  else
-    return too_big
+    return filesize_cache[bufnr] > size * 1024
   end
 end
 
-Utils.winmove = function(key)
+M.winmove = function(key)
   local curwin = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if curwin == vim.fn.winnr() then
@@ -70,27 +83,32 @@ Utils.winmove = function(key)
   end
 end
 
-Utils.split_focus = function(dir)
+M.split_focus = function(dir)
   if string.match(dir, '[jk]') then
     vim.cmd.wincmd('s')
+    if dir == 'k' then vim.cmd.wincmd('k') end
   else
     vim.cmd.wincmd('v')
+    if dir == 'h' then vim.cmd.wincmd('h') end
   end
-  vim.cmd.wincmd(dir)
 end
 
-Utils.split = function(dir, fn, opts)
+M.split = function(dir, fn, opts)
   opts = opts or {}
   local bufnr = api.nvim_win_get_buf(0)
   local pos = api.nvim_win_get_cursor(0)
-  if opts.new or (vim.fn.winnr() == vim.fn.winnr(dir)) then
-    if string.match(dir, '[jk]') then
-      vim.cmd.wincmd('s')
-    else
-      vim.cmd.wincmd('v')
-    end
+  local same = vim.fn.winnr() == vim.fn.winnr(dir)
+  local ignored_ft = false
+  if not same then
+    local buf_in_dir = vim.api.nvim_win_get_buf(vim.fn.win_getid(vim.fn.winnr(dir)))
+    local ft = api.nvim_get_option_value("filetype", { buf = buf_in_dir })
+    ignored_ft = M.split_ignore_ft[ft]
   end
-  Utils.winmove(dir)
+  if opts.new or same or ignored_ft then
+    M.split_focus(dir)
+  else
+    vim.cmd.wincmd(dir)
+  end
   api.nvim_win_set_buf(0, bufnr)
   api.nvim_win_set_cursor(0, pos)
   if type(fn) == 'function' then
@@ -101,7 +119,7 @@ Utils.split = function(dir, fn, opts)
   end
 end
 
-Utils.resize = function(direction, size)
+M.resize = function(direction, size)
   if string.match('jk', direction) and (vim.fn.winnr('j') == vim.fn.winnr('k')) then
     return -- prevent horizontally resizing the viewport
   end
@@ -118,7 +136,7 @@ Utils.resize = function(direction, size)
   end
 end
 
-Utils.fntab_ignored_ft = {
+M.fntab_ignored_ft = {
   ["neo-tree"] = true,
   ["toggleterm"] = true,
   ["terminal"] = true,
@@ -131,10 +149,10 @@ Utils.fntab_ignored_ft = {
   [""] = true,
 }
 
-Utils.fntab = function(fn, opts)
+M.fntab = function(fn, opts)
   opts = opts or {}
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-  if not filetype or Utils.fntab_ignored_ft[filetype] then
+  if not filetype or M.fntab_ignored_ft[filetype] then
     vim.cmd('tabnew')
   else
     vim.cmd('norm mz')
@@ -150,27 +168,66 @@ Utils.fntab = function(fn, opts)
 end
 
 -- to be updated
-Utils.get_langserv = function()
+M.get_langserv = function()
   local ret = ""
-  local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+  local clients = vim.lsp.get_clients({ bufnr = api.nvim_get_current_buf() })
   local b = false
   for _, name in ipairs(clients) do
     if b then
       ret = ret .. ' | ' .. name.name
     else
-    ret = ' ' .. name.name
+      ret = ' ' .. name.name
     end
     b = false
   end
   return ret
 end
 
-Utils.get_treesitter = function()
-  if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil then
+M.get_treesitter = function()
+  if vim.treesitter.highlighter.active[api.nvim_get_current_buf()] ~= nil then
     return true
   else
     return false
   end
 end
 
-return Utils
+M.smart_rename_ts = function()
+  if M.get_treesitter() then
+    require('nvim-treesitter-refactor.smart_rename').smart_rename(api.nvim_win_get_buf(0))
+  else
+    api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.rename_cmd, true, true, true), "", true)
+  end
+end
+
+M.smart_rename_lsp = function(client, bufnr)
+  if not utils_local.default_rename_handler then
+    utils_local.smart_rename_set_handler(M.smart_rename_ts)
+  end
+  local supported, supported_result = pcall(client.supports_method, 'textDocument/prepareRename')
+  if supported and supported_result then
+    local win = api.nvim_get_current_win()
+    local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+    client.request('textDocument/prepareRename', params, function(err, result)
+      if err or (result == nil) then
+        M.smart_rename_ts()
+      else
+        vim.lsp.buf.rename()
+      end
+    end, bufnr)
+  end
+end
+
+utils_local.smart_rename_set_handler = function(fallback)
+  utils_local.default_rename_handler = vim.lsp.handlers['textDocument/rename']
+  vim.lsp.handlers['textDocument/rename'] = function(err, result, ctx, config)
+    if err or not result then
+      if type(fallback) == 'function' then
+        fallback()
+      end
+    else
+      utils_local.default_rename_handler(err, result, ctx, config)
+    end
+  end
+end
+
+return M
