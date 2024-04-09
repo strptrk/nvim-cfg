@@ -4,7 +4,8 @@ return {
     lazy = true,
     dependencies = {
       { 'nvim-telescope/telescope-dap.nvim', lazy = true },
-      { 'theHamsta/nvim-dap-virtual-text', lazy = true },
+      { 'theHamsta/nvim-dap-virtual-text',   lazy = true },
+      { "nvim-neotest/nvim-nio",             lazy = true },
       {
         'rcarriga/nvim-dap-ui',
         lazy = true,
@@ -130,11 +131,11 @@ return {
         return fallback
       end
       local ADAPTER = get_path({
+        "lldb-mi", -- lldb-vscode
         "OpenDebugAD7", -- cppdbg
         "codelldb", -- codelldb
         "lldb-vscode", -- lldb-vscode
         "lldb-dap", -- lldb-vscode
-        "lldb-mi", -- lldb-vscode
       }, nil)
       -- vim.notify("adapter: "..ADAPTER, vim.log.levels.INFO)
       local select_executable = function(opts, fn)
@@ -319,11 +320,11 @@ return {
         dap.adapters.cppdbg = {
           id = 'cppdbg',
           type = 'executable',
-          command = get_path({ 'OpenDebugAD7' }, nil),
+          command = get_path({ 'OpenDebugAD7' }, os.getenv('HOME') .. '/.local/bin/OpenDebugAD7'),
         }
         dap.configurations.cpp = {}
         for _, v in ipairs(configurations.common) do
-          v.miDebuggerPath = get_path('lldb-mi', nil)
+          v.miDebuggerPath = get_path('lldb-mi', os.getenv('HOME') .. '/.local/bin/lldb-mi')
           local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, v)
           table.insert(dap.configurations.cpp, configuration)
         end
