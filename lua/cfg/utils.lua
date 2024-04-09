@@ -13,7 +13,21 @@ M.split_ignore_ft = {
   ["lazy"] = true,
   ["qf"] = true,
   ["noice"] = true,
+  ["toggleterm"] = true,
   ["terminal"] = true
+}
+
+M.fntab_ignored_ft = {
+  ["neo-tree"] = true,
+  ["toggleterm"] = true,
+  ["terminal"] = true,
+  ["help"] = true,
+  ["alpha"] = true,
+  ["dashboard"] = true,
+  ["Trouble"] = true,
+  ["lazy"] = true,
+  ["nofile"] = true,
+  [""] = true,
 }
 
 local filesize_cache = {}
@@ -46,9 +60,9 @@ M.file_too_big = function(size)
 end
 
 M.winmove = function(key)
-  local curwin = vim.fn.winnr()
+  local current_win = vim.fn.winnr()
   vim.cmd.wincmd(key)
-  if curwin == vim.fn.winnr() then
+  if current_win == vim.fn.winnr() then
     if os.getenv('TMUX') then
       local dir = {
         ['h'] = '-L',
@@ -135,19 +149,6 @@ M.resize = function(direction, size)
     end
   end
 end
-
-M.fntab_ignored_ft = {
-  ["neo-tree"] = true,
-  ["toggleterm"] = true,
-  ["terminal"] = true,
-  ["help"] = true,
-  ["alpha"] = true,
-  ["dashboard"] = true,
-  ["Trouble"] = true,
-  ["lazy"] = true,
-  ["nofile"] = true,
-  [""] = true,
-}
 
 M.fntab = function(fn, opts)
   opts = opts or {}
