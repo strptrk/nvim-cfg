@@ -29,13 +29,7 @@ autocmd('TermOpen', {
   end,
 })
 
-autocmd('FileType', {
-  pattern = { 'sh' },
-  callback = function()
-    vim.api.nvim_set_option_value('filetype', 'bash', { buf = 0 })
-  end,
-})
-
+-- for <C-x><C-e> commandline editing
 autocmd('BufReadPost', {
   pattern = '/tmp/zsh*',
   callback = function()

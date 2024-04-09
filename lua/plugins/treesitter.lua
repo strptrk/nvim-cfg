@@ -122,6 +122,8 @@ return {
       },
     },
     config = function()
+      vim.treesitter.language.register("bash", "sh")
+      vim.treesitter.language.register("bash", "zsh")
       require('nvim-treesitter.configs').setup({
         ensure_installed = ts_ensure_installed,
         highlight = {
