@@ -1,29 +1,30 @@
-local ts_installed = {
-  'bash', 'norg', 'c', 'cpp', 'rust', 'python',
-  'lua', 'json', 'markdown', 'markdown_inline',
-  'comment', 'awk', 'cmake',
-  "css", "diff", "dockerfile", "fennel",
-  "git_rebase", "gitcommit", "gitignore", "gitattributes",
-  "go", "jq", "latex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml", "pkl"
+-- treesitter parser names and their respective filetypes are not always the same
+local ts_common = {
+  'c', 'cpp', 'rust', 'python', "go",
+  'lua', "perl", 'awk', 'bash',
+  "toml", "yaml", 'json', 'norg', 'markdown',
+  'cmake', "make", "meson", "ninja",
+  "dockerfile",
+  "html", "css", "scss", "sql",
+  "git_rebase", "gitcommit", "gitignore", "gitattributes", "diff",
+  "latex",
 }
 
-local ts_ft = {
-  'bash', 'norg', 'c', 'cpp', 'rust', 'python',
-  'lua', 'json', 'markdown',
-  'comment', 'awk', 'cmake',
-  "css", "diff", "dockerfile", "fennel",
-  "git_rebase", "gitcommit", "gitignore", "gitattributes",
-  "go", "latex", "tex", "make", "meson", "ninja", "perl",
-  "regex", "scss", "html", "sql", "toml", "yaml", "pkl",
-}
+local ts_ensure_installed = vim.tbl_extend("force", {
+  "comment",
+  "regex",
+}, ts_common)
+
+local ts_fts = vim.tbl_extend("force", {
+  "tex"
+}, ts_common)
 
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     lazy = true, -- no config, has to be loaded after TS
-    ft = ts_ft,
+    ft = ts_fts,
     keys = {
       { '<A-I>', '<cmd>IBLToggle<cr>', desc = 'Toggle Indent Lines' },
     },
@@ -47,7 +48,7 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     cmd = { 'TSInstall', 'TSUpdate' },
-    ft = ts_ft,
+    ft = ts_fts,
     keys = {
       { '<A-S>', '<cmd>TSToggle refactor.highlight_current_scope<cr>', desc = 'Toggle Current Scope' },
     },
@@ -122,7 +123,7 @@ return {
     },
     config = function()
       require('nvim-treesitter.configs').setup({
-        ensure_installed = ts_installed,
+        ensure_installed = ts_ensure_installed,
         highlight = {
           enable = true,
           disable = require("cfg.utils").file_too_big(128),
