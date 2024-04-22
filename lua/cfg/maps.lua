@@ -43,6 +43,7 @@ end)
 
 map('n', '<C-s>', '<cmd>update<CR>')
 map('n', '<A-c>', '<cmd>q<CR>')
+map('n', '<Esc><Esc>', '<cmd>nohl<cr>')
 map({ 'n', 't' }, '<A-Esc>', function()
   if vim.bo.buftype == 'terminal' then
     vim.cmd([[stopinsert]])
@@ -143,6 +144,7 @@ map('n', '<C-;>', 'mz:norm A;<CR>`z')
 map('n', 'sp', '"0P', { desc = 'Paste before cursor', silent = true })
 map('n', 'sP', 'viw"0P', { desc = 'Paste after cursor', silent = true })
 map('x', 'sp', '"0P', { desc = 'Paste', silent = true })
+map('n', 'sn', 'viw"0P', { desc = 'Replace word with last yanked text.', silent = true })
 
 map({ 'n', 'x' }, 'ga', '<Plug>(EasyAlign)')
 
