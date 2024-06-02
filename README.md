@@ -6,12 +6,6 @@ git clone https://github.com/strptrk/nvim-cfg.git ~/.config/nvim
 nvim --headless "+Lazy! sync" +qa
 nvim --headless "+Lazy! load nvim-treesitter" # to install parsers
 ```
-## tree-sitter cli for certain parsers
-```sh
-sudo pacman -S rust
-cargo install tree-sitter-cli --git https://github.com/tree-sitter/tree-sitter.git
-```
-
 ## language servers
 
 ### C/C++ (`clang` contains `clangd`)

@@ -1,20 +1,23 @@
 return {
   {
-    'mhartington/formatter.nvim',
+    "mhartington/formatter.nvim",
     lazy = true,
-    cmd = { 'Format' },
+    cmd = { "Format" },
+    keys = {
+      { "sF", "<cmd>Format<cr>", desc = "Format document (Formatter)" },
+    },
     config = function()
-      require('formatter').setup({
+      require("formatter").setup({
         logging = false,
         filetype = {
           json = {
             function()
               return {
-                exe = 'prettier',
+                exe = "prettier",
                 args = {
-                  '--stdin-filepath',
+                  "--stdin-filepath",
                   vim.api.nvim_buf_get_name(0),
-                  '--single-quote',
+                  "--single-quote",
                 },
                 stdin = true,
               }
@@ -23,11 +26,11 @@ return {
           css = {
             function()
               return {
-                exe = 'prettier',
+                exe = "prettier",
                 args = {
-                  '--stdin-filepath',
+                  "--stdin-filepath",
                   vim.api.nvim_buf_get_name(0),
-                  '--single-quote',
+                  "--single-quote",
                 },
                 stdin = true,
               }
@@ -37,11 +40,11 @@ return {
             -- prettier
             function()
               return {
-                exe = 'prettier',
+                exe = "prettier",
                 args = {
-                  '--stdin-filepath',
+                  "--stdin-filepath",
                   vim.api.nvim_buf_get_name(0),
-                  '--single-quote',
+                  "--single-quote",
                 },
                 stdin = true,
               }
@@ -51,7 +54,7 @@ return {
             -- lua-format
             function()
               return {
-                exe = 'stylua',
+                exe = "stylua",
                 args = {
                   vim.api.nvim_buf_get_name(0),
                 },
@@ -62,10 +65,10 @@ return {
           rust = {
             function()
               return {
-                exe = 'rustfmt',
+                exe = "rustfmt",
                 args = { vim.api.nvim_buf_get_name(0) },
                 stdin = false,
-                cwd = vim.fn.expand('%:p:h'),
+                cwd = vim.fn.expand("%:p:h"),
               }
             end,
           },
@@ -73,10 +76,10 @@ return {
             -- clang-format
             function()
               return {
-                exe = 'clang-format',
-                args = { '--assume-filename', vim.api.nvim_buf_get_name(0) },
+                exe = "clang-format",
+                args = { "--assume-filename", vim.api.nvim_buf_get_name(0) },
                 stdin = true,
-                cwd = vim.fn.expand('%:p:h'), -- Run clang-format in cwd of the file.
+                cwd = vim.fn.expand("%:p:h"), -- Run clang-format in cwd of the file.
               }
             end,
           },
@@ -84,10 +87,10 @@ return {
             -- clang-format
             function()
               return {
-                exe = 'clang-format',
-                args = { '--assume-filename', vim.api.nvim_buf_get_name(0) },
+                exe = "clang-format",
+                args = { "--assume-filename", vim.api.nvim_buf_get_name(0) },
                 stdin = true,
-                cwd = vim.fn.expand('%:p:h'), -- Run clang-format in cwd of the file.
+                cwd = vim.fn.expand("%:p:h"), -- Run clang-format in cwd of the file.
               }
             end,
           },
@@ -95,8 +98,8 @@ return {
             -- clang-format
             function()
               return {
-                exe = 'astyle',
-                args = { '--mode=java', '--style=java' },
+                exe = "astyle",
+                args = { "--mode=java", "--style=java" },
                 stdin = true,
                 -- cwd = vim.fn.expand('%:p:h') -- Run clang-format in cwd of the file.
               }
@@ -106,8 +109,8 @@ return {
             -- Shell Script Formatter
             function()
               return {
-                exe = 'shfmt',
-                args = { '-i', 4 },
+                exe = "shfmt",
+                args = { "-i", 4 },
                 stdin = true, --
               }
             end,
@@ -115,7 +118,7 @@ return {
           python = {
             function()
               return {
-                exe = 'autopep8',
+                exe = "autopep8",
                 args = { vim.api.nvim_buf_get_name(0) },
                 stdin = true, --
               }

@@ -1,18 +1,19 @@
 return {
   {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
     ft = {
-      'python',
-      'lua',
-      'go',
-      'c', 'cpp',
-      'cmake',
-      'tex'
+      "python",
+      "lua",
+      "go",
+      "c",
+      "cpp",
+      "cmake",
+      "tex",
     },
     lazy = true,
     config = function()
-      local lsp = require('lspconfig')
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local lsp = require("lspconfig")
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
       lsp.pylsp.setup({ capabilities = capabilities })
       lsp.gopls.setup({ capabilities = capabilities })
       lsp.cmake.setup({ capabilities = capabilities })
@@ -42,10 +43,10 @@ return {
                 "^Underfull \\\\[vh]box.*", -- lua escape + regex escape
                 "^Overfull \\\\[vh]box.*",
                 "^Unused global option\\(s\\):$",
-              }
-            }
+              },
+            },
           },
-        }
+        },
       })
       lsp.lua_ls.setup({
         capabilities = capabilities,
@@ -53,15 +54,13 @@ return {
           Lua = {
             diagnostics = {
               globals = {
-                'vim',
+                "vim",
               },
             },
             workspace = {
               library = {
-                -- [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                -- [vim.fn.stdpath('config') .. '/lua'] = true,
-                vim.fn.expand('$VIMRUNTIME/lua'),
-                vim.fn.stdpath('config') .. '/lua',
+                vim.fn.expand("$VIMRUNTIME/lua"),
+                vim.fn.stdpath("config") .. "/lua",
               },
             },
           },
@@ -70,116 +69,99 @@ return {
           },
         },
       })
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          vim.keymap.set('n', 'sh', vim.lsp.buf.hover, { desc = 'Symbol hover information' })
-          vim.keymap.set('n', '<Space>sh', '<cmd>ClangdSwitchSourceHeader<cr>', { desc = 'Switch source and header' })
-          vim.keymap.set('n', '<Space>L', vim.diagnostic.setloclist, { desc = 'Diagnostic Set Loclist' })
-          vim.keymap.set('n', '<Space>Q', vim.diagnostic.setqflist, { desc = 'Diagnostic Set Quickfix List' })
-          vim.keymap.set('n', '<Space>a', vim.lsp.buf.code_action, { desc = 'Code Actions' })
-          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to Declaration' })
-          if vim.fn.has('nvim-0.10') > 0 then
-              local methods = vim.lsp.protocol.Methods
-              local client = vim.lsp.get_client_by_id(ev.data.client_id)
-              if client and client.supports_method(methods.textDocument_inlayHint) then
-                  vim.keymap.set('n', "gi", function() vim.lsp.inlay_hint.enable(ev.buf, not vim.lsp.inlay_hint.is_enabled()) end,
-                  { desc = "Toggle inlay hints" })
-                  vim.lsp.inlay_hint.enable(ev.buf, false)
-              end
-              if client and client.supports_method(methods.textDocument_rename) then
-                  vim.keymap.set('n', "ss", function() require('cfg.utils').smart_rename_lsp(client, ev.buf) end, { desc = "LSP rename", buffer = ev.buf })
-              end
+          vim.keymap.set("n", "sh", vim.lsp.buf.hover, { desc = "Symbol hover information" })
+          vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, { desc = "Code Actions" })
+          vim.keymap.set({ "n", "x" }, "sf", vim.lsp.buf.format, { desc = "Format document (lsp)" })
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
+          vim.keymap.set("n", "<Space>sh", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch source and header" })
+          if vim.fn.has("nvim-0.10") > 0 then
+            local methods = vim.lsp.protocol.Methods
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            if client and client.supports_method(methods.textDocument_inlayHint) then
+              vim.keymap.set("n", "si", function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ buf = ev.buf }), { buf = ev.buf })
+              end, { desc = "Toggle inlay hints" })
+              vim.lsp.inlay_hint.enable(false, { buf = ev.buf })
+            end
+            if client and client.supports_method(methods.textDocument_rename) then
+              vim.keymap.set("n", "ss", function()
+                require("cfg.utils").smart_rename_lsp(client, ev.buf)
+              end, { desc = "LSP rename", buffer = ev.buf })
+            end
           else
-              vim.keymap.set('n', "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
+            vim.keymap.set("n", "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
           end
         end,
       })
     end,
   },
   {
-    'p00f/clangd_extensions.nvim',
+    "p00f/clangd_extensions.nvim",
     lazy = true,
-    ft = { 'c', 'cpp' },
+    ft = { "c", "cpp" },
     opts = {
-      extensions = {
-        -- defaults:
-        -- Automatically set inlay hints (type hints)
-        autoSetHints = true,
-        -- These apply to the default ClangdSetInlayHints command
-        inlay_hints = {
-          -- Only show inlay hints for the current line
-          only_current_line = false,
-          -- Event which triggers a refersh of the inlay hints.
-          -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-          -- not that this may cause  higher CPU usage.
-          -- This option is only respected when only_current_line and
-          -- autoSetHints both are true.
-          only_current_line_autocmd = 'CursorHold',
-          -- whether to show parameter hints with the inlay hints or not
-          show_parameter_hints = true,
-          -- prefix for parameter hints
-          parameter_hints_prefix = '<- ',
-          -- prefix for all the other hints (type, chaining)
-          other_hints_prefix = '=> ',
-          -- whether to align to the length of the longest line in the file
-          max_len_align = false,
-          -- padding from the left if max_len_align is true
-          max_len_align_padding = 1,
-          -- whether to align to the extreme right or not
-          right_align = false,
-          -- padding from the right if right_align is true
-          right_align_padding = 7,
-          -- The color of the hints
-          highlight = 'InlayHint',
-          -- The highlight group priority for extmark
-          priority = 100,
+      inlay_hints = {
+        inline = vim.fn.has("nvim-0.10") == 1,
+        only_current_line = false,
+        only_current_line_autocmd = { "CursorHold" },
+        show_parameter_hints = true,
+        parameter_hints_prefix = "<- ",
+        other_hints_prefix = "=> ",
+        max_len_align = false,
+        max_len_align_padding = 1,
+        right_align = false,
+        right_align_padding = 7,
+        highlight = "Comment",
+        priority = 100,
+      },
+      ast = {
+        role_icons = {
+          type = "",
+          declaration = "",
+          expression = "",
+          specifier = "",
+          statement = "",
+          ["template argument"] = "",
         },
-        ast = {
-          role_icons = {
-            type = '',
-            declaration = '',
-            expression = '',
-            specifier = '',
-            statement = '',
-            ['template argument'] = '',
-          },
-          kind_icons = {
-            Compound = '',
-            Recovery = '',
-            TranslationUnit = '',
-            PackExpansion = '',
-            TemplateTypeParm = '',
-            TemplateTemplateParm = '',
-            TemplateParamObject = '',
-          },
-          highlights = {
-            detail = 'Comment',
-          },
+
+        kind_icons = {
+          Compound = "",
+          Recovery = "",
+          TranslationUnit = "",
+          PackExpansion = "",
+          TemplateTypeParm = "",
+          TemplateTemplateParm = "",
+          TemplateParamObject = "",
         },
-        memory_usage = {
-          border = 'rounded',
+        highlights = {
+          detail = "Comment",
         },
-        symbol_info = {
-          border = 'rounded',
-        },
+      },
+      memory_usage = {
+        border = "rounded",
+      },
+      symbol_info = {
+        border = "rounded",
       },
     },
   },
   {
-    'simrat39/rust-tools.nvim',
+    "simrat39/rust-tools.nvim",
     lazy = true,
-    ft = { 'rust' },
+    ft = { "rust" },
     config = function()
-      local rt = require('rust-tools')
+      local rt = require("rust-tools")
       rt.setup({
         server = {
-          capabilities = require('cmp_nvim_lsp').default_capabilities(),
+          capabilities = require("cmp_nvim_lsp").default_capabilities(),
           on_attach = function(_, bufnr)
             -- Hover actions
-            vim.keymap.set('n', 'sH', rt.hover_actions.hover_actions, { buffer = bufnr })
+            vim.keymap.set("n", "sH", rt.hover_actions.hover_actions, { buffer = bufnr })
             -- Code action groups
-            vim.keymap.set('n', '<Space>A', rt.code_action_group.code_action_group, { buffer = bufnr })
+            vim.keymap.set("n", "sA", rt.code_action_group.code_action_group, { buffer = bufnr })
           end,
         },
         tools = {
@@ -187,51 +169,113 @@ return {
             auto = false,
             parameter_hints_prefix = "<- ",
             other_hints_prefix = "=> ",
-            highlight = "InlayHint"
-          }
-        }
+            highlight = "InlayHint",
+          },
+        },
       })
     end,
   },
   {
-    'nvimdev/lspsaga.nvim',
+    "folke/trouble.nvim",
     lazy = true,
-    event = { 'LspAttach' },
+    event = { "LspAttach" },
     keys = {
       {
-        'gw',
-        '<cmd>Lspsaga finder<cr>',
-        desc = 'LSP Finder',
+        "<Space>dd",
+        "<cmd>Trouble diagnostics focus filter.buf=0 win.position=bottom<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
       },
       {
-        '<Space>ic',
-        '<cmd>Lspsaga incoming_calls<cr>',
-        desc = 'LSP Incoming Calls',
+        "sl",
+        "<cmd>Trouble lsp focus win.position=right<cr>",
+        desc = "Location List (Trouble)",
       },
       {
-        '<Space>oc',
-        '<cmd>Lspsaga outgoing_calls<cr>',
-        desc = 'LSP Outgoing Calls',
-      },
-      -- {
-      --   '<Space>a',
-      --   '<cmd>Lspsaga code_action<cr>',
-      --   desc = 'LSP Code Action',
-      -- },
-      {
-        'gp',
-        '<cmd>Lspsaga peek_definition<cr>',
-        desc = 'LSP Peek Definition',
+        "sL",
+        "<cmd>Trouble loclist toggle focus=true win.position=bottom<cr>",
+        desc = "Location List (Trouble)",
       },
       {
-        '<Space>k',
-        '<cmd>Lspsaga hover_doc<cr>',
-        desc = 'LSP Hover',
+        "sq",
+        "<cmd>Trouble qflist toggle focus=true win.position=bottom<cr>",
+        desc = "Quickfix List (Trouble)",
       },
       {
-        'so',
-        '<cmd>Lspsaga outline<cr>',
-        desc = 'LSP Outline',
+        "so",
+        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+      {
+        "<Space>t",
+        "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
+    opts = {
+      win = {
+        border = "rounded",
+      },
+      keys = {
+        i = "inspect",
+        p = "preview",
+        P = "toggle_preview",
+        zo = "fold_open",
+        zO = "fold_open_recursive",
+        c = "fold_close",
+        C = "fold_close_recursive",
+        f = "fold_toggle",
+        F = "fold_toggle_recursive",
+        zm = "fold_more",
+        zM = "fold_close_all",
+        zr = "fold_reduce",
+        ze = "fold_open_all",
+        zx = "fold_update",
+        zX = "fold_update_all",
+        zn = "fold_disable",
+        zN = "fold_enable",
+        t = "fold_toggle_enable",
+        b = {
+          action = function(view)
+            view:filter({ buf = 0 }, { toggle = true })
+          end,
+          desc = "Toggle Current Buffer Filter",
+        },
+        s = {
+          action = function(view)
+            local f = view:get_filter("severity")
+            local severity = ((f and f.filter.severity or 0) + 1) % 5
+            view:filter({ severity = severity }, {
+              id = "severity",
+              template = "{hl:Title}Filter:{hl} {severity}",
+              del = severity == 0,
+            })
+          end,
+          desc = "Toggle Severity Filter",
+        },
+      },
+    },
+  },
+  {
+    "nvimdev/lspsaga.nvim",
+    lazy = true,
+    event = { "LspAttach" },
+    keys = {
+      {
+        "sco",
+        "<cmd>Lspsaga outgoing_calls<cr>",
+      },
+      {
+        "sci",
+        "<cmd>Lspsaga incoming_calls<cr>",
+      },
+      {
+        "sw",
+        "<cmd>Lspsaga finder<cr>",
+      },
+      {
+        "sp",
+        "<cmd>Lspsaga peek_definition<cr>",
+        desc = "LSP Peek Definition",
       },
     },
     opts = {
@@ -239,42 +283,42 @@ return {
         max_height = 0.75,
         left_width = 0.35,
         right_width = 0.35,
-        default = 'tyd+def+imp+ref',
+        default = "tyd+def+imp+ref",
         methods = {
-          ['tyd'] = 'textDocument/typeDefinition'
+          ["tyd"] = "textDocument/typeDefinition",
         },
-        layout = 'float',
+        layout = "float",
         keys = {
-          ['shuttle'] = 'S',
-          ['split'] = 's',
-          ['vsplit'] = 'v',
-          ['toggle_or_open'] = '<cr>',
-          ['tabe'] = 't',
-          ['tabnew'] = 'n',
-          ['quit'] = {'q', '<esc>'},
-          ['clone'] = '<C-c><C-c>',
-        }
+          ["shuttle"] = "S",
+          ["split"] = "s",
+          ["vsplit"] = "v",
+          ["toggle_or_open"] = "<cr>",
+          ["tabe"] = "t",
+          ["tabnew"] = "n",
+          ["quit"] = { "q", "<esc>" },
+          ["clone"] = "<C-c><C-c>",
+        },
       },
       symbol_in_winbar = {
-        enable = false
+        enable = false,
       },
       callhierarchy = {
         keys = {
-          ['toggle_or_req'] = 'u',
-          ['edit'] = '<CR>',
-          ['split'] = 's',
-          ['vsplit'] = 'v',
-          ['tabe'] = 't',
-          ['quit'] = {'q', '<esc>'},
-          ['shuttle'] = 'S',
-          ['close'] = '<C-c><C-c>',
-        }
+          ["toggle_or_req"] = "u",
+          ["edit"] = "<CR>",
+          ["split"] = "s",
+          ["vsplit"] = "v",
+          ["tabe"] = "t",
+          ["quit"] = { "q", "<esc>" },
+          ["shuttle"] = "S",
+          ["close"] = "<C-c><C-c>",
+        },
       },
       outline = {
         auto_preview = false,
         keys = {
-          ['toggle_or_jump'] = '<CR>',
-          ['edit'] = 'e',
+          ["toggle_or_jump"] = "<CR>",
+          ["edit"] = "e",
         },
       },
       lightbulb = {
@@ -282,13 +326,13 @@ return {
       },
       ui = {
         devicon = false,
-        code_action = '',
+        code_action = "",
         kind = require("catppuccin.groups.integrations.lsp_saga").custom_kind(),
       },
     },
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      'nvim-tree/nvim-web-devicons'
-    }
-  }
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+  },
 }

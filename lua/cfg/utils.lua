@@ -2,7 +2,7 @@ local api = vim.api
 
 local utils_local = {
   rename_cmd = [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  default_rename_handler = nil
+  default_rename_handler = nil,
 }
 
 local M = {}
@@ -14,7 +14,9 @@ M.split_ignore_ft = {
   ["qf"] = true,
   ["noice"] = true,
   ["toggleterm"] = true,
-  ["terminal"] = true
+  ["terminal"] = true,
+  ["trouble"] = true,
+  ["TelescopePrompt"] = true,
 }
 
 M.fntab_ignored_ft = {
@@ -24,10 +26,11 @@ M.fntab_ignored_ft = {
   ["help"] = true,
   ["alpha"] = true,
   ["dashboard"] = true,
-  ["Trouble"] = true,
+  ["trouble"] = true,
   ["lazy"] = true,
   ["nofile"] = true,
   [""] = true,
+  ["TelescopePrompt"] = true,
 }
 
 local filesize_cache = {}
@@ -63,22 +66,22 @@ M.winmove = function(key)
   local current_win = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if current_win == vim.fn.winnr() then
-    if os.getenv('TMUX') then
+    if os.getenv("TMUX") then
       local dir = {
-        ['h'] = '-L',
-        ['j'] = '-D',
-        ['k'] = '-U',
-        ['l'] = '-R',
+        ["h"] = "-L",
+        ["j"] = "-D",
+        ["k"] = "-U",
+        ["l"] = "-R",
       }
-      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']]) == '0' .. string.char(10) then
-        vim.fn.system('tmux select-pane ' .. dir[key])
+      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']]) == "0" .. string.char(10) then
+        vim.fn.system("tmux select-pane " .. dir[key])
       end
-    elseif os.getenv('TERM_PROGRAM') == 'WezTerm' then
+    elseif os.getenv("TERM_PROGRAM") == "WezTerm" then
       local dir = {
-        ['h'] = 'Left',
-        ['j'] = 'Down',
-        ['k'] = 'Up',
-        ['l'] = 'Right',
+        ["h"] = "Left",
+        ["j"] = "Down",
+        ["k"] = "Up",
+        ["l"] = "Right",
       }
       local function is_zoomed()
         local pane_info = vim.json.decode(vim.fn.system([[wezterm cli list --format json]]))
@@ -91,19 +94,23 @@ M.winmove = function(key)
         return false
       end
       if not is_zoomed() then
-        vim.fn.system('wezterm cli activate-pane-direction ' .. dir[key])
+        vim.fn.system("wezterm cli activate-pane-direction " .. dir[key])
       end
     end
   end
 end
 
 M.split_focus = function(dir)
-  if string.match(dir, '[jk]') then
-    vim.cmd.wincmd('s')
-    if dir == 'k' then vim.cmd.wincmd('k') end
+  if string.match(dir, "[jk]") then
+    vim.cmd.wincmd("s")
+    if dir == "k" then
+      vim.cmd.wincmd("k")
+    end
   else
-    vim.cmd.wincmd('v')
-    if dir == 'h' then vim.cmd.wincmd('h') end
+    vim.cmd.wincmd("v")
+    if dir == "h" then
+      vim.cmd.wincmd("h")
+    end
   end
 end
 
@@ -125,7 +132,7 @@ M.split = function(dir, fn, opts)
   end
   api.nvim_win_set_buf(0, bufnr)
   api.nvim_win_set_cursor(0, pos)
-  if type(fn) == 'function' then
+  if type(fn) == "function" then
     fn(opts.args)
   end
   if opts.zz then
@@ -134,15 +141,15 @@ M.split = function(dir, fn, opts)
 end
 
 M.resize = function(direction, size)
-  if string.match('jk', direction) and (vim.fn.winnr('j') == vim.fn.winnr('k')) then
+  if string.match("jk", direction) and (vim.fn.winnr("j") == vim.fn.winnr("k")) then
     return -- prevent horizontally resizing the viewport
   end
   local to_dir = vim.fn.winnr(direction)
-  local vertical = (direction == 'h' or direction == 'l') and 'vertical ' or ''
+  local vertical = (direction == "h" or direction == "l") and "vertical " or ""
   if to_dir == vim.fn.winnr() then
     vim.cmd(vertical .. [[resize -]] .. size)
   else
-    if to_dir == vim.fn.winnr('2' .. direction) then
+    if to_dir == vim.fn.winnr("2" .. direction) then
       vim.cmd(vertical .. to_dir .. [[resize -]] .. size)
     else
       vim.cmd(vertical .. [[resize +]] .. size)
@@ -154,17 +161,17 @@ M.fntab = function(fn, opts)
   opts = opts or {}
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
   if not filetype or M.fntab_ignored_ft[filetype] then
-    vim.cmd('tabnew')
+    vim.cmd("tabnew")
   else
-    vim.cmd('norm mz')
-    vim.cmd('tabedit %')
-    vim.cmd('norm `z')
+    vim.cmd("norm mz")
+    vim.cmd("tabedit %")
+    vim.cmd("norm `z")
   end
-  if type(fn) == 'function' then
+  if type(fn) == "function" then
     fn(opts.args)
   end
   if opts.zz then
-    vim.cmd('norm zz')
+    vim.cmd("norm zz")
   end
 end
 
@@ -175,9 +182,9 @@ M.get_langserv = function()
   local b = false
   for _, name in ipairs(clients) do
     if b then
-      ret = ret .. ' | ' .. name.name
+      ret = ret .. " | " .. name.name
     else
-      ret = ' ' .. name.name
+      ret = " " .. name.name
     end
     b = false
   end
@@ -194,7 +201,7 @@ end
 
 M.smart_rename_ts = function()
   if M.get_treesitter() then
-    require('nvim-treesitter-refactor.smart_rename').smart_rename(api.nvim_win_get_buf(0))
+    require("nvim-treesitter-refactor.smart_rename").smart_rename(api.nvim_win_get_buf(0))
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.rename_cmd, true, true, true), "", true)
   end
@@ -204,25 +211,29 @@ M.smart_rename_lsp = function(client, bufnr)
   if not utils_local.default_rename_handler then
     utils_local.smart_rename_set_handler(M.smart_rename_ts)
   end
-  local supported, supported_result = pcall(client.supports_method, 'textDocument/prepareRename')
+  local supported, supported_result = pcall(client.supports_method, "textDocument/prepareRename")
   if supported and supported_result then
     local win = api.nvim_get_current_win()
     local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
-    client.request('textDocument/prepareRename', params, function(err, result)
+    client.request("textDocument/prepareRename", params, function(err, result)
       if err or (result == nil) then
         M.smart_rename_ts()
       else
         vim.lsp.buf.rename()
       end
     end, bufnr)
+  else
+    -- not all language servers support prepareRename
+    -- that support rename
+    vim.lsp.buf.rename()
   end
 end
 
 utils_local.smart_rename_set_handler = function(fallback)
-  utils_local.default_rename_handler = vim.lsp.handlers['textDocument/rename']
-  vim.lsp.handlers['textDocument/rename'] = function(err, result, ctx, config)
+  utils_local.default_rename_handler = vim.lsp.handlers["textDocument/rename"]
+  vim.lsp.handlers["textDocument/rename"] = function(err, result, ctx, config)
     if err or not result then
-      if type(fallback) == 'function' then
+      if type(fallback) == "function" then
         fallback()
       end
     else

@@ -1,37 +1,37 @@
 return {
   {
-    'akinsho/toggleterm.nvim',
+    "akinsho/toggleterm.nvim",
     lazy = true,
-    cmd = { 'TermExec', 'ToggleTerm', 'Lazygit' },
+    cmd = { "TermExec", "ToggleTerm", "Lazygit" },
     keys = {
-      { '<A-f>', nil, desc = 'Open Terminal' },
-      { '<A-F>', nil, desc = 'Open Terminal (floating)' },
-      { '<A-B>', nil, desc = 'Select Terminal' },
-      { '<A-N>', nil, desc = 'Set Terminal Name' },
-      { '<A-r>', nil, desc = 'Run Command in Terminal' },
-      { '<A-C-r>', nil, desc = 'Set Command to Run' },
-      { '<A-R>', nil, desc = 'Toggle Run Terminal' },
-      { '<A-v>f', nil, desc = 'Open Terminal (float)' },
-      { '<A-v>t', nil, desc = 'Open Terminal (tab)' },
-      { '<A-v>v', nil, desc = 'Open Terminal (vertical)' },
-      { '<A-v>h', nil, desc = 'Open Terminal (horizontal)' },
-      { '<A-v>l', nil, desc = 'Open Terminal (vertical)' },
-      { '<A-v>j', nil, desc = 'Open Terminal (horizontal)' },
+      { "<A-f>", nil, desc = "Open Terminal" },
+      { "<A-F>", nil, desc = "Open Terminal (floating)" },
+      { "<A-B>", nil, desc = "Select Terminal" },
+      { "<A-N>", nil, desc = "Set Terminal Name" },
+      { "<A-r>", nil, desc = "Run Command in Terminal" },
+      { "<A-C-r>", nil, desc = "Set Command to Run" },
+      { "<A-R>", nil, desc = "Toggle Run Terminal" },
+      { "<A-v>f", nil, desc = "Open Terminal (float)" },
+      { "<A-v>t", nil, desc = "Open Terminal (tab)" },
+      { "<A-v>v", nil, desc = "Open Terminal (vertical)" },
+      { "<A-v>h", nil, desc = "Open Terminal (horizontal)" },
+      { "<A-v>l", nil, desc = "Open Terminal (vertical)" },
+      { "<A-v>j", nil, desc = "Open Terminal (horizontal)" },
     },
     config = function()
       local api = vim.api
-      local pickers = require('telescope.pickers')
-      local finders = require('telescope.finders')
-      local conf = require('telescope.config').values
-      local actions = require('telescope.actions')
-      local previewers = require('telescope.previewers')
-      local action_state = require('telescope.actions.state')
+      local pickers = require("telescope.pickers")
+      local finders = require("telescope.finders")
+      local conf = require("telescope.config").values
+      local actions = require("telescope.actions")
+      local previewers = require("telescope.previewers")
+      local action_state = require("telescope.actions.state")
       Term = {}
-      require('toggleterm').setup({
+      require("toggleterm").setup({
         size = function(term)
-          if term.direction == 'horizontal' then
+          if term.direction == "horizontal" then
             return 10
-          elseif term.direction == 'vertical' then
+          elseif term.direction == "vertical" then
             return vim.o.columns * 0.3
           end
         end,
@@ -44,11 +44,11 @@ return {
         terminal_mappings = true,
         persist_size = true,
         persist_mode = true,
-        direction = 'horizontal',
+        direction = "horizontal",
         close_on_exit = true,
         autochdir = true,
         autoscroll = true,
-        float_opts = { border = 'single', winblend = 0 },
+        float_opts = { border = "single", winblend = 0 },
         winbar = {
           enabled = false,
           name_formatter = function(term)
@@ -57,17 +57,21 @@ return {
         },
       })
 
-      local Terminal = require('toggleterm.terminal').Terminal
+      local Terminal = require("toggleterm.terminal").Terminal
       local lazygit = Terminal:new({
-        cmd = 'lazygit',
-        direction = 'tab',
+        cmd = "lazygit",
+        direction = "tab",
         hidden = true,
         count = 1001,
       })
       Term.lazygit_toggle = function()
-        lazygit:toggle()
+        if 1 == vim.fn.executable("lazygit") then
+          lazygit:toggle()
+        else
+          vim.notify("lazygit is not installed or is not in PATH", vim.log.levels.WARN)
+        end
       end
-      vim.api.nvim_create_user_command('Lazygit', Term.lazygit_toggle, { force = true })
+      vim.api.nvim_create_user_command("Lazygit", Term.lazygit_toggle, { force = true })
 
       Term.Terminals = {}
       Term.Last = -1
@@ -76,7 +80,7 @@ return {
         Term.Terminals[num] = {
           term = Terminal:new({
             -- cmd = vim.o.shell,
-            direction = dir or 'float',
+            direction = dir or "float",
             count = num,
             on_exit = Term.delete_term,
           }),
@@ -114,27 +118,27 @@ return {
         local from = -1 * (api.nvim_win_get_height(status.preview_win) + 1)
         local lines = api.nvim_buf_get_lines(entry.value.term.bufnr, from, -1, false)
         api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines or {})
-        api.nvim_set_option_value('wrap', false, { win = status.preview_win })
+        api.nvim_set_option_value("wrap", false, { win = status.preview_win })
       end
 
       Term.select_open_term = function(opts, title)
         opts = opts or {}
         if not next(Term.Terminals) then
-          vim.notify('There are no terminals open')
+          vim.notify("There are no terminals open")
           return
         end
         pickers
           .new(opts, {
-            prompt_title = title or 'Terminal',
+            prompt_title = title or "Terminal",
             finder = finders.new_table({
               results = Term.Terminals,
               entry_maker = function(entry)
-                local name = (entry.term.display_name or 'Terminal')
-                  .. ' #'
+                local name = (entry.term.display_name or "Terminal")
+                  .. " #"
                   .. entry.term.count
-                  .. ' ('
+                  .. " ("
                   .. entry.term.direction
-                  .. ')'
+                  .. ")"
                 return {
                   value = entry,
                   display = name,
@@ -143,7 +147,7 @@ return {
               end,
             }),
             previewer = previewers.new_buffer_previewer({
-              title = 'Terminal',
+              title = "Terminal",
               define_preview = Term.preview_term,
             }),
             sorter = conf.generic_sorter(opts),
@@ -152,7 +156,7 @@ return {
                 actions.close(prompt_bufnr)
                 local entry = action_state.get_selected_entry()
                 Term.focus_term(entry.value.term.count, nil)
-                Term.Terminals[entry.value.term.count].term:set_mode('i')
+                Term.Terminals[entry.value.term.count].term:set_mode("i")
               end)
               return true
             end,
@@ -163,21 +167,21 @@ return {
       Term.rename_term = function(opts, title)
         opts = opts or {}
         if not next(Term.Terminals) then
-          vim.notify('There are no terminals open')
+          vim.notify("There are no terminals open")
           return
         end
         pickers
           .new(opts, {
-            prompt_title = title or 'Rename Terminal',
+            prompt_title = title or "Rename Terminal",
             finder = finders.new_table({
               results = Term.Terminals,
               entry_maker = function(entry)
-                local name = (entry.term.display_name or 'Terminal')
-                  .. ' #'
+                local name = (entry.term.display_name or "Terminal")
+                  .. " #"
                   .. entry.term.count
-                  .. ' ('
+                  .. " ("
                   .. entry.term.direction
-                  .. ')'
+                  .. ")"
                 return {
                   value = entry,
                   display = name,
@@ -186,7 +190,7 @@ return {
               end,
             }),
             previewer = previewers.new_buffer_previewer({
-              title = 'Terminal',
+              title = "Terminal",
               define_preview = Term.preview_term,
             }),
             sorter = conf.generic_sorter(opts),
@@ -194,8 +198,8 @@ return {
               actions.select_default:replace(function()
                 actions.close(prompt_bufnr)
                 local entry = action_state.get_selected_entry()
-                vim.ui.input({ prompt = 'Set Name of ' .. entry.display, kind = 'center' }, function(input)
-                  if not input or input == '' then
+                vim.ui.input({ prompt = "Set Name of " .. entry.display, kind = "center" }, function(input)
+                  if not input or input == "" then
                     return
                   end
                   entry.value.term.display_name = input
@@ -208,7 +212,7 @@ return {
       end
 
       Term.runterm = Terminal:new({
-        direction = 'vertical',
+        direction = "vertical",
         hidden = true,
         count = 1001,
       })
@@ -218,8 +222,8 @@ return {
 
       Term.runterm_run = function()
         if Term.runcmd == nil then
-          vim.ui.input({ prompt = 'Command to run: ' }, function(input)
-            if not input or input == '' then
+          vim.ui.input({ prompt = "Command to run: " }, function(input)
+            if not input or input == "" then
               return
             else
               Term.runcmd = input
@@ -238,8 +242,8 @@ return {
       end
 
       Term.runterm_askcmd = function()
-        vim.ui.input({ prompt = 'Command to run: ', }, function(input)
-          if not input or input == '' then
+        vim.ui.input({ prompt = "Command to run: " }, function(input)
+          if not input or input == "" then
             return
           else
             Term.runcmd = input
@@ -247,9 +251,9 @@ return {
         end)
       end
 
-      vim.api.nvim_create_user_command('RunTermDir', function(args)
+      vim.api.nvim_create_user_command("RunTermDir", function(args)
         local dir = args.fargs[1]
-        if not dir or dir == '' then
+        if not dir or dir == "" then
           return
         end
         if Term.runterm:is_open() then
@@ -257,54 +261,54 @@ return {
         end
         Term.runterm:change_direction(dir)
         Term.runterm:open()
-      end, { force = true, nargs = '?' })
+      end, { force = true, nargs = "?" })
 
-      vim.keymap.set({ 'n', 't', 'x' }, '<A-R>', function()
+      vim.keymap.set({ "n", "t", "x" }, "<A-R>", function()
         Term.runterm_toggle()
-      end, { desc = 'Set Command to Run' })
-      vim.keymap.set({ 'n', 't', 'x' }, '<A-C-r>', function()
+      end, { desc = "Set Command to Run" })
+      vim.keymap.set({ "n", "t", "x" }, "<A-C-r>", function()
         Term.runterm_askcmd()
-      end, { desc = 'Toggle Run Terminal' })
-      vim.keymap.set({ 'n', 't', 'x' }, '<A-r>', function()
+      end, { desc = "Toggle Run Terminal" })
+      vim.keymap.set({ "n", "t", "x" }, "<A-r>", function()
         Term.runterm_run()
-      end, { desc = 'Run Command in Terminal' })
+      end, { desc = "Run Command in Terminal" })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-f>]], function()
+      vim.keymap.set({ "n", "v", "t" }, [[<A-f>]], function()
         if vim.v.count == 0 then
           Term.focus_last()
         else
           Term.focus_term(vim.v.count, nil)
         end
-      end, { desc = 'Open terminal' })
+      end, { desc = "Open terminal" })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-B>]], function()
+      vim.keymap.set({ "n", "v", "t" }, [[<A-B>]], function()
         Term.select_open_term()
-      end, { desc = 'Select Terminal' })
+      end, { desc = "Select Terminal" })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-N>]], function()
+      vim.keymap.set({ "n", "v", "t" }, [[<A-N>]], function()
         Term.rename_term()
-      end, { desc = 'Set Terminal Name' })
+      end, { desc = "Set Terminal Name" })
 
-      vim.keymap.set({ 'n', 'v', 't' }, [[<A-F>]], function()
-        Term.focus_term(1000, 'float')
-      end, { desc = 'Open Terminal (floating)' })
+      vim.keymap.set({ "n", "v", "t" }, [[<A-F>]], function()
+        Term.focus_term(1000, "float")
+      end, { desc = "Open Terminal (floating)" })
 
       local directions = {
-        f = 'float',
-        t = 'tab',
-        v = 'vertical',
-        l = 'vertical',
-        h = 'horizontal',
-        j = 'horizontal',
+        f = "float",
+        t = "tab",
+        v = "vertical",
+        l = "vertical",
+        h = "horizontal",
+        j = "horizontal",
       }
-      for k, _ in string.gmatch('ftvhjl', '.') do
-        vim.keymap.set({ 'n', 'v', 't' }, [[<A-v>]] .. k, function()
+      for k, _ in string.gmatch("ftvhjl", ".") do
+        vim.keymap.set({ "n", "v", "t" }, [[<A-v>]] .. k, function()
           if vim.v.count == 0 then
             Term.focus_last(directions[k])
           else
             Term.focus_term(vim.v.count, directions[k])
           end
-        end, { desc = 'Open Terminal (' .. directions[k] .. ')' })
+        end, { desc = "Open Terminal (" .. directions[k] .. ")" })
       end
     end,
   },

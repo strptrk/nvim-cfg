@@ -1,77 +1,77 @@
 return {
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    "catppuccin/nvim",
+    name = "catppuccin",
     enabled = true,
     lazy = false,
     priority = 1000,
     config = function()
-      local transparent = os.getenv('TRANSPARENT') == "1"
+      local transparent = os.getenv("TRANSPARENT") == "1"
       vim.o.termguicolors = true
-      require('catppuccin').setup({
-        flavour = 'frappe', -- latte, frappe, macchiato, mocha
+      require("catppuccin").setup({
+        flavour = "frappe", -- latte, frappe, macchiato, mocha
         transparent_background = transparent,
         show_end_of_buffer = true,
         term_colors = false,
         dim_inactive = {
           enabled = not transparent,
-          shade = 'dark',
+          shade = "dark",
           percentage = 0.15,
         },
         no_italic = false,
         no_bold = false,
         styles = {
           comments = {},
-          conditionals = { 'bold' },
-          loops = { 'bold' },
-          functions = { 'bold' },
+          conditionals = { "bold" },
+          loops = { "bold" },
+          functions = { "bold" },
           keywords = {},
           strings = {},
           variables = {},
-          numbers = { 'bold' },
-          booleans = { 'bold' },
+          numbers = { "bold" },
+          booleans = { "bold" },
           properties = {},
           types = {},
           operators = {},
         },
         custom_highlights = function(C)
           return {
-            CmpItemKindSnippet       = { fg = C.base, bg = C.mauve },
-            CmpItemKindKeyword       = { fg = C.base, bg = C.red },
-            CmpItemKindText          = { fg = C.base, bg = C.teal },
-            CmpItemKindMethod        = { fg = C.base, bg = C.blue },
-            CmpItemKindConstructor   = { fg = C.base, bg = C.blue },
-            CmpItemKindFunction      = { fg = C.base, bg = C.blue },
-            CmpItemKindFolder        = { fg = C.base, bg = C.blue },
-            CmpItemKindModule        = { fg = C.base, bg = C.blue },
-            CmpItemKindConstant      = { fg = C.base, bg = C.peach },
-            CmpItemKindField         = { fg = C.base, bg = C.green },
-            CmpItemKindProperty      = { fg = C.base, bg = C.green },
-            CmpItemKindEnum          = { fg = C.base, bg = C.green },
-            CmpItemKindUnit          = { fg = C.base, bg = C.green },
-            CmpItemKindClass         = { fg = C.base, bg = C.yellow },
-            CmpItemKindVariable      = { fg = C.base, bg = C.flamingo },
-            CmpItemKindFile          = { fg = C.base, bg = C.blue },
-            CmpItemKindInterface     = { fg = C.base, bg = C.yellow },
-            CmpItemKindColor         = { fg = C.base, bg = C.red },
-            CmpItemKindReference     = { fg = C.base, bg = C.red },
-            CmpItemKindEnumMember    = { fg = C.base, bg = C.red },
-            CmpItemKindStruct        = { fg = C.base, bg = C.blue },
-            CmpItemKindValue         = { fg = C.base, bg = C.peach },
-            CmpItemKindEvent         = { fg = C.base, bg = C.blue },
-            CmpItemKindOperator      = { fg = C.base, bg = C.blue },
+            CmpItemKindSnippet = { fg = C.base, bg = C.mauve },
+            CmpItemKindKeyword = { fg = C.base, bg = C.red },
+            CmpItemKindText = { fg = C.base, bg = C.teal },
+            CmpItemKindMethod = { fg = C.base, bg = C.blue },
+            CmpItemKindConstructor = { fg = C.base, bg = C.blue },
+            CmpItemKindFunction = { fg = C.base, bg = C.blue },
+            CmpItemKindFolder = { fg = C.base, bg = C.blue },
+            CmpItemKindModule = { fg = C.base, bg = C.blue },
+            CmpItemKindConstant = { fg = C.base, bg = C.peach },
+            CmpItemKindField = { fg = C.base, bg = C.green },
+            CmpItemKindProperty = { fg = C.base, bg = C.green },
+            CmpItemKindEnum = { fg = C.base, bg = C.green },
+            CmpItemKindUnit = { fg = C.base, bg = C.green },
+            CmpItemKindClass = { fg = C.base, bg = C.yellow },
+            CmpItemKindVariable = { fg = C.base, bg = C.flamingo },
+            CmpItemKindFile = { fg = C.base, bg = C.blue },
+            CmpItemKindInterface = { fg = C.base, bg = C.yellow },
+            CmpItemKindColor = { fg = C.base, bg = C.red },
+            CmpItemKindReference = { fg = C.base, bg = C.red },
+            CmpItemKindEnumMember = { fg = C.base, bg = C.red },
+            CmpItemKindStruct = { fg = C.base, bg = C.blue },
+            CmpItemKindValue = { fg = C.base, bg = C.peach },
+            CmpItemKindEvent = { fg = C.base, bg = C.blue },
+            CmpItemKindOperator = { fg = C.base, bg = C.blue },
             CmpItemKindTypeParameter = { fg = C.base, bg = C.blue },
-            HopNextKey  = { fg = '#F72044', style = { 'bold' } },
-            HopNextKey1 = { fg = '#F72044', style = { 'bold' } },
-            HopNextKey2 = { fg = '#F7A156' },
+            HopNextKey = { fg = "#F72044", style = { "bold" } },
+            HopNextKey1 = { fg = "#F72044", style = { "bold" } },
+            HopNextKey2 = { fg = "#F7A156" },
             ["@lsp.typemod.function.defaultLibrary"] = { fg = C.sapphire },
             ["@constant.builtin"] = { style = { "bold" } },
             FloatBorder = { style = { "bold" } },
             TelescopeBorder = {
               fg = C.blue,
-              bg = transparent and 'none' or C.base,
+              bg = transparent and "none" or C.base,
               style = { "bold" },
-            }
+            },
           }
         end,
         integrations = {
@@ -88,16 +88,16 @@ return {
           native_lsp = {
             enabled = true,
             virtual_text = {
-              errors = { 'italic' },
-              hints = { 'italic' },
-              warnings = { 'italic' },
-              information = { 'italic' },
+              errors = { "italic" },
+              hints = { "italic" },
+              warnings = { "italic" },
+              information = { "italic" },
             },
             underlines = {
-              errors = { 'undercurl' },
-              hints = { 'undercurl' },
-              warnings = { 'undercurl' },
-              information = { 'undercurl' },
+              errors = { "undercurl" },
+              hints = { "undercurl" },
+              warnings = { "undercurl" },
+              information = { "undercurl" },
             },
             inlay_hints = {
               background = true,
@@ -111,7 +111,7 @@ return {
           },
         },
       })
-      vim.cmd.colorscheme('catppuccin')
+      vim.cmd.colorscheme("catppuccin")
     end,
-  }
+  },
 }
