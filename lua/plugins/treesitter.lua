@@ -219,7 +219,7 @@ return {
             },
           },
           highlight_definitions = {
-            enable = true,
+            enable = false,
             disable = require("cfg.utils").file_too_big(64),
             clear_on_cursor_move = true,
           },

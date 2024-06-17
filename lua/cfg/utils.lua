@@ -2,6 +2,9 @@ local api = vim.api
 
 local utils_local = {
   rename_cmd = [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  highlight_cmd_word = [[<cmd>let @/='\<' . expand('<cword>') . '\>'<bar>set hls<cr>]],
+  highlight_cmd_all = [[<cmd>let @/=expand('<cword>')<bar>set hls<cr>]],
+  clear_highlight_cmd = [[<cmd>nohls<cr>]],
   default_rename_handler = nil,
 }
 
@@ -205,6 +208,29 @@ M.smart_rename_ts = function()
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.rename_cmd, true, true, true), "", true)
   end
+end
+
+M.highlight_usages = function()
+  if M.get_treesitter() then
+    require("nvim-treesitter-refactor.highlight_definitions").highlight_usages(api.nvim_win_get_buf(0))
+  else
+    api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.highlight_cmd_word, true, true, true), "", true)
+  end
+end
+
+M.clear_highlight_usages = function()
+  if M.get_treesitter() then
+    require("nvim-treesitter-refactor.highlight_definitions").clear_usage_highlights(api.nvim_win_get_buf(0))
+  end
+  api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.clear_highlight_cmd, true, true, true), "", true)
+end
+
+M.highlight_cmd_all = function()
+  return utils_local.highlight_cmd_all
+end
+
+M.highlight_cmd_word = function()
+  return utils_local.highlight_cmd_word
 end
 
 M.smart_rename_lsp = function(client, bufnr)

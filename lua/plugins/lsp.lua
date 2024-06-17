@@ -59,7 +59,7 @@ return {
             },
             workspace = {
               library = {
-                vim.fn.expand("$VIMRUNTIME/lua"),
+                vim.env.VIMRUNTIME,
                 vim.fn.stdpath("config") .. "/lua",
               },
             },

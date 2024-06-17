@@ -64,7 +64,7 @@ opt.synmaxcol = 240
 opt.showmode = false
 
 -- revert back to vim's block cursor in insert mode as a default
-opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
+-- opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
 
 -- lower updatetime to trigger treesitter-refactor's token highlight
 -- swapfile directory changed to ramfs (mostly) to avoid excessive disk writes
