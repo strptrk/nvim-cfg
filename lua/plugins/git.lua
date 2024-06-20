@@ -5,6 +5,7 @@ return {
     dependencies = "nvim-lua/plenary.nvim",
     keys = {
       { ",do", "<cmd>DiffviewOpen<cr>", desc = "Diffview" },
+      { ",dh", "<cmd>DiffviewOpen HEAD^..HEAD<cr>", desc = "Diffview for HEAD" },
       { ",dc", "<cmd>DiffviewFileHistory<cr>", desc = "Diffview Commit History" },
       { ",df", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview File History" },
     },
