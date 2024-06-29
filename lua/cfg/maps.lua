@@ -35,12 +35,17 @@ map("n", "<C-s>", "<cmd>update<CR>")
 map("n", "<A-c>", "<cmd>q<CR>")
 
 map("t", "<Esc><Esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
+
 map("n", "<Space>u", function()
   require("cfg.utils").highlight_usages()
 end, { desc = "Highlight Usages" })
 map("n", "<Space>U", function()
+  return require("cfg.utils").highlight_cmd_word()
+end, { expr = true, desc = "Highlight Usages (word)" })
+map("n", "<Space><C-u>", function()
   return require("cfg.utils").highlight_cmd_all()
 end, { expr = true, desc = "Highlight Usages (all)" })
+
 map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]], { desc = "Escape and Clear Highlights" })
 map({ "n", "t" }, "<A-Esc>", function()
   if vim.bo.buftype == "terminal" then
