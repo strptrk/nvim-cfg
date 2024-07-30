@@ -27,3 +27,35 @@ snippet rev
     for(int $1 = $2; $1 >= 0; --$1){
         $0
     }
+
+snippet fn
+    $1($2){
+        $0
+    }
+
+snippet #guard
+	#ifndef $1
+	#define $1
+	$2
+	#endif
+
+# Disable C++ name mangling in C headers
+snippet #ifcpp
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
+    
+    ${0}
+    
+    #ifdef __cplusplus
+    } /* extern "C" */
+    #endif
+
+snippet doxy
+	/*! \brief ${1:Brief function description here}
+	 *
+	 *  ${2:Detailed description of the function}
+	 *
+	 * \param $3 ${4:Parameter description}
+	 * \return ${5:Return parameter description}
+	 */

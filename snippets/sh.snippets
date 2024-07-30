@@ -1,8 +1,70 @@
-snippet !zsh
-    #!/usr/bin/env zsh
+snippet !sh
+    #!/bin/sh
 
 snippet !bash
     #!/usr/bin/env bash
 
-snippet !sh
-    #!/bin/sh
+snippet !zsh
+    #!/usr/bin/env zsh
+
+snippet if
+    if [[ $1 ]]; then
+        ${0:${VISUAL}}
+    fi
+
+snippet elif
+    elif [[ $1 ]]; then
+        ${0:${VISUAL}}
+
+snippet wh
+    while [[ $1 ]]; do
+        ${0:${VISUAL}}
+    done
+
+snippet until
+    until [[ $1 ]]; do
+        ${0:${VISUAL}}
+    done
+
+snippet for
+    for(($1; $2; $3)); do
+        ${4:${VISUAL}}
+    done
+
+snippet root
+    if [ \$(id -u) -ne 0 ]; then exec sudo \$0; fi
+
+snippet getopt
+    __VERSION__=${1:1.0.0}
+    __NAME__=\$(basename \$0)
+    
+    usage(){
+    cat <<EOF
+    	Usage:  \${__NAME__} [options] [--]
+    
+        Options:
+        -h|help       Display this message
+        -v|version    Display script version"
+    
+    EOF
+    }
+    
+    while getopts ":hv" opt
+    do
+      case \$opt in
+    	h | help)
+            usage
+            exit 0
+            ;;
+    	v | version)
+            echo "\${__VERSION__}"
+            exit 0
+            ;;
+    	*)
+            echo -e "\\n  Option does not exist : \${OPTARG}\\n"
+            usage
+            exit 1
+            ;;
+      esac
+    done
+    shift \$(($OPTIND-1))

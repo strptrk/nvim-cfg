@@ -26,6 +26,18 @@ return {
       },
       n_lines = 20, -- Number of lines within which surrounding is searched
       respect_selection_type = false,
+      custom_surroundings = {
+        -- by default, left {parentheses, brackets, tags, braces} add spaces and right ones don't, swap that
+        [')'] = { output = { left = '( ', right = ' )' } },
+        ['('] = { output = { left = '(', right = ')' } },
+        ['>'] = { output = { left = '< ', right = ' >' } },
+        ['<'] = { output = { left = '<', right = '>' } },
+        ['{'] = { output = { left = '{', right = '}' } },
+        ['}'] = { output = { left = '{ ', right = ' }' } },
+        -- never add spaces for []
+        ['['] = { output = { left = '[', right = ']' } },
+        [']'] = { output = { left = '[', right = ']' } },
+      }
     },
   },
   {
