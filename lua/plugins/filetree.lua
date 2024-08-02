@@ -175,7 +175,7 @@ return {
             ["S"] = "split_with_window_picker",
             ["V"] = "vsplit_with_window_picker",
             ["t"] = "open_tabnew",
-            ["o"] = "open_drop",
+            ["o"] = false,
             ["O"] = "open_tab_drop",
             ["w"] = "open_with_window_picker",
             ["z"] = false,
