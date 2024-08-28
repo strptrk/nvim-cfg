@@ -240,7 +240,7 @@ return {
         if state.executable ~= nil then
           return state.executable
         else
-          local exec_string = os.getenv("DEBUG_EXECUTABLE")
+          local exec_string = vim.env["DEBUG_EXECUTABLE"]
           if exec_string then
             state.executable = exec_string
           else
@@ -265,7 +265,7 @@ return {
         if state.args ~= nil then
           return state.args
         else
-          local arg_string = os.getenv("DEBUG_ARGS")
+          local arg_string = vim.env["DEBUG_ARGS"]
           if arg_string then
             state.args = vim.split(arg_string, " ")
           else
@@ -380,11 +380,11 @@ return {
         dap.adapters.cppdbg = {
           id = "cppdbg",
           type = "executable",
-          command = get_path({ "OpenDebugAD7" }, os.getenv("HOME") .. "/.local/bin/OpenDebugAD7"),
+          command = get_path({ "OpenDebugAD7" }, vim.env["HOME"] .. "/.local/bin/OpenDebugAD7"),
         }
         dap.configurations.cpp = {}
         for _, v in ipairs(configurations.common) do
-          v.miDebuggerPath = get_path("lldb-mi", os.getenv("HOME") .. "/.local/bin/lldb-mi")
+          v.miDebuggerPath = get_path("lldb-mi", vim.env["HOME"] .. "/.local/bin/lldb-mi")
           local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, v)
           table.insert(dap.configurations.cpp, configuration)
         end
@@ -392,7 +392,7 @@ return {
         dap.adapters.cppdbg = {
           id = "cppdbg",
           type = "executable",
-          command = get_path({ "OpenDebugAD7" }, os.getenv("HOME") .. "/.local/bin/OpenDebugAD7"),
+          command = get_path({ "OpenDebugAD7" }, vim.env["HOME"] .. "/.local/bin/OpenDebugAD7"),
         }
         dap.configurations.cpp = {
           {
@@ -473,8 +473,8 @@ return {
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#Python
       dap.adapters.python = {
         type = "executable",
-        -- command = getpath({ 'debugpy', 'python-debugpy' }, os.getenv('HOME') .. '/.local/bin/python-debugpy'),
-        command = os.getenv("HOME") .. "/.clones/virtualenvs/debugpy/bin/python",
+        -- command = getpath({ 'debugpy', 'python-debugpy' }, vim.env['HOME'] .. '/.local/bin/python-debugpy'),
+        command = vim.env["HOME"] .. "/.clones/virtualenvs/debugpy/bin/python",
         args = { "-m", "debugpy.adapter" },
       }
       dap.configurations.python = {
@@ -491,7 +491,7 @@ return {
             elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
               return cwd .. "/.venv/bin/python"
             else
-              local venv = os.getenv("VIRTUAL_ENV")
+              local venv = vim.env["VIRTUAL_ENV"]
               return get_path({ venv and (venv .. "/bin/python") or "python", "python3" }, nil)
             end
           end,

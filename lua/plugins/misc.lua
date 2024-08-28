@@ -37,16 +37,23 @@ return {
         -- never add spaces for []
         ['['] = { output = { left = '[', right = ']' } },
         [']'] = { output = { left = '[', right = ']' } },
+        -- [o]utput
+        ['o'] = { output = { left = '$(', right = ')' } },
+        -- [v]alue
+        ['v'] = { output = { left = '"${', right = '}"' } },
+        -- [L]ua function
+        ['L'] = { output = { left = 'function() ', right = ' end' } },
       }
     },
   },
   {
+    -- TODO: look for a replacement
     "junegunn/vim-easy-align",
     lazy = true,
     cmd = { "EasyAlign" },
     keys = {
-      { "<Space>E", ":EasyAlign<cr>*<Space>", mode = { "n", "v" } },
-      { "<Space>e", "<Plug>(EasyAlign)", mode = { "n", "v" } },
+      { "<Space>E", ":EasyAlign<cr>*<Space>", mode = { "n", "v" }, desc = "EasyAlign (all space)" },
+      { "<Space>e", "<Plug>(EasyAlign)", mode = { "n", "v" } , desc = "EasyAlign" },
     },
   },
   {
@@ -111,15 +118,16 @@ return {
     opts = {},
   },
   {
+    -- TODO replace (unmaintained)
     "phaazon/hop.nvim",
     lazy = true,
     init = function()
       vim.keymap.set({ "n", "x" }, "<Space><CR>", function()
         require("hop").hint_words()
-      end)
+      end, { desc = "Hop Word" })
       vim.keymap.set({ "n", "x" }, "<Space><BS>", function()
         require("hop").hint_lines()
-      end)
+      end, { desc = "Hop Lines" })
       vim.keymap.set({ "n", "x", "o" }, "f", function()
         require("hop").hint_char1({
           direction = require("hop.hint").HintDirection.AFTER_CURSOR,

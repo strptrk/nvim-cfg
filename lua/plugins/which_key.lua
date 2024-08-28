@@ -4,11 +4,41 @@ return {
     lazy = true,
     event = "VeryLazy",
     opts = {
+      ---@type false | "classic" | "modern" | "helix"
+      preset = "modern",
+      ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number
+      delay = function(ctx)
+        local delays = {
+          ["\""] = 0,
+          ["'"] = 0,
+          ["`"] = 0,
+          default = 350
+        }
+        return delays[ctx.keys] or delays.default
+      end,
+      triggers = {
+        { "<auto>",   mode = "nixsotc" },
+        { "<leader>", mode = { "n", "v" } },
+        { "<BS>",     mode = { "n", "v" } },
+        { "]",        mode = { "n", "v" } },
+        { "[",        mode = { "n", "v" } },
+        { ",",        mode = { "n", "v" } },
+      },
+      -- what could go into `wk.add(...)`
+      spec = {
+        { "<Space>d", group = "LSP Diagnostics" },
+        { "<Space>h", group = "Help & History" },
+        { "<Space>q", group = "Quickfix" },
+        { "<Space>s", group = "LSP Symbols" },
+        { "<Space>v", group = "Vim Options" },
+        { ",", group = "Comma Prefix" },
+      },
+      notify = {},
       plugins = {
         marks = true,
         registers = true,
         spelling = {
-          enabled = true,
+          enabled = true, -- z= to select spelling suggestions
           suggestions = 20,
         },
         presets = {
@@ -21,69 +51,14 @@ return {
           g = true,
         },
       },
-      operators = {
-        -- ["<Space>c"] = "Comments"
+      keys = {
+        scroll_down = "<c-j>",
+        scroll_up = "<c-k>",
       },
-      key_labels = {
-        -- ["<space>"] = "SPC",
-        -- ["<cr>"] = "RET",
-        -- ["<tab>"] = "TAB",
+      win = {
+        ---@type false | "none" | "single" | "double" | "rounded" | "solid" | "shadow"
+        border = (vim.env["W_TRANSPARENT"] or vim.env["TRANSPARENT"]) and "rounded" or "none",
       },
-      icons = {
-        breadcrumb = "»",
-        separator = "➜",
-        group = "+",
-      },
-      popup_mappings = {
-        scroll_down = "<c-d>",
-        scroll_up = "<c-u>",
-      },
-      window = {
-        border = "none",
-        position = "bottom",
-        margin = { 1, 0, 1, 0 },
-        padding = { 2, 2, 2, 2 },
-        winblend = 0,
-      },
-      layout = {
-        height = { min = 4, max = 25 },
-        width = { min = 20, max = 50 },
-        spacing = 3,
-        align = "left",
-      },
-      ignore_missing = false,
-      hidden = {
-        "<silent>",
-        "<cmd>",
-        "<Cmd>",
-        "<CR>",
-        "call",
-        "lua",
-        "^:",
-        "^ ",
-      },
-      show_help = true,
-      -- triggers = 'auto', -- automatically setup triggers
-      triggers = {
-        "<leader>",
-        "<C-w>",
-        "<Space>",
-        "<BS>",
-        "]",
-        "[",
-        "(",
-        ")",
-        "s",
-        "z",
-        "<M-v>",
-        "<M-o>",
-        "<M-s>",
-        [[`]],
-        [[']],
-        [["]],
-        [[,]],
-      },
-      triggers_blacklist = {},
       disable = {
         buftypes = {},
         filetypes = { "TelescopePrompt" },

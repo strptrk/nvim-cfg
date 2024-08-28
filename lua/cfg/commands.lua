@@ -16,7 +16,7 @@ end, {
 
 vim.api.nvim_create_user_command("Mktmpf", function(args)
   math.randomseed(os.time())
-  local dname = "/tmp/tmpdir_nvim_" .. os.getenv("USER") .. tostring(math.random(100000, 999999))
+  local dname = "/tmp/tmpdir_nvim_" .. vim.env["USER"] .. tostring(math.random(100000, 999999))
   local fname = "main." .. args.fargs[1]
   os.execute("mkdir -p " .. dname)
   vim.cmd("cd " .. dname)

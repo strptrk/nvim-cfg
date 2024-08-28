@@ -68,3 +68,9 @@ snippet getopt
       esac
     done
     shift \$(($OPTIND-1))
+
+snippet val
+  "${$0}"
+
+snippet out
+  $($0)

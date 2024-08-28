@@ -62,15 +62,21 @@ opt.history = 100
 opt.lazyredraw = false
 opt.synmaxcol = 240
 opt.showmode = false
+opt.exrc = true
 
 -- revert back to vim's block cursor in insert mode as a default
--- opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
+opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
 
 -- lower updatetime to trigger treesitter-refactor's token highlight
 -- swapfile directory changed to ramfs (mostly) to avoid excessive disk writes
 -- but nvim will not be able to recover after a power outage
 opt.updatetime = 750
-vim.api.nvim_set_option_value("directory", "/tmp/nvimswap//", { scope = "global" })
+vim.api.nvim_set_option_value(
+  "directory",
+  -- default is "~/.local/state/nvim/swap//"
+  vim.env["NVIM_SWAP_DIR"] or ("/tmp/.nvim_swap_dir_" .. (vim.env["USER"] or "") .. "//"),
+  { scope = "global" }
+)
 
 ---@diagnostic disable-next-line: inject-field
 vim.g.c_syntax_for_h = 1

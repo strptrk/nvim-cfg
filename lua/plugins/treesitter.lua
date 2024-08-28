@@ -30,6 +30,7 @@ local ts_parsers = {
   "latex",
   "comment",
   "regex",
+  "vim"
 }
 
 local ts_filetypes = {

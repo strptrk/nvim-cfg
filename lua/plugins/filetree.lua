@@ -5,7 +5,7 @@ return {
     lazy = true,
     keys = {
       {
-        ",a",
+        "<leader>a",
         function()
           vim.cmd([[Neotree show filesystem position=left]])
           vim.cmd([[Neotree show buffers position=top]])
@@ -14,21 +14,21 @@ return {
         desc = "Neotree Files, Git, Buffers",
       },
       {
-        ",g",
+        "<leader>g",
         function()
           vim.cmd([[Neotree focus git_status position=right]])
         end,
         desc = "Neotree Focus Git",
       },
       {
-        ",b",
+        "<leader>b",
         function()
           vim.cmd([[Neotree focus buffers position=top]])
         end,
         desc = "Neotree Focus Buffers",
       },
       {
-        ",f",
+        "<leader>f",
         function()
           vim.cmd([[Neotree focus filesystem position=left]])
         end,

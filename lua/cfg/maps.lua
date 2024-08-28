@@ -16,6 +16,10 @@ map("n", "[l", "<cmd>lprevious<CR>")
 map("n", "]l", "<cmd>lnext<CR>")
 map("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
 map("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+map("n", "[w", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN }) end, { desc = "Go to previous warning" })
+map("n", "]w", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN }) end, { desc = "Go to next warning" })
+map("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end, { desc = "Go to previous error" })
+map("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end, { desc = "Go to next error" })
 map("n", "<Space>dl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
 map("n", "<C-M-h>", function()
@@ -45,8 +49,12 @@ end, { expr = true, desc = "Highlight Usages (word)" })
 map("n", "<Space><C-u>", function()
   return require("cfg.utils").highlight_cmd_all()
 end, { expr = true, desc = "Highlight Usages (all)" })
+map("n", "*", function()
+  return require("cfg.utils").highlight_cmd_word()
+end, { expr = true, desc = "Highlight Usages" })
 
-map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]], { desc = "Escape and Clear Highlights" })
+map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]],
+  { desc = "Escape and Clear Highlights" })
 map({ "n", "t" }, "<A-Esc>", function()
   if vim.bo.buftype == "terminal" then
     vim.cmd([[stopinsert]])
@@ -106,7 +114,7 @@ map("n", "<A-i>", function()
 end)
 
 -- paste last yanked thing, not deleted
-map({ "n", "x" }, "<Space>p", 'mz"0P`z', { desc = "Paste", silent = true })
+map({ "n", "x" }, "<Space>p", 'mz"0P`z', { desc = "Paste (yanked)", silent = true })
 map("n", "<Space>w", 'mzviw"0P`z', { desc = "Replace word with last yanked text.", silent = true })
 
 map({ "n", "i", "t", "v" }, "<A-h>", function()
@@ -159,3 +167,10 @@ map("n", "s.", [[:.s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 
 map("n", "s,", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (file)" })
 map("n", "sv", [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 map("n", "s/", [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
+
+-- Yanks only the solution for LeetCode or similar contest sites.
+-- Within the local copy of the problem:
+-- /*SOLUTION_BEGIN*/
+--    <code>
+-- /*SOLUTION_END*/
+map("n", "sys", "<cmd>g/SOLUTION_BEGIN/+1,/SOLUTION_END/-1y<bar>nohls<cr>", { desc = "Yank Solution" })

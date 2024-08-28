@@ -69,7 +69,7 @@ M.winmove = function(key)
   local current_win = vim.fn.winnr()
   vim.cmd.wincmd(key)
   if current_win == vim.fn.winnr() then
-    if os.getenv("TMUX") then
+    if vim.env["TMUX"] then
       local dir = {
         ["h"] = "-L",
         ["j"] = "-D",
@@ -79,7 +79,7 @@ M.winmove = function(key)
       if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']]) == "0" .. string.char(10) then
         vim.fn.system("tmux select-pane " .. dir[key])
       end
-    elseif os.getenv("TERM_PROGRAM") == "WezTerm" then
+    elseif vim.env["TERM_PROGRAM"] == "WezTerm" then
       local dir = {
         ["h"] = "Left",
         ["j"] = "Down",
@@ -88,7 +88,7 @@ M.winmove = function(key)
       }
       local function is_zoomed()
         local pane_info = vim.json.decode(vim.fn.system([[wezterm cli list --format json]]))
-        local pane_id = tonumber(os.getenv("WEZTERM_PANE"))
+        local pane_id = tonumber(vim.env["WEZTERM_PANE"])
         for _, pane in ipairs(pane_info) do
           if pane.pane_id == pane_id then
             return pane.is_zoomed
