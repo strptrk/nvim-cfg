@@ -22,6 +22,14 @@ autocmd("FileType", {
   end,
 })
 
+-- usual line width limitations for git commit messages
+autocmd("FileType", {
+  pattern = { "gitcommit" },
+  callback = function()
+    vim.wo.colorcolumn = "72,100,120"
+  end,
+})
+
 autocmd("TermOpen", {
   pattern = "*",
   callback = function()

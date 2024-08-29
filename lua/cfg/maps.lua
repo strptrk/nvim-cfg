@@ -102,7 +102,7 @@ map("n", "<M-=>", "<cmd>wincmd =<CR>")
 map("n", "J", "mzJ`z")
 
 map("n", "<A-i>", function()
-  if vim.wo.cursorline == true then
+  if vim.wo.cursorline then
     vim.wo.cursorline = false
     vim.wo.cursorcolumn = false
     vim.wo.colorcolumn = "0"
