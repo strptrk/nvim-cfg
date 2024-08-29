@@ -1,5 +1,17 @@
 local map = vim.keymap.set
 
+-- "multi" map
+---@param mode string|string[] Mode short-name, see |nvim_set_keymap()|.
+---                            Can also be list of modes to create mapping on multiple modes.
+---@param lhs string[]         Left-hand side |{lhs}| of the mapping.
+---@param rhs string|function  Right-hand side |{rhs}| of the mapping, can be a Lua function.
+---@param opts? vim.keymap.set.Opts
+local mmap = function(mode, lhs, rhs, opts)
+  for _, lhs_ in ipairs(lhs) do
+    vim.keymap.set(mode, lhs_, rhs, opts)
+  end
+end
+
 map({ "x", "n" }, "gA", "ga")
 map({ "x", "n" }, "gs", "<Nop>")
 
@@ -117,28 +129,16 @@ end)
 map({ "n", "x" }, "<Space>p", 'mz"0P`z', { desc = "Paste (yanked)", silent = true })
 map("n", "<Space>w", 'mzviw"0P`z', { desc = "Replace word with last yanked text.", silent = true })
 
-map({ "n", "i", "t", "v" }, "<A-h>", function()
+mmap({ "n", "i", "t", "v" }, { "<A-h>", "<leader>h" }, function()
   require("cfg.utils").winmove("h")
 end)
-map({ "n", "i", "t", "v" }, "<A-j>", function()
+mmap({ "n", "i", "t", "v" }, { "<A-j>", "<leader>j" }, function()
   require("cfg.utils").winmove("j")
 end)
-map({ "n", "i", "t", "v" }, "<A-k>", function()
+mmap({ "n", "i", "t", "v" }, { "<A-k>", "<leader>k" }, function()
   require("cfg.utils").winmove("k")
 end)
-map({ "n", "i", "t", "v" }, "<A-l>", function()
-  require("cfg.utils").winmove("l")
-end)
-map({ "n", "v" }, "<leader>h", function()
-  require("cfg.utils").winmove("h")
-end)
-map({ "n", "v" }, "<leader>j", function()
-  require("cfg.utils").winmove("j")
-end)
-map({ "n", "v" }, "<leader>k", function()
-  require("cfg.utils").winmove("k")
-end)
-map({ "n", "v" }, "<leader>l", function()
+mmap({ "n", "i", "t", "v" }, { "<A-l>", "<leader>l" }, function()
   require("cfg.utils").winmove("l")
 end)
 
