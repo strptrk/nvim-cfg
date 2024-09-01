@@ -36,15 +36,16 @@ snippet root
 
 snippet getopt
     __VERSION__=${1:1.0.0}
-    __NAME__=\$(basename \$0)
+    __NAME__=\$(basename \"$0")
     
     usage(){
-    cat <<EOF
-    	Usage:  \${__NAME__} [options] [--]
+        cat <<EOF
+    Usage:
+        \${__NAME__} [options] [--]
     
-        Options:
-        -h|help       Display this message
-        -v|version    Display script version"
+    Options:
+        -h    Display this message
+        -v    Display script version"
     
     EOF
     }
@@ -52,11 +53,11 @@ snippet getopt
     while getopts ":hv" opt
     do
       case \$opt in
-    	h | help)
+    	h)
             usage
             exit 0
             ;;
-    	v | version)
+    	v)
             echo "\${__VERSION__}"
             exit 0
             ;;
