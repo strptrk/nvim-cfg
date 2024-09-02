@@ -170,12 +170,26 @@ return {
       }
       local findcmd = function()
         if 1 == vim.fn.executable("fd") then
-          return { "fd", "--type", "x", "--color", "never" }
+          -- "--no-ignore-vcs", because fd is gitignore-avare, 
+          -- and most build directories are excluded from version control,
+          return {
+            "fd",
+            "--type", "x",
+            "--color", "never",
+            "--no-ignore-vcs",
+          }
         elseif 1 == vim.fn.executable("fdfind") then
-          return { "fdfind", "--type", "x", "--color", "never" }
-        elseif 1 == vim.fn.executable("find") then
-          return { "find", ".", "-executable", "-type", "f" }
-        end
+          return {
+            "fdfind",
+            "--type", "x",
+            "--color", "never",
+            "--no-ignore-vcs",
+          }
+        elseif 1 == vim.fn.executable("find") then return {
+          "find", ".",
+          "-executable",
+          "-type", "f",
+        } end
         return {}
       end
 
