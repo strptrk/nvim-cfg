@@ -45,30 +45,33 @@ snippet getopt
     
     Options:
         -h    Display this message
-        -v    Display script version"
+        -v    Display script version
     
     EOF
     }
     
-    while getopts ":hv" opt
-    do
-      case \$opt in
-    	h)
-            usage
-            exit 0
-            ;;
-    	v)
-            echo "\${__VERSION__}"
-            exit 0
-            ;;
-    	*)
-            echo -e "\\n  Option does not exist : \${OPTARG}\\n"
-            usage
-            exit 1
-            ;;
-      esac
-    done
-    shift \$(($OPTIND-1))
+    main(){
+        while getopts ":hv" opt; do
+            case \$opt in
+                h)
+                    usage
+                    exit 0
+                    ;;
+                v)
+                    echo "\${__VERSION__}"
+                    exit 0
+                    ;;
+                *)
+                    echo -e "\\n  Option does not exist : \${OPTARG}\\n"
+                    usage
+                    exit 1
+                    ;;
+            esac
+        done
+        shift \$((OPTIND-1))
+    }
+
+    main "$@"
 
 snippet val
   "${$0}"
