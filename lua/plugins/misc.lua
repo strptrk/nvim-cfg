@@ -47,6 +47,48 @@ return {
     },
   },
   {
+    'echasnovski/mini.ai',
+    version = false,
+    lazy = true,
+    event = "VeryLazy",
+    config = function()
+      local gen_spec = require('mini.ai').gen_spec
+      require("mini.ai").setup({
+        custom_textobjects = {
+          -- use treesitter's instead
+          a = false,
+          f = false,
+          -- `i` instead of `f` as it is reserved for treesitter
+          -- `i` for "invocation"
+          i = gen_spec.function_call(),
+          -- whole buffer
+          g = function()
+            local from = { line = 1, col = 1 }
+            local to = {
+              line = vim.fn.line('$'),
+              col = math.max(vim.fn.getline('$'):len(), 1)
+            }
+            return { from = from, to = to }
+          end,
+        },
+        mappings = {
+          around = 'a',
+          inside = 'i',
+          around_next = '', -- an
+          inside_next = '', -- in
+          around_last = '', -- al
+          inside_last = '', -- il
+          goto_left = 'g[',
+          goto_right = 'g]',
+        },
+        n_lines = 50,
+        -- 'cover', 'cover_or_next', 'cover_or_prev', 'cover_or_nearest', 'next', 'previous', 'nearest'.
+        search_method = 'cover_or_next',
+        silent = false,
+      })
+    end,
+  },
+  {
     -- TODO: look for a replacement
     "junegunn/vim-easy-align",
     lazy = true,
