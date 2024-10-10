@@ -52,7 +52,7 @@ snippet getopt
     
     main(){
         while getopts ":hv" opt; do
-            case \$opt in
+            case "\${opt}" in
                 h)
                     usage
                     exit 0
