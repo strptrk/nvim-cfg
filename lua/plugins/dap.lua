@@ -211,7 +211,7 @@ return {
         "codelldb", -- codelldb
         "lldb-vscode", -- lldb-vscode
         "lldb-dap", -- lldb-vscode
-      }, nil)
+      }, "")
       local select_executable = function(opts, fn)
         opts = opts or {}
         pickers
