@@ -4,9 +4,9 @@ return {
     version = false,
     lazy = true,
     keys = {
-      { "sa", nil, mode = { "n", "x" } },
-      { "sd", nil, mode = { "n", "x" } },
-      { "sr", nil, mode = { "n", "x" } },
+      { "sa",  nil, mode = { "n", "x" } },
+      { "sd",  nil, mode = { "n", "x" } },
+      { "sr",  nil, mode = { "n", "x" } },
       { "sur", nil, mode = { "n", "x" } },
       { "sul", nil, mode = { "n", "x" } },
       { "suh", nil, mode = { "n", "x" } },
@@ -14,17 +14,17 @@ return {
     },
     opts = {
       mappings = {
-        add = "sa", -- Add surrounding in Normal and Visual modes
-        delete = "sd", -- Delete surrounding
-        replace = "sr", -- Replace surrounding
-        find = "sur", -- Find surrounding (to the right)
-        find_left = "sul", -- Find surrounding (to the left)
-        highlight = "suh", -- Highlight surrounding
+        add = "sa",             -- Add surrounding in Normal and Visual modes
+        delete = "sd",          -- Delete surrounding
+        replace = "sr",         -- Replace surrounding
+        find = "sur",           -- Find surrounding (to the right)
+        find_left = "sul",      -- Find surrounding (to the left)
+        highlight = "suh",      -- Highlight surrounding
         update_n_lines = "sun", -- Update `n_lines`
-        suffix_last = "l", -- Suffix to search with "prev" method
-        suffix_next = "n", -- Suffix to search with "next" method
+        suffix_last = "l",      -- Suffix to search with "prev" method
+        suffix_next = "n",      -- Suffix to search with "next" method
       },
-      n_lines = 20, -- Number of lines within which surrounding is searched
+      n_lines = 20,             -- Number of lines within which surrounding is searched
       respect_selection_type = false,
       custom_surroundings = {
         -- by default, left {parentheses, brackets, tags, braces} add spaces and right ones don't, swap that
@@ -43,6 +43,10 @@ return {
         ['v'] = { output = { left = '"${', right = '}"' } },
         -- [L]ua function
         ['L'] = { output = { left = 'function() ', right = ' end' } },
+        -- [k]omment
+        ['k'] = { output = { left = '/* ', right = ' */' } },
+        -- Lua [K]omment
+        ['K'] = { output = { left = '--[[ ', right = ' ]]--' } },
       }
     },
   },
@@ -89,14 +93,14 @@ return {
     end,
   },
   {
-    -- TODO: look for a replacement
-    "junegunn/vim-easy-align",
+    "echasnovski/mini.align",
     lazy = true,
-    cmd = { "EasyAlign" },
+    version = false,
     keys = {
-      { "<Space>E", ":EasyAlign<cr>*<Space>", mode = { "n", "v" }, desc = "EasyAlign (all space)" },
-      { "<Space>e", "<Plug>(EasyAlign)", mode = { "n", "v" } , desc = "EasyAlign" },
+      { "ga", nil, mode = { "n", "x" } },
+      { "gA", nil, mode = { "n", "x" } },
     },
+    opts = {}
   },
   {
     "Shatur/neovim-session-manager",
@@ -126,18 +130,28 @@ return {
     end,
   },
   {
-    -- TODO: replace with builtin commenting from v0.10
-    "numToStr/Comment.nvim",
+    "echasnovski/mini.comment",
     lazy = true,
-    event = "VeryLazy",
-    opts = {
-      padding = true,
-      sticky = true,
-      ignore = "^$",
-      toggler = { line = "<Space>cc", block = "<Space>cx" },
-      opleader = { line = "<Space>c", block = "<Space>x" },
-      mappings = { basic = true, extra = true, extended = false },
+    version = false,
+    keys = {
+      { "<Space>c", nil, mode = { "n", "x" } },
+      { "<Space>cc", nil, mode = { "n", "x" } },
+      { "K", nil, mode = { "o" } },
     },
+    opts = {
+      options = {
+        custom_commentstring = nil,
+        ignore_blank_line = true,
+        start_of_line = false,
+        pad_comment_parts = true,
+      },
+      mappings = {
+        comment = '<Space>c',
+        comment_line = '<Space>cc',
+        comment_visual = '<Space>c',
+        textobject = 'K',
+      },
+    }
   },
   {
     "samjwill/nvim-unception",

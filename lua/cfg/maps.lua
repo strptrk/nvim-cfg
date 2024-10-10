@@ -6,14 +6,12 @@ local map = vim.keymap.set
 ---@param lhs string[]         Left-hand side |{lhs}| of the mapping.
 ---@param rhs string|function  Right-hand side |{rhs}| of the mapping, can be a Lua function.
 ---@param opts? vim.keymap.set.Opts
+---@diagnostic disable-next-line: unused-local, unused-function
 local mmap = function(mode, lhs, rhs, opts)
   for _, lhs_ in ipairs(lhs) do
     vim.keymap.set(mode, lhs_, rhs, opts)
   end
 end
-
-map({ "x", "n" }, "gA", "ga")
-map({ "x", "n" }, "gs", "<Nop>")
 
 map("n", "<A-a>", "<cmd>tabprevious<cr>")
 map("n", "<A-d>", "<cmd>tabnext<cr>")
