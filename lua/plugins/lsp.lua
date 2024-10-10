@@ -14,61 +14,73 @@ return {
     config = function()
       local lsp = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      lsp.pylsp.setup({ capabilities = capabilities })
-      lsp.gopls.setup({ capabilities = capabilities })
-      lsp.cmake.setup({ capabilities = capabilities })
-      lsp.clangd.setup({
-        capabilities = capabilities,
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--header-insertion=iwyu",
-          "--completion-style=detailed",
-          "--function-arg-placeholders",
-          "--fallback-style=llvm",
-        },
-        init_options = {
-          usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-        },
-      })
-      lsp.texlab.setup({
-        capabilities = capabilities,
-        settings = {
-          texlab = {
-            diagnostics = {
-              ignoredPatterns = {
-                "^Underfull \\\\[vh]box.*", -- lua escape + regex escape
-                "^Overfull \\\\[vh]box.*",
-                "^Unused global option\\(s\\):$",
+      if 1 == vim.fn.executable("pylsp") then
+        lsp.pylsp.setup({ capabilities = capabilities })
+      end
+      if 1 == vim.fn.executable("gopls") then
+        lsp.gopls.setup({ capabilities = capabilities })
+      end
+      if 1 == vim.fn.executable("cmake-language-server") then
+        lsp.cmake.setup({ capabilities = capabilities })
+      end
+      if 1 == vim.fn.executable("clangd") then
+        lsp.clangd.setup({
+          capabilities = capabilities,
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
+          },
+          init_options = {
+            usePlaceholders = true,
+            completeUnimported = true,
+            clangdFileStatus = true,
+          },
+        })
+      end
+      if 1 == vim.fn.executable("texlab") then
+        lsp.texlab.setup({
+          capabilities = capabilities,
+          settings = {
+            texlab = {
+              diagnostics = {
+                ignoredPatterns = {
+                  "^Underfull \\\\[vh]box.*", -- lua escape + regex escape
+                  "^Overfull \\\\[vh]box.*",
+                  "^Unused global option\\(s\\):$",
+                },
               },
             },
           },
-        },
-      })
-      lsp.lua_ls.setup({
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = {
-                "vim",
+        })
+      end
+      if 1 == vim.fn.executable("lua-language-server") then
+        lsp.lua_ls.setup({
+          capabilities = capabilities,
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = {
+                  "vim",
+                },
+              },
+              workspace = {
+                library = {
+                  vim.env.VIMRUNTIME,
+                  vim.fn.stdpath("config") .. "/lua",
+                },
               },
             },
-            workspace = {
-              library = {
-                vim.env.VIMRUNTIME,
-                vim.fn.stdpath("config") .. "/lua",
-              },
+            telemetry = {
+              enable = false,
             },
           },
-          telemetry = {
-            enable = false,
-          },
-        },
-      })
+        })
+      end
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
@@ -77,22 +89,18 @@ return {
           vim.keymap.set({ "n", "x" }, "sf", vim.lsp.buf.format, { desc = "Format document (lsp)" })
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
           vim.keymap.set("n", "<Space>sh", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch source and header" })
-          if vim.fn.has("nvim-0.10") > 0 then
-            local methods = vim.lsp.protocol.Methods
-            local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            if client and client.supports_method(methods.textDocument_inlayHint) then
-              vim.keymap.set("n", "si", function()
-                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ buf = ev.buf }), { buf = ev.buf })
-              end, { desc = "Toggle inlay hints" })
-              vim.lsp.inlay_hint.enable(false, { buf = ev.buf })
-            end
-            if client and client.supports_method(methods.textDocument_rename) then
-              vim.keymap.set("n", "ss", function()
-                require("cfg.utils").smart_rename_lsp(client, ev.buf)
-              end, { desc = "LSP rename", buffer = ev.buf })
-            end
-          else
-            vim.keymap.set("n", "ss", vim.lsp.buf.rename, { desc = "LSP rename", buffer = ev.buf })
+          local methods = vim.lsp.protocol.Methods
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.supports_method(methods.textDocument_inlayHint) then
+            vim.keymap.set("n", "si", function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ buf = ev.buf }), { buf = ev.buf })
+            end, { desc = "Toggle inlay hints" })
+            vim.lsp.inlay_hint.enable(false, { buf = ev.buf })
+          end
+          if client and client.supports_method(methods.textDocument_rename) then
+            vim.keymap.set("n", "ss", function()
+              require("cfg.utils").smart_rename_lsp(client, ev.buf)
+            end, { desc = "LSP rename", buffer = ev.buf })
           end
         end,
       })

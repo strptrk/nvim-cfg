@@ -154,16 +154,6 @@ return {
     }
   },
   {
-    "samjwill/nvim-unception",
-    lazy = false,
-    init = function()
-      ---@diagnostic disable-next-line: inject-field
-      vim.g.unception_open_buffer_in_new_tab = true
-      ---@diagnostic disable-next-line: inject-field
-      vim.g.unception_enable_flavor_text = false
-    end,
-  },
-  {
     "nvim-lua/plenary.nvim",
     lazy = true,
   },
