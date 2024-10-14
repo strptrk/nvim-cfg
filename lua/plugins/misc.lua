@@ -37,6 +37,11 @@ return {
         -- never add spaces for []
         ['['] = { output = { left = '[', right = ']' } },
         [']'] = { output = { left = '[', right = ']' } },
+        -- by default, b adds (), change it to p and b to {}
+        ['b'] = { output = { left = '{', right = '}' } },
+        ['p'] = { output = { left = '(', right = ')' } },
+        -- escaped [Q]uotes
+        ['Q'] = { output = { left = '\\"', right = '\\"' } },
         -- [o]utput
         ['o'] = { output = { left = '$(', right = ')' } },
         -- [v]alue

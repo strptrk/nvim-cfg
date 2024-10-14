@@ -1,3 +1,5 @@
+local oil_long_format = false
+
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -280,27 +282,44 @@ return {
       "Oil",
     },
     keys = {
-      { ",o", "<cmd>Oil<cr>" },
+      { "<A-o>", function() require("oil").toggle_float() end },
     },
     opts = {
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
-        ["<C-\\>"] = "actions.select_vsplit",
-        ["<C-->"] = "actions.select_split",
-        ["<C-t>"] = "actions.select_tab",
-        ["<C-p>"] = "actions.preview",
-        ["<C-c>"] = "actions.close",
-        ["gr"] = "actions.refresh",
+        ["<A-v>"] = "actions.select_vsplit",
+        ["<A-s>"] = "actions.select_split",
+        ["<A-t>"] = "actions.select_tab",
+        ["<A-p>"] = "actions.preview",
+        ["<A-c>"] = "actions.close",
+        ["<A-r>"] = "actions.refresh",
+        ["<A-a>"] = "actions.refresh",
+        ["<C-s>"] = function() require("oil").save() end,
         ["<bs>"] = "actions.parent",
         ["_"] = "actions.open_cwd",
         ["`"] = "actions.cd",
         ["~"] = "actions.tcd",
         ["gs"] = "actions.change_sort",
         ["gx"] = "actions.open_external",
-        ["<C-h>"] = "actions.toggle_hidden",
+        ["<A-h>"] = "actions.toggle_hidden",
+        ["<A-u>"] = function() require("oil").discard_all_changes() end,
         ["H"] = "actions.toggle_hidden",
-        ["g\\"] = "actions.toggle_trash",
+        ["<A-T>"] = "actions.toggle_trash",
+        ["<A-y>"] = "actions.yank_entry",
+        ["<A-l>"] = function()
+          if oil_long_format then
+            require("oil").set_columns({ "icon" })
+          else
+            require("oil").set_columns({
+              "icon",
+              { "permissions", highlight = "Tag" },
+              { "size",        highlight = "Special" },
+              { "mtime",       highlight = "Question" },
+            })
+          end
+          oil_long_format = not oil_long_format
+        end,
       },
     },
     dependencies = { "nvim-tree/nvim-web-devicons" },

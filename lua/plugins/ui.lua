@@ -219,17 +219,25 @@ return {
     end,
   },
   {
-    "norcalli/nvim-colorizer.lua",
-    lazy = true,
-    cmd = { "ColorizerToggle", "ColorizerAttachToBuffer" },
+    'echasnovski/mini.hipatterns',
+    version = false,
+    event = "VeryLazy",
     config = function()
-      require("colorizer").setup({
-        "css",
-        "html",
-        "lua",
-        "md",
-        "neorg",
+      local hipatterns = require('mini.hipatterns')
+      hipatterns.setup({
+        highlighters = {
+          -- _ = { pattern = function(buf_id) return nil|string|[string] end, group = "..." },
+          -- fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+          -- hack  = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+          -- todo  = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+          -- note  = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+          trailing_space = { pattern = '%f[%s]%s*$', group = 'MiniHipatternsFixme' },
+          hex_color = hipatterns.gen_highlighter.hex_color(),
+        },
       })
+      vim.api.nvim_create_user_command("HipatToggle", function ()
+        hipatterns.toggle(0)
+      end, { force = true })
     end,
   },
   {
@@ -301,11 +309,11 @@ return {
             "filetype",
           },
           lualine_y = { "fileformat", "encoding", "filesize" },
-          lualine_z = { "progress", "location" },
+          lualine_z = { "progress", "selectioncount", "location" },
         },
         inactive_sections = {},
         tabline = {},
-        extensions = { "toggleterm", "quickfix" },
+        extensions = { "toggleterm", "quickfix", "nvim-dap-ui", "trouble", "oil" },
       }
       require("lualine").setup(opts)
     end,

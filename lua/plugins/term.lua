@@ -71,7 +71,9 @@ return {
           vim.notify("lazygit is not installed or is not in PATH", vim.log.levels.WARN)
         end
       end
-      vim.api.nvim_create_user_command("Lazygit", Term.lazygit_toggle, { force = true })
+      if 1 == vim.fn.executable("lazygit") then
+        vim.api.nvim_create_user_command("Lazygit", Term.lazygit_toggle, { force = true })
+      end
 
       Term.Terminals = {}
       Term.Last = -1

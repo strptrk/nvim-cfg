@@ -1,12 +1,13 @@
 return {
   {
+    -- TODO: replace
     "anuvyklack/hydra.nvim",
     lazy = true,
     keys = {
       { "<A-z>", nil, desc = "Scroll" },
       { "<A-g>", nil, desc = "Git Actions" },
       { "<A-G>", nil, desc = "Git Telescope" },
-      { "<A-o>", nil, desc = "Options" },
+      { "<A-O>", nil, desc = "Options" },
     },
     config = function()
       local Hydra = require("hydra")
@@ -196,7 +197,7 @@ return {
           },
         },
         mode = { "n", "x" },
-        body = "<A-o>",
+        body = "<A-O>",
         heads = {
           {
             "n",
