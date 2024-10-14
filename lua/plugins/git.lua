@@ -82,11 +82,12 @@ return {
           DiffviewFileHistory = {},
         },
         hooks = {
-          diff_buf_win_enter = function(_, win)
-            vim.api.nvim_set_option_value("wrap", false, { win = win })
-            vim.api.nvim_set_option_value("list", false, { win = win })
-            vim.api.nvim_set_option_value("number", false, { win = win })
-            vim.api.nvim_set_option_value("cursorline", true, { win = win })
+          -- bufnr, winid, ctx: { symbol, layout_name }
+          diff_buf_win_enter = function(_, _, _)
+            vim.opt_local.wrap = false
+            vim.opt_local.list = false
+            vim.opt_local.number = false
+            vim.opt_local.colorcolumn = "80,100,120"
           end,
         },
         keymaps = {
@@ -129,6 +130,7 @@ return {
             { "n", ",F", actions.toggle_files, { desc = "Toggle files" } },
             { "n", "[x", actions.prev_conflict, { desc = "Previous conflict" } },
             { "n", "]x", actions.next_conflict, { desc = "Next conflict" } },
+            { "n", "<A-i>", actions.view_windo("set cursorline!"), { desc = "Toggle cursorline" } },
           },
           file_history_panel = {
             { "n", "g!", actions.options, { desc = "Options" } },
