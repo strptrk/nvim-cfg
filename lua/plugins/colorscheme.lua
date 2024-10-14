@@ -72,6 +72,10 @@ return {
               bg = transparent and "none" or C.base,
               style = { "bold" },
             },
+            LualineCustom = {
+              fg = C.text,
+              bg = transparent and "" or C.mantle,
+            },
           }
         end,
         integrations = {

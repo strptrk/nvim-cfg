@@ -13,10 +13,34 @@ local colors = {
   red2 = "#be5046",
   yellow = "#e5c07b",
   fg = "#abb2bf",
+  teal = "#81c8be",
   bg = "#232323",
   gray1 = "#302f2f",
   gray2 = "#302f2f",
   gray3 = "#444444",
+}
+
+local mode_color = {
+  n = colors.blue,
+  i = colors.green,
+  v = colors.purple,
+  [''] = colors.purple,
+  V = colors.purple,
+  c = colors.yellow,
+  no = colors.blue,
+  s = colors.red1,
+  S = colors.red1,
+  [''] = colors.red1,
+  ic = colors.yellow,
+  R = colors.red1,
+  Rv = colors.red1,
+  cv = colors.red1,
+  ce = colors.red1,
+  r = colors.cyan,
+  rm = colors.cyan,
+  ['r?'] = colors.cyan,
+  ['!'] = colors.red2,
+  t = colors.yellow,
 }
 
 ---@diagnostic disable-next-line: unused-local
@@ -225,6 +249,9 @@ return {
     config = function()
       local hipatterns = require('mini.hipatterns')
       hipatterns.setup({
+        delay = {
+          text_change = 500
+        },
         highlighters = {
           -- _ = { pattern = function(buf_id) return nil|string|[string] end, group = "..." },
           -- fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
@@ -235,16 +262,9 @@ return {
           hex_color = hipatterns.gen_highlighter.hex_color(),
         },
       })
-      vim.api.nvim_create_user_command("HipatToggle", function ()
+      vim.api.nvim_create_user_command("HipatToggle", function()
         hipatterns.toggle(0)
       end, { force = true })
-    end,
-  },
-  {
-    "Pocco81/true-zen.nvim",
-    lazy = true,
-    config = function()
-      require("true-zen").setup({})
     end,
   },
   {
@@ -255,7 +275,7 @@ return {
     },
     config = function()
       local trouble = require("trouble")
-      local symbols = trouble.statusline({
+      local trouble_symbols = trouble.statusline({
         mode = "lsp_document_symbols",
         groups = {},
         title = false,
@@ -263,28 +283,77 @@ return {
         format = "{kind_icon}{symbol.name:Normal}",
         hl_group = "lualine_c_normal",
       })
+
+      local conditions = {
+        has_filename = function()
+          return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
+        end,
+        width_over = function(w)
+          return function()
+            return vim.fn.winwidth(0) > w
+          end
+        end,
+      }
+
       local opts = {
         options = {
           icons_enabled = true,
-          theme = "catppuccin",
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
+          theme = {
+            normal = { c = "LualineCustom" },
+            inactive = { c = "LualineCustom" },
+          },
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
           disabled_filetypes = {},
           always_divide_middle = false,
           globalstatus = true,
         },
         sections = {
-          lualine_a = { "mode" },
-          lualine_b = {
-            "branch",
-            "diff",
-            { "diagnostics", sources = { "nvim_diagnostic" } },
-          },
+          lualine_a = {},
+          lualine_b = {},
           lualine_c = {
-            "filename",
             {
-              symbols.get,
-              cond = symbols.has,
+              function()
+                return '▊ '
+              end,
+              color = function()
+                return { fg = mode_color[vim.fn.mode()], }
+              end,
+              padding = { right = 1 },
+            },
+            {
+              "filename",
+              cond = conditions.has_filename,
+              color = function()
+                return {
+                  fg = mode_color[vim.fn.mode()],
+                  gui = "bold",
+                }
+              end,
+            },
+            {
+              "branch",
+              icon = "",
+              color = { fg = colors.fg },
+              cond = conditions.width_over(70),
+            },
+            {
+              "diff",
+              cond = conditions.width_over(80),
+              padding = { left = 0 }
+            },
+            {
+              function()
+                return '%='
+              end
+            },
+            {
+              trouble_symbols.get,
+              cond = function()
+                return conditions.has_filename()
+                    and conditions.width_over(110)()
+                    and trouble_symbols.has()
+              end,
             },
           },
           lualine_x = {
@@ -306,14 +375,80 @@ return {
               end,
               color = { fg = colors.cyan },
             },
-            "filetype",
+            {
+              "diagnostics",
+              sources = { "nvim_diagnostic" },
+              padding = { right = 0 },
+              cond = conditions.width_over(100),
+            },
+            {
+              function()
+                local bufnr = vim.api.nvim_win_get_buf(0)
+                local clients = vim.lsp.get_clients({ bufnr = bufnr })
+                local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+                if next(clients) ~= nil then
+                  for _, client in ipairs(clients) do
+                    local filetypes = client.config.filetypes
+                    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+                      return client.name
+                    end
+                  end
+                end
+                return ""
+              end,
+              icon = '',
+              color = { fg = colors.green, gui = 'bold' },
+            },
+            {
+              "filetype",
+              color = { gui = 'bold' },
+            },
+            {
+              'fileformat',
+              icons_enabled = false,
+              color = function()
+                return { fg = mode_color[vim.fn.mode()], }
+              end,
+              cond = conditions.has_filename,
+              padding = { left = 1, right = 0 }
+            },
+            {
+              "encoding",
+              color = function()
+                return { fg = mode_color[vim.fn.mode()], }
+              end,
+              padding = { left = 1, right = 0 },
+            },
+            {
+              "filesize",
+              color = function()
+                return { fg = mode_color[vim.fn.mode()], }
+              end,
+              padding = { left = 1, right = 0 }
+            },
+            {
+              "selectioncount",
+              color = { fg = colors.purple },
+              padding = { left = 1, right = 0 }
+            },
+            {
+              function()
+                return '▊'
+              end,
+              color = function()
+                return { fg = mode_color[vim.fn.mode()], }
+              end,
+              padding = { left = 1 },
+            },
+            -- lualine_y = { "fileformat", "encoding", "filesize" },
+            -- lualine_z = { "progress", "selectioncount", "location" },
           },
-          lualine_y = { "fileformat", "encoding", "filesize" },
-          lualine_z = { "progress", "selectioncount", "location" },
+          lualine_y = {},
+          lualine_z = {},
         },
         inactive_sections = {},
         tabline = {},
-        extensions = { "toggleterm", "quickfix", "nvim-dap-ui", "trouble", "oil" },
+        extensions = { "quickfix", "nvim-dap-ui", "trouble", "oil" },
       }
       require("lualine").setup(opts)
     end,
@@ -374,6 +509,12 @@ return {
     event = "VeryLazy",
     lazy = true,
     opts = {
+      cmdline = {
+        view = "cmdline",
+        format = {
+          cmdline = { icon = "" }
+        }
+      },
       messages = {
         view_search = false, -- view for search count messages. Set to `false` to disable
       },
@@ -406,13 +547,17 @@ return {
       },
       views = {
         cmdline_popup = {
+          border = {
+            style = "none",
+            padding = { 0, 1 },
+          },
           position = {
-            row = -2,
+            row = -1,
             col = "50%",
           },
-          size = {
-            width = 60,
-            height = "auto",
+          filter_options = {},
+          win_options = {
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
           },
         },
         popupmenu = {
