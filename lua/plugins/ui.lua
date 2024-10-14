@@ -288,11 +288,29 @@ return {
         has_filename = function()
           return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
         end,
-        width_over = function(w)
+        window_width_over = function(w)
           return function()
             return vim.fn.winwidth(0) > w
           end
         end,
+        editor_width_over = function(w)
+          return function()
+            return vim.api.nvim_get_option_value("columns", {}) > w
+          end
+        end,
+      }
+
+      local sources = {
+        gs_diff = function()
+          local gitsigns = vim.b.gitsigns_status_dict
+          if gitsigns then
+            return {
+              added = gitsigns.added,
+              modified = gitsigns.changed,
+              removed = gitsigns.removed
+            }
+          end
+        end
       }
 
       local opts = {
@@ -332,15 +350,16 @@ return {
               end,
             },
             {
-              "branch",
+              "b:gitsigns_head",
               icon = "",
               color = { fg = colors.fg },
-              cond = conditions.width_over(70),
+              cond = conditions.editor_width_over(70),
             },
             {
               "diff",
-              cond = conditions.width_over(80),
-              padding = { left = 0 }
+              cond = conditions.editor_width_over(80),
+              padding = { left = 0 },
+              source = sources.gs_diff,
             },
             {
               function()
@@ -351,7 +370,7 @@ return {
               trouble_symbols.get,
               cond = function()
                 return conditions.has_filename()
-                    and conditions.width_over(110)()
+                    and conditions.editor_width_over(110)()
                     and trouble_symbols.has()
               end,
             },
@@ -379,22 +398,14 @@ return {
               "diagnostics",
               sources = { "nvim_diagnostic" },
               padding = { right = 0 },
-              cond = conditions.width_over(100),
+              cond = conditions.editor_width_over(100),
             },
             {
               function()
-                local bufnr = vim.api.nvim_win_get_buf(0)
-                local clients = vim.lsp.get_clients({ bufnr = bufnr })
-                local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
-                if next(clients) ~= nil then
-                  for _, client in ipairs(clients) do
-                    local filetypes = client.config.filetypes
-                    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-                      return client.name
-                    end
-                  end
-                end
-                return ""
+                local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_win_get_buf(0) })
+                return #clients > 0 and
+                    table.concat(vim.tbl_map(function(client) return client.name end, clients), ",")
+                    or ""
               end,
               icon = '',
               color = { fg = colors.green, gui = 'bold' },
@@ -515,7 +526,7 @@ return {
           -- integrate into lualine
           cmdline     = { icon = "▊   " },
           search_down = { icon = "▊     " },
-          search_up   = { icon = "▊     "  },
+          search_up   = { icon = "▊     " },
           filter      = { icon = "▊   󰈲 " },
           lua         = { icon = "▊    " },
           help        = { icon = "▊    " },

@@ -76,6 +76,9 @@ return {
               fg = C.text,
               bg = transparent and "" or C.mantle,
             },
+            NoiceCmdlineIcon = {
+              fg = C.rosewater,
+            },
           }
         end,
         integrations = {
