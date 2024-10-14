@@ -4,6 +4,11 @@ local resize_edgy = function(edgy_win, direction, size)
   edgy_win:resize(dimension, on_edge * size)
 end
 
+local symbols = {
+  left_five_eights_block = "▋",
+  right_five_eights_block = "🮉",
+}
+
 local colors = {
   blue = "#61afef",
   green = "#98c379",
@@ -332,7 +337,7 @@ return {
           lualine_c = {
             {
               function()
-                return '▊ '
+                return symbols.left_five_eights_block .. ' '
               end,
               color = function()
                 return { fg = mode_color[vim.fn.mode()], }
@@ -444,7 +449,7 @@ return {
             },
             {
               function()
-                return '▊'
+                return symbols.right_five_eights_block
               end,
               color = function()
                 return { fg = mode_color[vim.fn.mode()], }
@@ -524,13 +529,13 @@ return {
         view = "cmdline",
         format = {
           -- integrate into lualine
-          cmdline     = { icon = "▊   " },
-          search_down = { icon = "▊     " },
-          search_up   = { icon = "▊     " },
-          filter      = { icon = "▊   󰈲 " },
-          lua         = { icon = "▊    " },
-          help        = { icon = "▊    " },
-          input       = { icon = "▊   󰥻 " },
+          cmdline     = { icon = symbols.left_five_eights_block .. "   " },
+          search_down = { icon = symbols.left_five_eights_block .. "     " },
+          search_up   = { icon = symbols.left_five_eights_block .. "     " },
+          filter      = { icon = symbols.left_five_eights_block .. "   󰈲 " },
+          lua         = { icon = symbols.left_five_eights_block .. "    " },
+          help        = { icon = symbols.left_five_eights_block .. "    " },
+          input       = { icon = symbols.left_five_eights_block .. "   󰥻 " },
         }
       },
       messages = {
