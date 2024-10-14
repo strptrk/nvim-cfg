@@ -7,6 +7,7 @@ return {
       { ",do", "<cmd>DiffviewOpen<cr>", desc = "Diffview" },
       { ",dh", "<cmd>DiffviewOpen HEAD^..HEAD<cr>", desc = "Diffview for HEAD" },
       { ",dc", "<cmd>DiffviewFileHistory<cr>", desc = "Diffview Commit History" },
+      { ",gl", "<cmd>DiffviewFileHistory<cr>", desc = "Diffview Commit History" }, -- "git log"
       { ",df", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview File History" },
     },
     cmd = {
