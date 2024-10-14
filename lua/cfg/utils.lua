@@ -24,6 +24,7 @@ M.split_ignore_ft = {
 
 M.fntab_ignored_ft = {
   ["neo-tree"] = true,
+  ["DiffviewFiles"] = true,
   ["toggleterm"] = true,
   ["terminal"] = true,
   ["help"] = true,

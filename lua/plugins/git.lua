@@ -105,6 +105,8 @@ return {
             { "n", "gcb", actions.conflict_choose("base"), { desc = "Choose base" } },
             { "n", "gca", actions.conflict_choose("all"), { desc = "Choose all" } },
             { "n", "gcn", actions.conflict_choose("none"), { desc = "Choose none" } },
+            { "n", "<A-i>", actions.view_windo("set cursorline!"), { desc = "Toggle cursorline" } },
+            { "n", "<A-n>", actions.view_windo("set number!"), { desc = "Toggle line numbers" } },
           },
           file_panel = {
             { "n", "j", actions.next_entry, { desc = "Next entry" } },
@@ -131,6 +133,7 @@ return {
             { "n", "[x", actions.prev_conflict, { desc = "Previous conflict" } },
             { "n", "]x", actions.next_conflict, { desc = "Next conflict" } },
             { "n", "<A-i>", actions.view_windo("set cursorline!"), { desc = "Toggle cursorline" } },
+            { "n", "<A-n>", actions.view_windo("set number!"), { desc = "Toggle line numbers" } },
           },
           file_history_panel = {
             { "n", "g!", actions.options, { desc = "Options" } },
@@ -153,6 +156,8 @@ return {
             { "n", "gf", actions.goto_file_tab, { desc = "Go to file (tab)" } },
             { "n", ",f", actions.focus_files, { desc = "Focus files" } },
             { "n", ",F", actions.toggle_files, { desc = "Toggle files" } },
+            { "n", "<A-i>", actions.view_windo("set cursorline!"), { desc = "Toggle cursorline" } },
+            { "n", "<A-n>", actions.view_windo("set number!"), { desc = "Toggle line numbers" } },
           },
           option_panel = {
             { "n", "<tab>", actions.select_entry, { desc = "Select entry" } },

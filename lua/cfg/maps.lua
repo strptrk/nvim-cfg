@@ -20,6 +20,8 @@ map("n", "<A-t>", function()
   require("cfg.utils").fntab(nil, { zz = true })
 end, { desc = "Open New Tab" })
 
+map("n", "<A-n>", "<cmd>set number!<CR>")
+
 map("n", "[q", "<cmd>cprevious<CR>")
 map("n", "]q", "<cmd>cnext<CR>")
 map("n", "[l", "<cmd>lprevious<CR>")
