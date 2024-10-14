@@ -286,6 +286,7 @@ return {
       { "<A-o>", function() require("oil").toggle_float() end },
     },
     opts = {
+      watch_for_changes = true,
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
