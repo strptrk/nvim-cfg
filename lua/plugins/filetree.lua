@@ -233,6 +233,7 @@ return {
           window = {
             mappings = {
               ["<bs>"] = "navigate_up",
+              ["-"] = "navigate_up",
               ["."] = "set_root",
               ["H"] = "toggle_hidden",
               ["<C-/>"] = "fuzzy_finder",
@@ -285,6 +286,17 @@ return {
     keys = {
       { "<A-o>", function() require("oil").toggle_float() end },
     },
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "OilEnter",
+        callback = vim.schedule_wrap(function(args)
+          local oil = require("oil")
+          if vim.api.nvim_get_current_buf() == args.data.buf and oil.get_cursor_entry() then
+            oil.open_preview()
+          end
+        end),
+      })
+    end,
     opts = {
       watch_for_changes = true,
       keymaps = {
@@ -298,7 +310,7 @@ return {
         ["<A-r>"] = "actions.refresh",
         ["<A-a>"] = "actions.refresh",
         ["<C-s>"] = function() require("oil").save() end,
-        ["<bs>"] = "actions.parent",
+        ["-"] = "actions.parent",
         ["_"] = "actions.open_cwd",
         ["`"] = "actions.cd",
         ["~"] = "actions.tcd",
