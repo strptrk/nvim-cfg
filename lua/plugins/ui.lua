@@ -382,6 +382,11 @@ return {
           },
           lualine_x = {
             {
+              "selectioncount",
+              color = { fg = colors.purple },
+              padding = { left = 0, right = 1 },
+            },
+            {
               function()
                 return require("noice").api.status.mode.get()
               end,
@@ -440,11 +445,6 @@ return {
               color = function()
                 return { fg = mode_color[vim.fn.mode()], }
               end,
-              padding = { left = 1, right = 0 }
-            },
-            {
-              "selectioncount",
-              color = { fg = colors.purple },
               padding = { left = 1, right = 0 }
             },
             {
