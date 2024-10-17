@@ -279,6 +279,23 @@ return {
       { "nvim-tree/nvim-web-devicons" },
     },
     config = function()
+      local lsps = {}
+      local get_lsp = function(bufnr)
+        bufnr = bufnr or vim.api.nvim_win_get_buf(0)
+        local clients = vim.lsp.get_clients({ bufnr = bufnr })
+        if #clients == 0 then return "" end
+        return table.concat(vim.tbl_map(function(client) return client.name end, clients), ",")
+      end
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          lsps[args.buf] = get_lsp(args.buf)
+        end
+      })
+      vim.api.nvim_create_autocmd("LspDetach", {
+        callback = function(args)
+          lsps[args.buf] = nil
+        end
+      })
       local trouble = require("trouble")
       local trouble_symbols = trouble.statusline({
         mode = "lsp_document_symbols",
@@ -412,10 +429,7 @@ return {
             },
             {
               function()
-                local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_win_get_buf(0) })
-                return #clients > 0 and
-                    table.concat(vim.tbl_map(function(client) return client.name end, clients), ",")
-                    or ""
+                return lsps[vim.api.nvim_get_current_buf()] or ""
               end,
               icon = '',
               color = { fg = colors.green, gui = 'bold' },
