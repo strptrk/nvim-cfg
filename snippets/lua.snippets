@@ -7,3 +7,35 @@ snippet module
     $1
 
     return M
+
+snippet autocmd
+    vim.api.nvim_create_autocmd("${1:event}", {
+      group = vim.api.nvim_create_augroup("${2:group}", { clear = true }),
+      callback = function(ev)
+        ${0}
+      end,
+    })
+
+snippet win
+    local win = vim.api.nvim_get_current_win()
+
+snippet buf
+    local buf = vim.api.nvim_get_current_buf()
+
+snippet schedule
+    vim.schedule(function()
+      ${0}
+    end)
+
+snippet deepextend
+    vim.tbl_deep_extend("force", ${1:lhs}, ${2:rhs})
+
+snippet filter
+    vim.tbl_filter(function(v)
+      ${0}
+    end, ${1:table})
+
+snippet map
+    vim.tbl_map(function(v)
+      ${0}
+    end, ${1:table})

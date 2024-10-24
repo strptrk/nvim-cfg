@@ -19,12 +19,20 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
   performance = {
     cache = { enabled = true },
+    change_detection = {
+      enabled = false,
+      notify = false,
+    },
     rtp = {
       disabled_plugins = {
         "tohtml",
         "tutor",
+        "netrwPlugin"
       },
     },
+    readme = {
+      enabled = false
+    }
   },
 })
 

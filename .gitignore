@@ -3,3 +3,4 @@
 lua/plugins/local.lua
 lua/cfg/local.lua
 snippets/local.snippets
+lazy-lock.json
