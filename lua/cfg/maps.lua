@@ -174,6 +174,8 @@ map("n", "<Space>ht", ":tab help ")
 map("n", "<Space>ho", ":help  | only" .. string.rep("<Left>", 7))
 map("n", "<Space>N", "<cmd>Notifications<cr>")
 
+map({ "n", "x" }, "<leader>t", ":Trim<cr>")
+
 map("n", "ss", function()
   require("cfg.utils").smart_rename_ts()
 end, { desc = "Rename" })

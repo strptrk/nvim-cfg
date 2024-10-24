@@ -22,3 +22,14 @@ vim.api.nvim_create_user_command("Mktmpf", function(args)
   vim.cmd("cd " .. dname)
   vim.cmd("e " .. fname)
 end, { nargs = 1 })
+
+-- remove trailing whitespaces from the whole file, or range
+vim.api.nvim_create_user_command("Trim",
+  function(opts)
+    local range_start = tostring(opts.line1)
+    local range_end = tostring(opts.line2)
+    vim.cmd(range_start .. "," .. range_end .. [[s/\s\+$//]])
+    vim.cmd("nohls")
+  end,
+  { nargs = 0, range = "%" }
+)
