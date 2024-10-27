@@ -345,4 +345,13 @@ return {
       })
     end,
   },
+  {
+    "cshuaimin/ssr.nvim",
+    lazy = true,
+    ft = ts_filetypes,
+    keys = {
+      { "<Space>sr", function() require("ssr").open() end, mode = { "x", "n" } }
+    },
+    opts = {}
+  }
 }

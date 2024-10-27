@@ -28,8 +28,15 @@ vim.api.nvim_create_user_command("Trim",
   function(opts)
     local range_start = tostring(opts.line1)
     local range_end = tostring(opts.line2)
-    vim.cmd(range_start .. "," .. range_end .. [[s/\s\+$//]])
+    local success, _ = pcall(function()
+      vim.cmd(range_start .. "," .. range_end .. [[s/\s\+$//]])
+    end)
     vim.cmd("nohls")
+    if success then
+      vim.notify("Trailing whitespaces removed!", vim.log.levels.INFO)
+    else
+      vim.notify("No trailing whitespace found!", vim.log.levels.INFO)
+    end
   end,
   { nargs = 0, range = "%" }
 )

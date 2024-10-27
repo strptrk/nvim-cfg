@@ -48,10 +48,6 @@ return {
         ['v'] = { output = { left = '"${', right = '}"' } },
         -- [L]ua function
         ['L'] = { output = { left = 'function() ', right = ' end' } },
-        -- [k]omment
-        ['k'] = { output = { left = '/* ', right = ' */' } },
-        -- Lua [K]omment
-        ['K'] = { output = { left = '--[[ ', right = ' ]]--' } },
       }
     },
   },
@@ -135,27 +131,24 @@ return {
     end,
   },
   {
-    "echasnovski/mini.comment",
-    lazy = true,
-    version = false,
+    "numToStr/Comment.nvim",
     keys = {
-      { "<Space>c", nil, mode = { "n", "x" } },
-      { "<Space>cc", nil, mode = { "n", "x" } },
-      { "K", nil, mode = { "o" } },
+      { "<Space>c",  nil, mode = { "x", "o" } },
+      { "<Space>x",  nil, mode = { "x", "o" } },
+      { "<Space>cc", nil, mode = "n" },
+      { "<Space>cx", nil, mode = "n" },
+      { "<Space>cO", nil, mode = "n" },
+      { "<Space>co", nil, mode = "n" },
+      { "<Space>cl", nil, mode = "n" },
     },
     opts = {
-      options = {
-        custom_commentstring = nil,
-        ignore_blank_line = true,
-        start_of_line = false,
-        pad_comment_parts = true,
-      },
-      mappings = {
-        comment = '<Space>c',
-        comment_line = '<Space>cc',
-        comment_visual = '<Space>c',
-        textobject = 'K',
-      },
+      padding = true,
+      sticky = true,
+      ignore = "^$",
+      toggler = { line = "<Space>cc", block = "<Space>cx" },
+      opleader = { line = "<Space>c", block = "<Space>x" },
+      extra = { above = '<Space>cO', below = '<Space>co', eol = '<Space>cl' },
+      mappings = { basic = true, extra = true, extended = false },
     }
   },
   {
