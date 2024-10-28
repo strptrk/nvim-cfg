@@ -9,83 +9,31 @@ return {
       {
         "rcarriga/nvim-dap-ui",
         lazy = true,
+        cmd = {
+          "DapSelectTarget",
+          "DapSetTarget",
+          "DapSetArgs",
+          "DapSetHost",
+        },
         keys = {
-          {
-            "<BS>E",
-            function()
-              require("dapui").close()
-            end,
-            desc = "Debug: Close DAP UI",
-          },
-          {
-            "<BS>b",
-            function()
-              require("dap").toggle_breakpoint()
-            end,
-            desc = "Debug: Toggle Breakpoint",
-          },
-          {
-            "<BS>c",
-            function()
-              require("dap").continue()
-            end,
-            desc = "Debug: Continue",
-          },
-          {
-            "<BS>i",
-            function()
-              require("dap").step_into()
-            end,
-            desc = "Debug: Step Into",
-          },
-          {
-            "<BS>o",
-            function()
-              require("dap").step_over()
-            end,
-            desc = "Debug: Step Over",
-          },
-          {
-            "<BS>r",
-            function()
-              require("dap").repl.open()
-            end,
-            desc = "Debug: Open REPL",
-          },
-          {
-            "<BS>u",
-            function()
-              require("dapui").toggle()
-            end,
-            desc = "Debug: Toggle UI",
-          },
-          {
-            "<BS>t",
-            function()
-              require("cfg.utils").fntab(nil, { zz = true })
-              require("dapui").toggle()
-            end,
-            desc = "Debug: Toggle UI",
-          },
-          {
-            "<BS>h",
-            function()
-              require("dap.ui.widgets").hover()
-            end,
-            desc = "Debug: Hover Symbol",
-          },
-          {
-            "<BS>e",
-            function()
-              require("dapui").eval()
-            end,
-            desc = "Debug: Eval Expression",
-          },
+          { "<BS>E", function() require("dapui").close() end, desc = "Debug: Close DAP UI" },
+          { "<BS>b", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
+          { "<BS>c", function() require("dap").continue() end, desc = "Debug: Continue" },
+          { "<BS>i", function() require("dap").step_into() end, desc = "Debug: Step Into" },
+          { "<BS>o", function() require("dap").step_over() end, desc = "Debug: Step Over" },
+          { "<BS>r", function() require("dap").repl.open() end, desc = "Debug: Open REPL" },
+          { "<BS>u", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
+          { "<BS>h", function() require("dap.ui.widgets").hover() end, desc = "Debug: Hover Symbol" },
+          { "<BS>e", function() require("dapui").eval() end, desc = "Debug: Eval Expression" },
+          { "<BS>se", "<cmd>DapSelectTarget<cr>", desc = "Debug: Select Target" },
+          { "<BS>sE", "<cmd>DapSetTarget<cr>", desc = "Debug: Set Target" },
+          { "<BS>sh", "<cmd>DapSetHost<cr>", desc = "Debug: Set Remote Host" },
+          { "<BS>sa", "<cmd>DapSetArgs<cr>", desc = "Debug: Set Arguments" },
+          { "<BS>t", function() require("cfg.utils").fntab(function () require("dapui").toggle() end, { zz = true }) end, desc = "Debug: Toggle UI" },
         },
         config = function()
           local dapui = require("dapui")
           dapui.setup({
-            icons = { expanded = "", collapsed = "", current_frame = "" },
             mappings = {
               expand = { "<CR>", "<2-LeftMouse>" },
               open = "o",
@@ -95,7 +43,7 @@ return {
               toggle = "t",
             },
             element_mappings = {},
-            expand_lines = vim.fn.has("nvim-0.7") == 1,
+            expand_lines = true,
             layouts = {
               {
                 elements = {
@@ -131,8 +79,6 @@ return {
               },
             },
             floating = {
-              max_height = nil,
-              max_width = nil,
               border = "single",
               mappings = {
                 close = { "q", "<Esc>" },
@@ -145,10 +91,7 @@ return {
             },
           })
           vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-          vim.fn.sign_define(
-            "DapBreakpointCondition",
-            { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" }
-          )
+          vim.fn.sign_define("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
           vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
         end,
       },
@@ -163,33 +106,23 @@ return {
       local dap = require("dap")
       local defcommand = vim.api.nvim_create_user_command
       local map = vim.keymap.set
+
       local state = {
         executable = nil,
         args = nil,
         host = nil,
       }
+
       local findcmd = function()
+        -- "--no-ignore-vcs", because fd is gitignore-avare,
+        -- and most build directories are excluded from version control,
         if 1 == vim.fn.executable("fd") then
-          -- "--no-ignore-vcs", because fd is gitignore-avare, 
-          -- and most build directories are excluded from version control,
-          return {
-            "fd",
-            "--type", "x",
-            "--color", "never",
-            "--no-ignore-vcs",
-          }
+          return { "fd", "--type", "x", "--color", "never", "--no-ignore-vcs" }
         elseif 1 == vim.fn.executable("fdfind") then
-          return {
-            "fdfind",
-            "--type", "x",
-            "--color", "never",
-            "--no-ignore-vcs",
-          }
-        elseif 1 == vim.fn.executable("find") then return {
-          "find", ".",
-          "-executable",
-          "-type", "f",
-        } end
+          return { "fdfind", "--type", "x", "--color", "never", "--no-ignore-vcs" }
+        elseif 1 == vim.fn.executable("find") then
+          return { "find", ".", "-executable", "-type", "f" }
+        end
         return {}
       end
 
@@ -212,19 +145,20 @@ return {
         "lldb-vscode", -- lldb-vscode
         "lldb-dap", -- lldb-vscode
       }, "")
-      local select_executable = function(opts, fn)
+
+      local telescope_pick_executable = function(opts, callback)
         opts = opts or {}
         pickers
           .new(opts, {
-            prompt_title = "Executable to run with debugger",
+            prompt_title = "Executable to debug",
             finder = finders.new_oneshot_job(findcmd(), opts),
             sorter = conf.generic_sorter(opts),
             attach_mappings = function(prompt_bufnr, _)
               actions.select_default:replace(function()
                 actions.close(prompt_bufnr)
                 state.executable = vim.fn.getcwd() .. "/" .. action_state.get_selected_entry()[1]
-                if fn then
-                  fn()
+                if callback then
+                  callback()
                 end
               end)
               return true
@@ -233,73 +167,54 @@ return {
           :find()
       end
 
-      defcommand("DapSelectExecutable", function()
-        select_executable(require("telescope.themes").get_dropdown({}))
+      local select_target = function(callback)
+        if state.executable == nil or state.executable == "" then
+          telescope_pick_executable(require("telescope.themes").get_dropdown({}), callback)
+        end
+        return state.executable
+      end
+      defcommand("DapSelectTarget", function()
+        state.executable = nil
+        select_target()
       end, { force = true })
 
-      local get_exec = function()
-        if state.executable ~= nil then
-          return state.executable
-        else
+      local set_target = function()
+        if state.executable == nil or state.executable == "" then
           state.executable = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          return state.executable
         end
+        return state.executable
       end
-      local get_exec_modify = function()
+      defcommand("DapSetTarget", function()
         state.executable = nil
-        return get_exec()
-      end
+        select_target()
+      end, { force = true })
 
-      local get_exec_env = function()
-        if state.executable ~= nil then
-          return state.executable
-        else
-          local exec_string = vim.env["DEBUG_EXECUTABLE"]
-          if exec_string then
-            state.executable = exec_string
-          else
-            state.executable = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          end
-          return state.executable
-        end
-      end
-
-      local get_args = function()
+      local set_args = function()
         if state.args == nil then
-          state.args = vim.split(vim.fn.input("Arguments: "), " ")
-        end
-        return state.args
-      end
-      local get_args_modify = function()
-        state.args = nil
-        return get_args()
-      end
-
-      local get_args_env = function()
-        if state.args ~= nil then
-          return state.args
-        else
-          local arg_string = vim.env["DEBUG_ARGS"]
-          if arg_string then
-            state.args = vim.split(arg_string, " ")
+          local split = vim.split(vim.fn.input("Arguments: "), " ")
+          if #split == 1 and split[1] == "" then
+            state.args = {}
           else
-            state.args = vim.split(vim.fn.input("Arguments: "), " ")
+            state.args = split
           end
         end
         return state.args
       end
+      defcommand("DapSetArgs", function()
+        state.args = nil
+        set_args()
+      end, { force = true })
 
-      local get_host = function()
+      local set_host = function()
         if state.host == nil then
           state.host = vim.fn.input("Hostname: ", "localhost:")
         end
         return state.host
       end
-
-      local get_host_modify = function()
-        state.host = nil
-        return get_host()
-      end
+      defcommand("DapSetHost", function()
+        state.args = nil
+        set_args()
+      end, { force = true })
 
       local configurations = {
         codelldb = {
@@ -312,7 +227,7 @@ return {
           type = "cppdbg",
           request = "launch",
           cwd = "${workspaceFolder}",
-          stopAtEntry = true,
+          stopAtEntry = false,
           setupCommands = {
             {
               text = "-enable-pretty-printing",
@@ -336,34 +251,9 @@ return {
         },
         common = {
           {
-            name = "Launch (without arguments)",
-            program = get_exec,
-            args = {},
-          },
-          {
-            name = "Launch (modify executable)",
-            program = get_exec_modify,
-            args = {},
-          },
-          {
-            name = "Launch (with arguments)",
-            program = get_exec,
-            args = get_args,
-          },
-          {
-            name = "Launch (modify arguments)",
-            program = get_exec,
-            args = get_args_modify,
-          },
-          {
-            name = "Launch (modify executable and arguments)",
-            program = get_exec_modify,
-            args = get_args_modify,
-          },
-          {
-            name = "Launch (using environmental variables)",
-            program = get_exec_env,
-            args = get_args_env,
+            name = "Launch",
+            program = set_target,
+            args = set_args,
           },
         },
       }
@@ -397,9 +287,10 @@ return {
           command = get_path({ "OpenDebugAD7" }, vim.env["HOME"] .. "/.local/bin/OpenDebugAD7"),
         }
         dap.configurations.cpp = {}
-        for _, v in ipairs(configurations.common) do
-          v.miDebuggerPath = get_path("lldb-mi", vim.env["HOME"] .. "/.local/bin/lldb-mi")
-          local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, v)
+        local midebpath = get_path("lldb-mi", vim.env["HOME"] .. "/.local/bin/lldb-mi")
+        for _, common_conf in ipairs(configurations.common) do
+          common_conf.miDebuggerPath = midebpath
+          local configuration = vim.tbl_deep_extend("force", configurations.cppdbg, common_conf)
           table.insert(dap.configurations.cpp, configuration)
         end
       elseif string.match(ADAPTER, "OpenDebugAD7$") then
@@ -414,44 +305,10 @@ return {
             type = "cppdbg",
             request = "launch",
             MIMode = "gdb",
-            miDebuggerServerAddress = get_host,
+            miDebuggerServerAddress = set_host,
             miDebuggerPath = get_path({ "gdb" }, "/usr/bin/gdb"),
             cwd = "${workspaceFolder}",
-            program = get_exec,
-            setupCommands = {
-              {
-                text = "-enable-pretty-printing",
-                description = "enable pretty printing",
-                ignoreFailures = false,
-              },
-            },
-          },
-          {
-            name = "Attach to gdbserver (modify address)",
-            type = "cppdbg",
-            request = "launch",
-            MIMode = "gdb",
-            miDebuggerServerAddress = get_host_modify,
-            miDebuggerPath = get_path({ "gdb" }, "/usr/bin/gdb"),
-            cwd = "${workspaceFolder}",
-            program = get_exec,
-            setupCommands = {
-              {
-                text = "-enable-pretty-printing",
-                description = "enable pretty printing",
-                ignoreFailures = false,
-              },
-            },
-          },
-          {
-            name = "Attach to gdbserver (modify executable)",
-            type = "cppdbg",
-            request = "launch",
-            MIMode = "gdb",
-            miDebuggerServerAddress = get_host,
-            miDebuggerPath = get_path({ "gdb" }, "/usr/bin/gdb"),
-            cwd = "${workspaceFolder}",
-            program = get_exec_modify,
+            program = set_target,
             setupCommands = {
               {
                 text = "-enable-pretty-printing",
@@ -515,16 +372,8 @@ return {
       dap.listeners.after.event_initialized["dapui_config"] = function()
         require("dapui").open({})
       end
-      -- dap.listeners.before.event_terminated["dapui_config"] = function()
-      --   dapui.close({})
-      -- end
-      -- dap.listeners.before.event_exited["dapui_config"] = function()
-      --   dapui.close({})
-      -- end
+
       require("nvim-dap-virtual-text").setup({})
-      map("n", "<BS>se", function()
-        select_executable({}, require("dapui").open)
-      end, { desc = "Debug: Select Executable" })
     end,
   },
 }

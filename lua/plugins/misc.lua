@@ -159,7 +159,9 @@ return {
     "windwp/nvim-autopairs",
     lazy = true,
     event = "InsertEnter",
-    opts = {},
+    opts = {
+      disable_filetype = { "TelescopePrompt", "spectre_panel", "dap-repl" },
+    }
   },
   {
     -- TODO replace (unmaintained)
