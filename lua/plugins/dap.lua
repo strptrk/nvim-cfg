@@ -175,7 +175,7 @@ return {
       end
       defcommand("DapSelectTarget", function()
         state.executable = nil
-        select_target()
+        select_target(require("dapui").open)
       end, { force = true })
 
       local set_target = function()
