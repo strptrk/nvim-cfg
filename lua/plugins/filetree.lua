@@ -37,6 +37,13 @@ return {
         end,
         desc = "Neotree Focus Files",
       },
+      {
+        "<leader>c",
+        function()
+          vim.cmd([[Neotree focus filesystem position=left reveal=true]])
+        end,
+        desc = "Neotree Focus Current File",
+      },
     },
     dependencies = {
       {
