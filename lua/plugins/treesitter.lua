@@ -350,7 +350,7 @@ return {
     lazy = true,
     ft = ts_filetypes,
     keys = {
-      { "<Space>sr", function() require("ssr").open() end, mode = { "x", "n" } }
+      { "<Space>sr", function() require("ssr").open() end, mode = { "x", "n" }, desc = "Structural Search & Replace" }
     },
     opts = {}
   }
