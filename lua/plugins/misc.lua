@@ -133,13 +133,13 @@ return {
   {
     "numToStr/Comment.nvim",
     keys = {
-      { "<Space>c",  nil, mode = { "x", "o" } },
-      { "<Space>x",  nil, mode = { "x", "o" } },
-      { "<Space>cc", nil, mode = "n" },
-      { "<Space>cx", nil, mode = "n" },
-      { "<Space>cO", nil, mode = "n" },
-      { "<Space>co", nil, mode = "n" },
-      { "<Space>cl", nil, mode = "n" },
+      { "<Space>c",  nil, mode = { "x", "o" },  desc = "Comment linewise" },
+      { "<Space>x",  nil, mode = { "x", "o" },  desc = "Comment blockwise" },
+      { "<Space>cc", nil, mode = "n",           desc = "Comment linewise" },
+      { "<Space>cx", nil, mode = "n",           desc = "Comment linewise" },
+      { "<Space>cO", nil, mode = "n",           desc = "Comment line above" },
+      { "<Space>co", nil, mode = "n",           desc = "Comment line below" },
+      { "<Space>cl", nil, mode = "n",           desc = "Comment end of line" },
     },
     opts = {
       padding = true,

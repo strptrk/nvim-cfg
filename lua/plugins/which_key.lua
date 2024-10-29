@@ -31,7 +31,8 @@ return {
         { "<Space>q", group = "Quickfix" },
         { "<Space>s", group = "LSP Symbols" },
         { "<Space>v", group = "Vim Options" },
-        { ",", group = "Comma Prefix" },
+        { "<BS>s",    group = "Debug: Modify Properties" },
+        { ",",        group = "Comma Prefix" },
       },
       notify = {},
       plugins = {
