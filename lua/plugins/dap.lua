@@ -105,7 +105,6 @@ return {
       local action_state = require("telescope.actions.state")
       local dap = require("dap")
       local defcommand = vim.api.nvim_create_user_command
-      local map = vim.keymap.set
 
       local state = {
         executable = nil,
@@ -167,32 +166,35 @@ return {
           :find()
       end
 
-      local select_target = function(callback)
-        if state.executable == nil or state.executable == "" then
+      local select_target = function(callback, force)
+        if force or state.executable == nil or state.executable == "" then
           telescope_pick_executable(require("telescope.themes").get_dropdown({}), callback)
         end
         return state.executable
       end
       defcommand("DapSelectTarget", function()
-        state.executable = nil
-        select_target(require("dapui").open)
+        select_target(require("dapui").open, true)
       end, { force = true })
 
-      local set_target = function()
-        if state.executable == nil or state.executable == "" then
-          state.executable = vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+      local set_target = function(force)
+        if force or state.executable == nil or state.executable == "" then
+          local placeholder = state.executable or (vim.fn.getcwd() .. "/")
+          local tmp = vim.fn.input("Path to executable: ", placeholder, "file")
+          if tmp ~= nil and tmp ~= "" then
+            state.executable = tmp
+          end
         end
         return state.executable
       end
       defcommand("DapSetTarget", function()
-        state.executable = nil
-        select_target()
+        set_target(true)
       end, { force = true })
 
-      local set_args = function()
-        if state.args == nil then
-          local split = vim.split(vim.fn.input("Arguments: "), " ")
-          if #split == 1 and split[1] == "" then
+      local set_args = function(force)
+        if force or state.args == nil then
+          local placeholder = table.concat(state.args or {}, " ")
+          local split = vim.split(vim.fn.input("Arguments: ", placeholder), " ")
+          if not split or #split == 1 and split[1] == "" then
             state.args = {}
           else
             state.args = split
@@ -201,19 +203,21 @@ return {
         return state.args
       end
       defcommand("DapSetArgs", function()
-        state.args = nil
-        set_args()
+        set_args(true)
       end, { force = true })
 
-      local set_host = function()
-        if state.host == nil then
-          state.host = vim.fn.input("Hostname: ", "localhost:")
+      local set_host = function(force)
+        if force or state.host == nil then
+          local placeholder = state.host or "localhost:"
+          local tmp = vim.fn.input("Hostname: ", placeholder)
+          if tmp ~= nil and tmp ~= "" then
+            state.host = tmp
+          end
         end
         return state.host
       end
       defcommand("DapSetHost", function()
-        state.args = nil
-        set_args()
+        set_host(true)
       end, { force = true })
 
       local configurations = {
