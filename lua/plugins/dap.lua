@@ -224,13 +224,13 @@ return {
           type = "codelldb",
           request = "launch",
           cwd = "${workspaceFolder}",
-          stopOnEntry = false,
+          stopOnEntry = true,
         },
         cppdbg = {
           type = "cppdbg",
           request = "launch",
           cwd = "${workspaceFolder}",
-          stopAtEntry = false,
+          stopAtEntry = true,
           setupCommands = {
             {
               text = "-enable-pretty-printing",
@@ -243,7 +243,7 @@ return {
           type = "lldb",
           request = "launch",
           cwd = "${workspaceFolder}",
-          stopOnEntry = false,
+          stopOnEntry = true,
           env = function()
             local variables = {}
             for k, v in pairs(vim.fn.environ()) do
