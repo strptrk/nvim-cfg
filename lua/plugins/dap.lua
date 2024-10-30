@@ -173,10 +173,12 @@ return {
       end
       vim.api.nvim_create_user_command("DapSelectTarget", function()
         select_target(require("dapui").open, true)
-      end, { force = true })
+      end, { force = true, nargs = 0 })
 
-      local set_target = function(force)
-        if force or state.executable == nil or state.executable == "" then
+      local set_target = function(target, force)
+        if target then
+          state.executable = target
+        elseif force or state.executable == nil or state.executable == "" then
           local placeholder = state.executable or (vim.fn.getcwd() .. "/")
           local tmp = vim.fn.input("Path to executable: ", placeholder, "file")
           if tmp ~= nil and tmp ~= "" then
@@ -185,12 +187,22 @@ return {
         end
         return state.executable
       end
-      vim.api.nvim_create_user_command("DapSetTarget", function()
-        set_target(true)
-      end, { force = true })
+      vim.api.nvim_create_user_command("DapSetTarget", function(args)
+        if args.args == "" then
+          set_target(nil, true)
+        else
+          if string.sub(args.args[1], 1, 1) == "/" then
+            set_target(args.args)
+          else
+            set_target(vim.fn.getcwd() .. "/" .. args.args)
+          end
+        end
+      end, { force = true, nargs = "?", complete = "file" })
 
-      local set_args = function(force)
-        if force or state.args == nil then
+      local set_args = function(fargs, force)
+        if fargs then
+          state.args = fargs
+        elseif force or state.args == nil then
           local placeholder = table.concat(state.args or {}, " ")
           local split = vim.split(vim.fn.input("Arguments: ", placeholder), " ")
           if not split or (#split == 1 and split[1] == "") then
@@ -201,12 +213,18 @@ return {
         end
         return state.args
       end
-      vim.api.nvim_create_user_command("DapSetArgs", function()
-        set_args(true)
-      end, { force = true })
+      vim.api.nvim_create_user_command("DapSetArgs", function(args)
+        if #args.fargs == 0 then
+          set_args(nil, true)
+        else
+          set_args(args.fargs)
+        end
+      end, { force = true, nargs = "*" })
 
-      local set_host = function(force)
-        if force or state.host == nil then
+      local set_host = function(arg, force)
+        if arg then
+          state.host = arg
+        elseif force or state.host == nil then
           local placeholder = state.host or "localhost:"
           local tmp = vim.fn.input("Hostname: ", placeholder)
           if tmp ~= nil and tmp ~= "" then
@@ -215,9 +233,13 @@ return {
         end
         return state.host
       end
-      vim.api.nvim_create_user_command("DapSetHost", function()
-        set_host(true)
-      end, { force = true })
+      vim.api.nvim_create_user_command("DapSetHost", function(args)
+        if args.args == "" then
+          set_host(nil, true)
+        else
+          set_host(args.args)
+        end
+      end, { force = true, nargs = "?" })
 
       local configurations = {
         codelldb = {
