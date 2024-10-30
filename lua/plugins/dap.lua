@@ -191,7 +191,7 @@ return {
         if args.args == "" then
           set_target(nil, true)
         else
-          if string.sub(args.args[1], 1, 1) == "/" then
+          if string.sub(args.args, 1, 1) == "/" then
             set_target(args.args)
           else
             set_target(vim.fn.getcwd() .. "/" .. args.args)
