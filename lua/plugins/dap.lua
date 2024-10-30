@@ -104,7 +104,6 @@ return {
       local actions = require("telescope.actions")
       local action_state = require("telescope.actions.state")
       local dap = require("dap")
-      local defcommand = vim.api.nvim_create_user_command
 
       local state = {
         executable = nil,
@@ -172,7 +171,7 @@ return {
         end
         return state.executable
       end
-      defcommand("DapSelectTarget", function()
+      vim.api.nvim_create_user_command("DapSelectTarget", function()
         select_target(require("dapui").open, true)
       end, { force = true })
 
@@ -186,7 +185,7 @@ return {
         end
         return state.executable
       end
-      defcommand("DapSetTarget", function()
+      vim.api.nvim_create_user_command("DapSetTarget", function()
         set_target(true)
       end, { force = true })
 
@@ -202,7 +201,7 @@ return {
         end
         return state.args
       end
-      defcommand("DapSetArgs", function()
+      vim.api.nvim_create_user_command("DapSetArgs", function()
         set_args(true)
       end, { force = true })
 
@@ -216,7 +215,7 @@ return {
         end
         return state.host
       end
-      defcommand("DapSetHost", function()
+      vim.api.nvim_create_user_command("DapSetHost", function()
         set_host(true)
       end, { force = true })
 
