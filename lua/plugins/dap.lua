@@ -193,8 +193,8 @@ return {
         if force or state.args == nil then
           local placeholder = table.concat(state.args or {}, " ")
           local split = vim.split(vim.fn.input("Arguments: ", placeholder), " ")
-          if not split or #split == 1 and split[1] == "" then
-            state.args = {}
+          if not split or (#split == 1 and split[1] == "") then
+            state.args = state.args or {}
           else
             state.args = split
           end
