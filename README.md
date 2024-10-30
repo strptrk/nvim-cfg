@@ -77,8 +77,8 @@ ln -s $PWD/extension/adapter/codelldb ~/.local/bin
 mkdir -p ~/.clones/cpptools ~/.local/bin
 cd ~/.clones/cpptools
 curl -LO $(curl -s https://api.github.com/repos/microsoft/vscode-cpptools/releases | \
-  jq -r '[.[].assets[] | select(.name == "cpptools-linux.vsix").browser_download_url][0]')
-unzip cpptools-linux.vsix
+  jq -r '[.[].assets[] | select(.name == "cpptools-linux-x64.vsix").browser_download_url][0]')
+unzip cpptools-linux-x64.vsix
 chmod +x extension/debugAdapters/bin/OpenDebugAD7
 ln -s $PWD/extension/debugAdapters/bin/OpenDebugAD7 ~/.local/bin
 ```
