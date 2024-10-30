@@ -160,7 +160,7 @@ return {
   {
     "b0o/incline.nvim",
     lazy = true,
-    event = { "BufNewFile", "FileReadPost" },
+    event = { "BufNewFile", "BufReadPost" },
     config = function()
       require("incline").setup({
         debounce_threshold = {
@@ -242,7 +242,7 @@ return {
   {
     'echasnovski/mini.hipatterns',
     version = false,
-    event = { "BufAdd", "BufNewFile", "FileReadPost" },
+    event = { "BufAdd", "BufNewFile", "BufReadPost" },
     config = function()
       local hipatterns = require('mini.hipatterns')
       hipatterns.setup({

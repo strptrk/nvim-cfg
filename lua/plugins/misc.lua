@@ -55,7 +55,7 @@ return {
     'echasnovski/mini.ai',
     version = false,
     lazy = true,
-    event = { "BufAdd", "BufNewFile", "FileReadPost" },
+    event = { "BufAdd", "BufNewFile", "BufReadPost" },
     config = function()
       local gen_spec = require('mini.ai').gen_spec
       require("mini.ai").setup({
