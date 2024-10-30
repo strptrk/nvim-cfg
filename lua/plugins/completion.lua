@@ -3,7 +3,12 @@ return {
     "hrsh7th/nvim-cmp",
     lazy = true,
     version = false,
-    event = "VeryLazy",
+    event = "InsertEnter",
+    keys = {
+      { ":", ":", mode = { "x", "n" } },
+      { ";", ":", mode = { "x", "n" } },
+      { "/", "/", mode = { "x", "n" } },
+    },
     config = function()
       local cmp = require("cmp")
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
@@ -31,9 +36,6 @@ return {
         enabled = function()
           if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt" then
             return false
-          end
-          if require("cmp_dap").is_dap_buffer() then
-            return true
           end
 
           local context = require("cmp.config.context")
@@ -130,12 +132,6 @@ return {
         }),
       })
 
-      cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-        sources = {
-          { name = "dap" },
-        },
-      })
-
       -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
@@ -170,21 +166,18 @@ return {
           })
         end,
       },
-      { "hrsh7th/cmp-nvim-lsp" },
-      { "hrsh7th/cmp-buffer" },
-      { "hrsh7th/cmp-path" },
-      { "hrsh7th/cmp-cmdline" },
-      { "rcarriga/cmp-dap" },
-      { "ray-x/cmp-treesitter" },
+      { "hrsh7th/cmp-nvim-lsp", lazy = true },
+      { "hrsh7th/cmp-buffer", lazy = true },
+      { "hrsh7th/cmp-path", lazy = true },
+      { "hrsh7th/cmp-cmdline", lazy = true },
+      { "ray-x/cmp-treesitter", lazy = true },
       {
         "saadparwaiz1/cmp_luasnip",
         config = function()
           require("luasnip.loaders.from_snipmate").lazy_load({ paths = "./snippets" })
         end,
         dependencies = {
-          {
-            "L3MON4D3/LuaSnip",
-          },
+          { "L3MON4D3/LuaSnip", lazy = true},
         },
       },
     },

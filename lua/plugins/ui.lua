@@ -81,20 +81,12 @@ return {
           fps = 60,
           cps = 120,
         },
-        keys = {
-          ["<A-C-h>"] = function(win)
-            resize_edgy(win, "h", 2)
-          end,
-          ["<A-C-j>"] = function(win)
-            resize_edgy(win, "j", 2)
-          end,
-          ["<A-C-k>"] = function(win)
-            resize_edgy(win, "k", 2)
-          end,
-          ["<A-C-l>"] = function(win)
-            resize_edgy(win, "l", 2)
-          end,
-        },
+        keys = { ---@format disable
+          ["<A-C-h>"] = function(win) resize_edgy(win, "h", 2) end,
+          ["<A-C-j>"] = function(win) resize_edgy(win, "j", 2) end,
+          ["<A-C-k>"] = function(win) resize_edgy(win, "k", 2) end,
+          ["<A-C-l>"] = function(win) resize_edgy(win, "l", 2) end,
+        }, ---@format enable
         left = {
           {
             title = "Files",
@@ -168,7 +160,7 @@ return {
   {
     "b0o/incline.nvim",
     lazy = true,
-    event = "VeryLazy",
+    event = { "BufNewFile", "FileReadPost" },
     config = function()
       require("incline").setup({
         debounce_threshold = {
@@ -250,7 +242,7 @@ return {
   {
     'echasnovski/mini.hipatterns',
     version = false,
-    event = "VeryLazy",
+    event = { "BufAdd", "BufNewFile", "FileReadPost" },
     config = function()
       local hipatterns = require('mini.hipatterns')
       hipatterns.setup({
@@ -276,7 +268,7 @@ return {
     "nvim-lualine/lualine.nvim",
     lazy = false,
     dependencies = {
-      { "nvim-tree/nvim-web-devicons" },
+      { "nvim-tree/nvim-web-devicons", lazy = true },
     },
     config = function()
       local lsps = {}
@@ -486,7 +478,6 @@ return {
   {
     "nvim-tree/nvim-web-devicons",
     lazy = true,
-    event = "VeryLazy",
     opts = {
       override = { zsh = { icon = "", color = "#428850", name = "Zsh" } },
       default = true,
@@ -549,7 +540,7 @@ return {
           filter      = { icon = symbols.left_five_eights_block .. "   󰈲 " },
           lua         = { icon = symbols.left_five_eights_block .. "    " },
           help        = { icon = symbols.left_five_eights_block .. "    " },
-          input       = { icon = symbols.left_five_eights_block .. "   󰥻 " },
+          input       = { icon = "󰥻 " },
         }
       },
       messages = {
@@ -617,48 +608,11 @@ return {
         },
       },
     },
-    keys = {
-      {
-        "<S-Enter>",
-        function()
-          require("noice").redirect(vim.fn.getcmdline())
-        end,
-        mode = "c",
-        desc = "Redirect Cmdline",
-      },
-      {
-        "<c-f>",
-        function()
-          if not require("noice.lsp").scroll(4) then
-            return "<c-f>"
-          end
-        end,
-        silent = true,
-        expr = true,
-        desc = "Scroll forward",
-        mode = { "i", "n", "s" },
-      },
-      {
-        "<c-b>",
-        function()
-          if not require("noice.lsp").scroll(-4) then
-            return "<c-b>"
-          end
-        end,
-        silent = true,
-        expr = true,
-        desc = "Scroll backward",
-        mode = { "i", "n", "s" },
-      },
-      {
-        ",n",
-        function()
-          require("noice").cmd("dismiss")
-        end,
-        silent = true,
-        desc = "Clear Noice",
-        mode = "n",
-      },
-    },
+    keys = { ---@format disable
+      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end,                 mode = "c",    desc = "Redirect Cmdline" },
+      { "<c-f>",     function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,  silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll forward" },
+      { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll backward" },
+      { ",n",        function() require("noice").cmd("dismiss") end,                                silent = true, mode = "n",  desc = "Clear Noice" },
+    }, ---@format enable
   },
 }

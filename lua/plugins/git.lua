@@ -171,7 +171,7 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     lazy = true,
-    event = { "VeryLazy" },
+    event = { "BufNewFile", "FileReadPost", "BufWritePost" },
     config = function()
       require("gitsigns").setup({
         signcolumn = true,

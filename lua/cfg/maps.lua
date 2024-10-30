@@ -107,7 +107,6 @@ map("n", "sk", ":i<CR><CR>.<CR>", { desc = "Append newline above", silent = true
 map("n", "n", "nzz")
 map("n", "N", "Nzz")
 map("n", "Y", "y$")
-map({ "n", "v" }, ";", ":")
 map("x", ".", ":norm.<CR>")
 map("i", "<C-v>", "<C-r>+")
 map("n", "<M-=>", "<cmd>wincmd =<CR>")

@@ -105,6 +105,11 @@ return {
     },
   },
   {
+    "nvim-treesitter/playground",
+    cmd = "TSPlaygroundToggle",
+    lazy = true,
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     lazy = true,
     build = ":TSUpdate",
@@ -122,10 +127,6 @@ return {
       { "<A-S>", "<cmd>TSToggle refactor.highlight_current_scope<cr>", desc = "Toggle Current Scope" },
     },
     dependencies = {
-      {
-        "nvim-treesitter/playground",
-        lazy = true,
-      },
       {
         "andymass/vim-matchup",
         lazy = true,

@@ -6,45 +6,23 @@ return {
     branch = "v3.x",
     lazy = true,
     cmd = "Neotree",
-    keys = {
+    keys = { ---@format disable
       {
         "<leader>a",
         function()
-          vim.cmd([[Neotree show filesystem position=left]])
-          vim.cmd([[Neotree show buffers position=top]])
-          vim.cmd([[Neotree show git_status position=right]])
+          vim.cmd([[
+            Neotree show filesystem position=left
+            Neotree show buffers position=top
+            Neotree show git_status position=right
+          ]])
         end,
         desc = "Neotree Files, Git, Buffers",
       },
-      {
-        "<leader>g",
-        function()
-          vim.cmd([[Neotree focus git_status position=right]])
-        end,
-        desc = "Neotree Focus Git",
-      },
-      {
-        "<leader>b",
-        function()
-          vim.cmd([[Neotree focus buffers position=top]])
-        end,
-        desc = "Neotree Focus Buffers",
-      },
-      {
-        "<leader>f",
-        function()
-          vim.cmd([[Neotree focus filesystem position=left]])
-        end,
-        desc = "Neotree Focus Files",
-      },
-      {
-        "<leader>c",
-        function()
-          vim.cmd([[Neotree focus filesystem position=left reveal=true]])
-        end,
-        desc = "Neotree Focus Current File",
-      },
-    },
+      { "<leader>g", "<cmd>Neotree focus git_status position=right<cr>",            desc = "Neotree Focus Git" },
+      { "<leader>b", "<cmd>Neotree focus buffers position=top<cr>",                 desc = "Neotree Focus Buffers" },
+      { "<leader>f", "<cmd>Neotree focus filesystem position=left<cr>",             desc = "Neotree Focus Files" },
+      { "<leader>c", "<cmd>Neotree focus filesystem position=left reveal=true<cr>", desc = "Neotree Focus Current File" },
+    }, ---@format enable
     dependencies = {
       {
         "MunifTanjim/nui.nvim",
@@ -343,6 +321,8 @@ return {
         end,
       },
     },
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons", lazy = true }
+    },
   },
 }

@@ -4,8 +4,10 @@ return {
     lazy = true,
     dependencies = {
       { "nvim-telescope/telescope-dap.nvim", lazy = true },
-      { "theHamsta/nvim-dap-virtual-text", lazy = true },
-      { "nvim-neotest/nvim-nio", lazy = true },
+      { "nvim-telescope/telescope.nvim",     lazy = true },
+      { "rcarriga/cmp-dap",                  lazy = true },
+      { "theHamsta/nvim-dap-virtual-text",   lazy = true },
+      { "nvim-neotest/nvim-nio",             lazy = true },
       {
         "rcarriga/nvim-dap-ui",
         lazy = true,
@@ -15,7 +17,7 @@ return {
           "DapSetArgs",
           "DapSetHost",
         },
-        keys = {
+        keys = { ---@format disable
           { "<BS>E", function() require("dapui").close() end, desc = "Debug: Close DAP UI" },
           { "<BS>b", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
           { "<BS>c", function() require("dap").continue() end, desc = "Debug: Continue" },
@@ -29,8 +31,13 @@ return {
           { "<BS>sE", "<cmd>DapSetTarget<cr>", desc = "Debug: Set Target" },
           { "<BS>sh", "<cmd>DapSetHost<cr>", desc = "Debug: Set Remote Host" },
           { "<BS>sa", "<cmd>DapSetArgs<cr>", desc = "Debug: Set Arguments" },
-          { "<BS>t", function() require("cfg.utils").fntab(function () require("dapui").toggle() end, { zz = true }) end, desc = "Debug: Toggle UI" },
-        },
+          { "<BS>;", function() require("telescope").extensions.dap.commands(require("telescope.themes").get_ivy({})) end,         desc = "Telescope DAP Commands" },
+          { "<BS>C", function() require("telescope").extensions.dap.configurations(require("telescope.themes").get_ivy({})) end,   desc = "Telescope DAP Configurations" },
+          { "<BS>B", function() require("telescope").extensions.dap.list_breakpoints(require("telescope.themes").get_ivy({})) end, desc = "Telescope DAP Breakpoints"},
+          { "<BS>v", function() require("telescope").extensions.dap.variables(require("telescope.themes").get_ivy({})) end,        desc = "Telescope DAP Variables" },
+          { "<BS>f", function() require("telescope").extensions.dap.frames(require("telescope.themes").get_ivy({})) end,           desc = "Telescope DAP Frames" },
+          { "<BS>t", function() require("cfg.utils").fntab(function() require("dapui").toggle() end, { zz = true }) end,           desc = "Debug: Toggle UI" },
+        }, ---@format disable
         config = function()
           local dapui = require("dapui")
           dapui.setup({
@@ -90,20 +97,18 @@ return {
               max_value_lines = 100,
             },
           })
+          ---@format disable
           vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-          vim.fn.sign_define("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+          vim.fn.sign_define("DapBreakpointCondition", {text = "○", texthl = "DapBreakpointCondition", linehl = "", numhl = ""})
           vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
+          vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStopped", linehl = "debugPC", numhl = "" })
+          vim.fn.sign_define("DapBreakpointRejected", { text = "⊗", texthl = "DapBreakpointRejected", linehl = "", numhl = "" })
+          ---@format enable
         end,
       },
     },
     config = function()
       require("telescope").load_extension("dap")
-      local pickers = require("telescope.pickers")
-      local finders = require("telescope.finders")
-      local conf = require("telescope.config").values
-      local actions = require("telescope.actions")
-      local action_state = require("telescope.actions.state")
-      local dap = require("dap")
 
       local state = {
         executable = nil,
@@ -137,32 +142,38 @@ return {
         return fallback
       end
       local ADAPTER = get_path({
-        "lldb-mi", -- lldb-vscode
+        "lldb-mi",      -- lldb-vscode
         "OpenDebugAD7", -- cppdbg
-        "codelldb", -- codelldb
-        "lldb-vscode", -- lldb-vscode
-        "lldb-dap", -- lldb-vscode
+        "codelldb",     -- codelldb
+        "lldb-vscode",  -- lldb-vscode
+        "lldb-dap",     -- lldb-vscode
       }, "")
 
+      local pickers = require("telescope.pickers")
+      local finders = require("telescope.finders")
+      local conf = require("telescope.config").values
+      local actions = require("telescope.actions")
+      local action_state = require("telescope.actions.state")
+      local dap = require("dap")
       local telescope_pick_executable = function(opts, callback)
         opts = opts or {}
         pickers
-          .new(opts, {
-            prompt_title = "Executable to debug",
-            finder = finders.new_oneshot_job(findcmd(), opts),
-            sorter = conf.generic_sorter(opts),
-            attach_mappings = function(prompt_bufnr, _)
-              actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
-                state.executable = vim.fn.getcwd() .. "/" .. action_state.get_selected_entry()[1]
-                if callback then
-                  callback()
-                end
-              end)
-              return true
-            end,
-          })
-          :find()
+            .new(opts, {
+              prompt_title = "Executable to debug",
+              finder = finders.new_oneshot_job(findcmd(), opts),
+              sorter = conf.generic_sorter(opts),
+              attach_mappings = function(prompt_bufnr, _)
+                actions.select_default:replace(function()
+                  actions.close(prompt_bufnr)
+                  state.executable = vim.fn.getcwd() .. "/" .. action_state.get_selected_entry()[1]
+                  if callback then
+                    callback()
+                  end
+                end)
+                return true
+              end,
+            })
+            :find()
       end
 
       local select_target = function(callback, force)
@@ -399,6 +410,11 @@ return {
       end
 
       require("nvim-dap-virtual-text").setup({})
+      require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+        sources = {
+          { name = "dap" },
+        },
+      })
     end,
   },
 }

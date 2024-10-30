@@ -187,38 +187,14 @@ return {
     "folke/trouble.nvim",
     lazy = true,
     event = { "LspAttach" },
-    keys = {
-      {
-        "<Space>dd",
-        "<cmd>Trouble diagnostics focus filter.buf=0 win.position=bottom<cr>",
-        desc = "Buffer Diagnostics (Trouble)",
-      },
-      {
-        "sl",
-        "<cmd>Trouble lsp focus win.position=right<cr>",
-        desc = "Location List (Trouble)",
-      },
-      {
-        "sL",
-        "<cmd>Trouble loclist toggle focus=true win.position=bottom<cr>",
-        desc = "Location List (Trouble)",
-      },
-      {
-        "sq",
-        "<cmd>Trouble qflist toggle focus=true win.position=bottom<cr>",
-        desc = "Quickfix List (Trouble)",
-      },
-      {
-        "so",
-        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",
-        desc = "Quickfix List (Trouble)",
-      },
-      {
-        "<Space>t",
-        "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",
-        desc = "Quickfix List (Trouble)",
-      },
-    },
+    keys = { ---@format disable
+      { "<Space>dd", "<cmd>Trouble diagnostics focus filter.buf=0 win.position=bottom<cr>", desc = "Buffer Diagnostics (Trouble)" },
+      { "sl",        "<cmd>Trouble lsp focus win.position=right<cr>",                       desc = "Location List (Trouble)" },
+      { "sL",        "<cmd>Trouble loclist toggle focus=true win.position=bottom<cr>",      desc = "Location List (Trouble)" },
+      { "sq",        "<cmd>Trouble qflist toggle focus=true win.position=bottom<cr>",       desc = "Quickfix List (Trouble)" },
+      { "so",        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",      desc = "Quickfix List (Trouble)" },
+      { "<Space>t",  "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",    desc = "Quickfix List (Trouble)" },
+    }, ---@format enable
     opts = {
       win = {
         border = "rounded",
@@ -339,8 +315,8 @@ return {
       },
     },
     dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons",
+      { "nvim-treesitter/nvim-treesitter", lazy = true },
+      { "nvim-tree/nvim-web-devicons", lazy = true }
     },
   },
 }
