@@ -167,7 +167,7 @@ return {
 
       local select_target = function(callback, force)
         if force or state.executable == nil or state.executable == "" then
-          telescope_pick_executable(require("telescope.themes").get_dropdown({}), callback)
+          telescope_pick_executable({}, callback)
         end
         return state.executable
       end
