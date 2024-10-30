@@ -1,4 +1,4 @@
-return {
+eturn {
   {
     "mfussenegger/nvim-dap",
     lazy = true,
@@ -20,6 +20,8 @@ return {
         keys = { ---@format disable
           { "<BS>E", function() require("dapui").close() end, desc = "Debug: Close DAP UI" },
           { "<BS>b", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
+          { "<BS>B", function() require("dap").set_breakpoint(vim.fn.input("Condition:")) end, desc = "Debug: Set Conditional Breakpoint" },
+          { "<BS>H", function() require("dap").set_breakpoint(vim.fn.input("Condition:"), vim.fn.input("Hit Condition:")) end, desc = "Debug: Set Conditional Breakpoint with Hit Condition" },
           { "<BS>c", function() require("dap").continue() end, desc = "Debug: Continue" },
           { "<BS>i", function() require("dap").step_into() end, desc = "Debug: Step Into" },
           { "<BS>o", function() require("dap").step_over() end, desc = "Debug: Step Over" },
@@ -33,10 +35,10 @@ return {
           { "<BS>sa", "<cmd>DapSetArgs<cr>", desc = "Debug: Set Arguments" },
           { "<BS>;", function() require("telescope").extensions.dap.commands(require("telescope.themes").get_ivy({})) end,         desc = "Telescope DAP Commands" },
           { "<BS>C", function() require("telescope").extensions.dap.configurations(require("telescope.themes").get_ivy({})) end,   desc = "Telescope DAP Configurations" },
-          { "<BS>B", function() require("telescope").extensions.dap.list_breakpoints(require("telescope.themes").get_ivy({})) end, desc = "Telescope DAP Breakpoints"},
+          { "<BS>l", function() require("telescope").extensions.dap.list_breakpoints(require("telescope.themes").get_ivy({})) end, desc = "Telescope DAP Breakpoints"},
           { "<BS>v", function() require("telescope").extensions.dap.variables(require("telescope.themes").get_ivy({})) end,        desc = "Telescope DAP Variables" },
           { "<BS>f", function() require("telescope").extensions.dap.frames(require("telescope.themes").get_ivy({})) end,           desc = "Telescope DAP Frames" },
-          { "<BS>t", function() require("cfg.utils").fntab(function() require("dapui").toggle() end, { zz = true }) end,           desc = "Debug: Toggle UI" },
+          { "<BS>t", function() require("cfg.utils").fntab(function() require("dapui").toggle() end, { zz = true }) end,           desc = "Debug: Open UI in new tab" },
         }, ---@format disable
         config = function()
           local dapui = require("dapui")
@@ -99,7 +101,7 @@ return {
           })
           ---@format disable
           vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-          vim.fn.sign_define("DapBreakpointCondition", {text = "○", texthl = "DapBreakpointCondition", linehl = "", numhl = ""})
+          vim.fn.sign_define("DapBreakpointCondition", {text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = ""})
           vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
           vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStopped", linehl = "debugPC", numhl = "" })
           vim.fn.sign_define("DapBreakpointRejected", { text = "⊗", texthl = "DapBreakpointRejected", linehl = "", numhl = "" })
