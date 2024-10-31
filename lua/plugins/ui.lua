@@ -447,7 +447,7 @@ return {
                   gui = "bold",
                 }
               end,
-              padding = { left = 1, right = 0 }
+              padding = { left = 1, right = 1 }
             },
             {
               "selectioncount",
