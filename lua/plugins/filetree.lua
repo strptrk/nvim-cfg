@@ -301,12 +301,12 @@ return {
         ["~"] = "actions.tcd",
         ["gs"] = "actions.change_sort",
         ["gx"] = "actions.open_external",
-        ["<A-h>"] = "actions.toggle_hidden",
         ["<A-u>"] = function() require("oil").discard_all_changes() end,
+        ["<A-H>"] = "actions.toggle_hidden",
         ["H"] = "actions.toggle_hidden",
         ["<A-T>"] = "actions.toggle_trash",
         ["<A-y>"] = "actions.yank_entry",
-        ["<A-l>"] = function()
+        ["<A-f>"] = function()
           if oil_long_format then
             require("oil").set_columns({ "icon" })
           else
