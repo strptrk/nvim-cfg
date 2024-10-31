@@ -270,6 +270,7 @@ return {
     },
     keys = {
       { "<A-o>", function() require("oil").toggle_float() end },
+      { ",o", function() require("oil").open() end },
     },
     init = function()
       vim.api.nvim_create_autocmd("User", {

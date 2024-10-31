@@ -2,12 +2,11 @@
 ------ LAZY ------
 ------------------
 
----@diagnostic disable-next-line: undefined-field
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+---@diagnostic disable-next-line: undefined-field
 if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
-    "git",
-    "clone",
+    "git", "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
@@ -70,6 +69,9 @@ opt.synmaxcol = 240
 opt.showmode = false
 opt.exrc = true
 
+-- assume .h files are c, not c++
+vim.g.c_syntax_for_h = 1
+
 -- revert back to vim's block cursor in insert mode as a default
 opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
 
@@ -88,24 +90,19 @@ if vim.env["NVIM_SWAP_DIR"] then
   end
 end
 
----@diagnostic disable-next-line: inject-field
-vim.g.c_syntax_for_h = 1
-
--- abbreviations
-vim.cmd([[
-  cnoreabbrev qt tabclose
-  cnoreabbrev qq q!
-  cnoreabbrev qqa qa!
-  cnoreabbrev SL s/\ /\ \\\r/g
-]])
-
 -- load config after loading all UI elements
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   callback = function()
-    require("cfg.utils")
     require("cfg.maps")
     require("cfg.commands")
+    -- abbreviations
+    vim.cmd([[
+      cnoreabbrev qt tabclose
+      cnoreabbrev qq q!
+      cnoreabbrev qqa qa!
+      cnoreabbrev Splitws s/\ /\ \\\r/g
+    ]])
   end,
 })
 require("cfg.autocmds")

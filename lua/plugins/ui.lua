@@ -272,6 +272,14 @@ return {
     },
     config = function()
       local lsps = {}
+
+      local trouble = {
+        loaded = false,
+        symbols = {
+          get = function() return "" end,
+          has = function() return false end,
+        }
+      }
       local get_lsp = function(bufnr)
         bufnr = bufnr or vim.api.nvim_win_get_buf(0)
         local clients = vim.lsp.get_clients({ bufnr = bufnr })
@@ -281,21 +289,23 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           lsps[args.buf] = get_lsp(args.buf)
+          if not trouble.loaded then
+            trouble.symbols = require("trouble").statusline({
+              mode = "lsp_document_symbols",
+              groups = {},
+              title = false,
+              filter = { range = true },
+              format = "{kind_icon}{symbol.name:Normal}",
+              hl_group = "lualine_c_normal",
+            })
+            trouble.loaded = true
+          end
         end
       })
       vim.api.nvim_create_autocmd("LspDetach", {
         callback = function(args)
           lsps[args.buf] = nil
         end
-      })
-      local trouble = require("trouble")
-      local trouble_symbols = trouble.statusline({
-        mode = "lsp_document_symbols",
-        groups = {},
-        title = false,
-        filter = { range = true },
-        format = "{kind_icon}{symbol.name:Normal}",
-        hl_group = "lualine_c_normal",
       })
 
       local conditions = {
@@ -362,6 +372,23 @@ return {
                   gui = "bold",
                 }
               end,
+              padding = { left = 1, right = 1 }
+            },
+            {
+              "location",
+              color = function()
+                return {
+                  fg = mode_color[vim.fn.mode()],
+                  gui = "bold",
+                }
+              end,
+              padding = { left = 0, right = 0 }
+            },
+            {
+              "selectioncount",
+              color = { fg = colors.teal },
+              icon = "~",
+              padding = { left = 0, right = 1 },
             },
             {
               "b:gitsigns_head",
@@ -381,20 +408,17 @@ return {
               end
             },
             {
-              trouble_symbols.get,
+              function()
+                return trouble.symbols.get()
+              end,
               cond = function()
                 return conditions.has_filename()
                     and conditions.editor_width_over(110)()
-                    and trouble_symbols.has()
+                    and trouble.symbols.has()
               end,
             },
           },
           lualine_x = {
-            {
-              "selectioncount",
-              color = { fg = colors.purple },
-              padding = { left = 0, right = 1 },
-            },
             {
               function()
                 return require("noice").api.status.mode.get()
@@ -437,7 +461,7 @@ return {
                 return { fg = mode_color[vim.fn.mode()], }
               end,
               cond = conditions.has_filename,
-              padding = { left = 1, right = 0 }
+              padding = { left = 0, right = 0 }
             },
             {
               "encoding",
@@ -462,8 +486,6 @@ return {
               end,
               padding = { left = 1 },
             },
-            -- lualine_y = { "fileformat", "encoding", "filesize" },
-            -- lualine_z = { "progress", "selectioncount", "location" },
           },
           lualine_y = {},
           lualine_z = {},
