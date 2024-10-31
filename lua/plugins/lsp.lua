@@ -189,11 +189,11 @@ return {
     event = { "LspAttach" },
     keys = { ---@format disable
       { "<Space>dd", "<cmd>Trouble diagnostics focus filter.buf=0 win.position=bottom<cr>", desc = "Buffer Diagnostics (Trouble)" },
-      { "sl",        "<cmd>Trouble lsp focus win.position=right<cr>",                       desc = "Location List (Trouble)" },
+      { "sl",        "<cmd>Trouble lsp focus win.position=right<cr>",                       desc = "LSP (Trouble)" },
       { "sL",        "<cmd>Trouble loclist toggle focus=true win.position=bottom<cr>",      desc = "Location List (Trouble)" },
       { "sq",        "<cmd>Trouble qflist toggle focus=true win.position=bottom<cr>",       desc = "Quickfix List (Trouble)" },
-      { "so",        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",      desc = "Quickfix List (Trouble)" },
-      { "<Space>t",  "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",    desc = "Quickfix List (Trouble)" },
+      { "so",        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",      desc = "LSP Symbols Outline (Trouble)" },
+      { "<Space>t",  "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",    desc = "Trouble Telescope" },
     }, ---@format enable
     opts = {
       win = {
