@@ -185,7 +185,10 @@ map("n", "s/", [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
 
 -- Yanks only the solution for LeetCode or similar contest sites.
 -- Within the local copy of the problem:
--- /*SOLUTION_BEGIN*/
+-- /* @solution begin */
 --    <code>
--- /*SOLUTION_END*/
-map("n", "sys", "<cmd>g/SOLUTION_BEGIN/+1,/SOLUTION_END/-1y<bar>nohls<cr>", { desc = "Yank Solution" })
+-- /* @solution end */
+map("n", "sys",
+  "<cmd>g/" .. vim.g.solutionfmt["begin"] .. "/+1,/" .. vim.g.solutionfmt["end"] .. "/-1y<bar>nohls<cr>",
+  { desc = "Yank Solution" }
+)

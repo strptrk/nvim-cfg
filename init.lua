@@ -15,6 +15,14 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.keymap.set({ "n", "v" }, "s", "<Nop>") -- disable, so which-key does not fall back to it
+vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
+vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
+vim.g.solutionfmt = {
+  ["begin"] = "@solution begin",
+  ["end"] = "@solution end"
+}
+
 require("lazy").setup("plugins", {
   performance = {
     cache = { enabled = true },
@@ -35,49 +43,41 @@ require("lazy").setup("plugins", {
   },
 })
 
-local opt = vim.opt
-
-opt.mouse = "a"
-opt.clipboard = "unnamedplus"
-opt.syntax = "enable"
-opt.virtualedit = "block"
-opt.number = true
-opt.relativenumber = false
-opt.cursorline = false
-opt.linebreak = true
-opt.wrap = false
-opt.showmatch = true
-opt.signcolumn = "yes"
-opt.splitright = true
-opt.splitkeep = "screen"
-opt.splitbelow = true
-opt.smartcase = true
-opt.hlsearch = true
-opt.expandtab = true
-opt.autoindent = true
-opt.tabstop = 4
-opt.softtabstop = 4
-opt.shiftwidth = 4
-opt.conceallevel = 2
-opt.sidescrolloff = 1
-opt.scrolloff = 1
-opt.ruler = true
-opt.hidden = true
-opt.history = 100
-opt.lazyredraw = false
-opt.synmaxcol = 240
-opt.showmode = false
-opt.exrc = true
-
--- assume .h files are c, not c++
-vim.g.c_syntax_for_h = 1
-
--- revert back to vim's block cursor in insert mode as a default
-opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20"
+vim.opt.mouse = "a"
+vim.opt.clipboard = "unnamedplus"
+vim.opt.syntax = "enable"
+vim.opt.virtualedit = "block"
+vim.opt.number = true
+vim.opt.relativenumber = false
+vim.opt.cursorline = false
+vim.opt.linebreak = true
+vim.opt.wrap = false
+vim.opt.showmatch = true
+vim.opt.signcolumn = "yes"
+vim.opt.splitright = true
+vim.opt.splitkeep = "screen"
+vim.opt.splitbelow = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+vim.opt.expandtab = true
+vim.opt.autoindent = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.conceallevel = 2
+vim.opt.sidescrolloff = 1
+vim.opt.scrolloff = 1
+vim.opt.ruler = true
+vim.opt.hidden = true
+vim.opt.history = 100
+vim.opt.lazyredraw = false
+vim.opt.synmaxcol = 240
+vim.opt.showmode = false
+vim.opt.exrc = true
 
 if vim.env["NVIM_SWAP_DIR"] then
   if vim.env["NVIM_SWAP_DIR"] == "ram" then
-    opt.updatetime = 750
+    vim.opt.updatetime = 750
     vim.api.nvim_set_option_value(
       "directory",
       "/tmp/.nvim_swap_dir_" .. (vim.env["USER"] or "") .. "//",

@@ -4,13 +4,13 @@ return {
     version = false,
     lazy = true,
     keys = {
-      { "sa",  nil, mode = { "n", "x" } },
-      { "sd",  nil, mode = { "n", "x" } },
-      { "sr",  nil, mode = { "n", "x" } },
-      { "sur", nil, mode = { "n", "x" } },
-      { "sul", nil, mode = { "n", "x" } },
-      { "suh", nil, mode = { "n", "x" } },
-      { "sun", nil, mode = { "n", "x" } },
+      { "sa",  nil, mode = { "n", "x" }, desc = "Surround: Add" },
+      { "sd",  nil, mode = { "n", "x" }, desc = "Surround: Delete" },
+      { "sr",  nil, mode = { "n", "x" }, desc = "Surround: Replace" },
+      { "sur", nil, mode = { "n", "x" }, desc = "Surround: Find to the right" },
+      { "sul", nil, mode = { "n", "x" }, desc = "Surround: Find to the left" },
+      { "suh", nil, mode = { "n", "x" }, desc = "Surround: Hightlight" },
+      { "sun", nil, mode = { "n", "x" }, desc = "Surround: Update searched line count" },
     },
     opts = {
       mappings = {

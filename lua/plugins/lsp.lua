@@ -244,23 +244,10 @@ return {
     lazy = true,
     event = { "LspAttach" },
     keys = {
-      {
-        "sco",
-        "<cmd>Lspsaga outgoing_calls<cr>",
-      },
-      {
-        "sci",
-        "<cmd>Lspsaga incoming_calls<cr>",
-      },
-      {
-        "sw",
-        "<cmd>Lspsaga finder<cr>",
-      },
-      {
-        "sp",
-        "<cmd>Lspsaga peek_definition<cr>",
-        desc = "LSP Peek Definition",
-      },
+      { "sco", "<cmd>Lspsaga outgoing_calls<cr>",  desc = "LSP Outgoing calls" },
+      { "sci", "<cmd>Lspsaga incoming_calls<cr>",  desc = "LSP Incoming calls" },
+      { "sw",  "<cmd>Lspsaga finder<cr>",          desc = "LSP Finder" },
+      { "sp",  "<cmd>Lspsaga peek_definition<cr>", desc = "LSP Peek Definition" },
     },
     opts = {
       finder = {

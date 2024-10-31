@@ -69,7 +69,7 @@ snippet GPL3
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	${0}
-	
+
 snippet LGPL3
 	${1:One line to give the program's name and a brief description.}
 	Copyright `&enc[:2] == "utf" ? "©" : "(c)"` `strftime("%Y")` ${2:AUTHOR}
@@ -278,8 +278,8 @@ snippet ISC
 	${0}
 
 snippet solution
-  `printf(&commentstring, "SOLUTION_BEGIN")`
-  
+  `printf(&commentstring, g:solutionfmt["begin"])`
+
   $1
 
-  `printf(&commentstring, "SOLUTION_END")`
+  `printf(&commentstring, g:solutionfmt["end"])`

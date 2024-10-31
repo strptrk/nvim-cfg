@@ -23,6 +23,7 @@ return {
         { "]",        mode = { "n", "v" } },
         { "[",        mode = { "n", "v" } },
         { ",",        mode = { "n", "v" } },
+        { "s",        mode = { "n", "v" } },
       },
       -- what could go into `wk.add(...)`
       spec = {
@@ -33,6 +34,8 @@ return {
         { "<Space>v", group = "Vim Options" },
         { "<BS>s",    group = "Debug: Modify Properties" },
         { ",",        group = "Comma Prefix" },
+        { "sc",       group = "LSP Call Hierarchy" },
+        { "su",       group = "Surround" },
       },
       notify = {},
       plugins = {
