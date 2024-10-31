@@ -375,22 +375,6 @@ return {
               padding = { left = 1, right = 1 }
             },
             {
-              "location",
-              color = function()
-                return {
-                  fg = mode_color[vim.fn.mode()],
-                  gui = "bold",
-                }
-              end,
-              padding = { left = 0, right = 0 }
-            },
-            {
-              "selectioncount",
-              color = { fg = colors.teal },
-              icon = "~",
-              padding = { left = 0, right = 1 },
-            },
-            {
               "b:gitsigns_head",
               icon = "",
               color = { fg = colors.fg },
@@ -453,6 +437,23 @@ return {
             {
               "filetype",
               color = { gui = 'bold' },
+              padding = { left = 1, right = 0 }
+            },
+            {
+              "location",
+              color = function()
+                return {
+                  fg = mode_color[vim.fn.mode()],
+                  gui = "bold",
+                }
+              end,
+              padding = { left = 1, right = 0 }
+            },
+            {
+              "selectioncount",
+              color = { fg = colors.teal },
+              icon = "~",
+              padding = { left = 0, right = 1 },
             },
             {
               'fileformat',
