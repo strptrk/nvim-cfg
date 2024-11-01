@@ -44,3 +44,10 @@ autocmd("BufReadPost", {
     vim.keymap.set("n", "<CR>", ":wq<CR>")
   end,
 })
+
+autocmd("BufReadPost", {
+  pattern = "Dockerfile*",
+  callback = function(ev)
+    vim.api.nvim_set_option_value("filetype", "dockerfile", { buf = ev.buf })
+  end,
+})
