@@ -14,14 +14,29 @@ return {
     config = function()
       local lsp = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      if 1 == vim.fn.executable("pylsp") then
-        lsp.pylsp.setup({ capabilities = capabilities })
-      end
       if 1 == vim.fn.executable("gopls") then
         lsp.gopls.setup({ capabilities = capabilities })
       end
       if 1 == vim.fn.executable("cmake-language-server") then
         lsp.cmake.setup({ capabilities = capabilities })
+      end
+      if 1 == vim.fn.executable("pylsp") then
+        lsp.pylsp.setup({
+          capabilities = capabilities,
+          settings = {
+            pylsp = {}
+          }
+        })
+      end
+      if 1 == vim.fn.executable("ruff") then
+        lsp.ruff.setup({
+          capabilities = capabilities,
+          init_options = {
+            settings = {
+              logLevel = "debug"
+            }
+          }
+        })
       end
       if 1 == vim.fn.executable("clangd") then
         lsp.clangd.setup({

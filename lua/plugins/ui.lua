@@ -638,7 +638,25 @@ return {
           vim.notify = require("notify")
         end,
       },
-
-    }
+      {
+        "stevearc/dressing.nvim",
+        lazy = true,
+        init = function()
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = "DressingSelect",
+            callback = function()
+              vim.api.nvim_win_set_cursor(0, { 1, 1 })
+            end
+          })
+        end,
+        event = "VeryLazy",
+        opts = {
+          input = { enabled = false },
+          select = {
+            backend = { "builtin", "telescope", "nui" },
+          }
+        },
+      }
+    },
   },
 }
