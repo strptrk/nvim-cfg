@@ -266,7 +266,12 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    lazy = false,
+    lazy = true,
+    event = {
+      "BufAdd",
+      "BufNewFile",
+      "BufReadPost",
+    },
     dependencies = {
       { "nvim-tree/nvim-web-devicons", lazy = true },
     },
@@ -508,7 +513,12 @@ return {
   },
   {
     "akinsho/bufferline.nvim",
-    lazy = false,
+    lazy = true,
+    event = {
+      "BufAdd",
+      "BufNewFile",
+      "BufReadPost",
+    },
     opts = {
       -- highlights = require("catppuccin.groups.integrations.bufferline").get(),
       options = {
@@ -531,24 +541,6 @@ return {
     },
   },
   {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    event = "VeryLazy",
-    dependencies = {
-      {
-        "rcarriga/nvim-notify",
-        lazy = true,
-        config = function()
-          require("notify").setup({
-            background_colour = "#2e3440",
-            top_down = false,
-          })
-          vim.notify = require("notify")
-        end,
-      },
-    },
-  },
-  {
     "folke/noice.nvim",
     event = "VeryLazy",
     lazy = true,
@@ -565,9 +557,6 @@ return {
           help        = { icon = symbols.left_five_eights_block .. "    " },
           input       = { icon = "󰥻 " },
         }
-      },
-      messages = {
-        view_search = false, -- view for search count messages. Set to `false` to disable
       },
       lsp = {
         override = {
@@ -637,5 +626,19 @@ return {
       { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll backward" },
       { ",n",        function() require("noice").cmd("dismiss") end,                                silent = true, mode = "n",  desc = "Clear Noice" },
     }, ---@format enable
+    dependencies = {
+      {
+        "rcarriga/nvim-notify",
+        lazy = true,
+        config = function()
+          require("notify").setup({
+            background_colour = "#2e3440",
+            top_down = false,
+          })
+          vim.notify = require("notify")
+        end,
+      },
+
+    }
   },
 }

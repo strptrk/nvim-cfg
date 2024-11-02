@@ -7,7 +7,7 @@ return {
       local dashboard = require("alpha.themes.dashboard")
       local fortune = require("alpha.fortune")
       local cfgdir = vim.fn.stdpath("config")
-      dashboard.section.buttons.val = {
+      dashboard.section.buttons.val = { ---@format disable
         dashboard.button("e", "  New file", [[<cmd>ene<CR>]]),
         dashboard.button("t", "󱏒  File tree", [[<cmd>ene<bar>Neotree focus filesystem position=left<CR>]]),
         dashboard.button("f", "󰈞  Find file", [[<cmd>lua require('telescope.builtin').find_files()<CR>]]),
@@ -17,7 +17,7 @@ return {
         dashboard.button("c", "  Config", [[<cmd>cd ]] .. cfgdir .. [[ | lua require('telescope.builtin').find_files({ cwd = ']] .. cfgdir .. [[' })<CR>]]),
         dashboard.button("u", "󰅢  Update Packages", "<cmd>Lazy sync<CR>"),
         dashboard.button("q", "󰿅  Quit NVIM", "<cmd>qa<CR>"),
-      }
+      } ---@format enable
       vim.api.nvim_set_hl(0, "StartLogo1", { fg = "#51D8FF" })
       vim.api.nvim_set_hl(0, "StartLogo2", { fg = "#51D8FF" })
       vim.api.nvim_set_hl(0, "StartLogo3", { fg = "#46C7FF" })
@@ -71,7 +71,7 @@ return {
       alpha.setup({
         layout = {
           { type = "padding", val = 4 },
-          { type = "group", val = colorize_header() },
+          { type = "group",   val = colorize_header() },
           { type = "padding", val = 2 },
           dashboard.section.buttons,
           dashboard.section.footer,
