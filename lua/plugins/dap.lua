@@ -383,7 +383,7 @@ return {
       dap.adapters.python = {
         type = "executable",
         -- command = getpath({ 'debugpy', 'python-debugpy' }, vim.env['HOME'] .. '/.local/bin/python-debugpy'),
-        command = vim.env["HOME"] .. "/.clones/virtualenvs/debugpy/bin/python",
+        command = vim.env["HOME"] .. "/.local/venvs/debugpy/bin/python",
         args = { "-m", "debugpy.adapter" },
       }
       dap.configurations.python = {
