@@ -644,8 +644,9 @@ return {
         init = function()
           vim.api.nvim_create_autocmd("FileType", {
             pattern = "DressingSelect",
-            callback = function()
+            callback = function(ev)
               vim.api.nvim_win_set_cursor(0, { 1, 1 })
+              vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = ev.buf })
             end
           })
         end,
