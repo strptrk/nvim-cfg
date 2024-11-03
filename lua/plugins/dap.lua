@@ -25,6 +25,7 @@ return {
           { "<BS>c", function() require("dap").continue() end, desc = "Debug: Continue" },
           { "<BS>i", function() require("dap").step_into() end, desc = "Debug: Step Into" },
           { "<BS>o", function() require("dap").step_over() end, desc = "Debug: Step Over" },
+          { "<BS>O", function() require("dap").step_out() end, desc = "Debug: Step Out" },
           { "<BS>R", function() require("dap").repl.open() end, desc = "Debug: Open REPL" },
           { "<BS>r", function() require("dap").run_to_cursor() end, desc = "Debug: Run to Cursor" },
           { "<BS>d", function() require("dap").down() end, desc = "Debug: Jump Down a Frame" },
