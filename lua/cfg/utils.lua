@@ -38,6 +38,7 @@ M.fntab_ignored_ft = {
 }
 
 local filesize_cache = {}
+-- `size` is in `KiB`
 M.file_too_big = function(size)
   -- treesitter's enable calls with (lang, buf)
   -- others call with (buf)
@@ -179,32 +180,12 @@ M.fntab = function(fn, opts)
   end
 end
 
--- to be updated
-M.get_langserv = function()
-  local ret = ""
-  local clients = vim.lsp.get_clients({ bufnr = api.nvim_get_current_buf() })
-  local b = false
-  for _, name in ipairs(clients) do
-    if b then
-      ret = ret .. " | " .. name.name
-    else
-      ret = " " .. name.name
-    end
-    b = false
-  end
-  return ret
-end
-
-M.get_treesitter = function()
-  if vim.treesitter.highlighter.active[api.nvim_get_current_buf()] ~= nil then
-    return true
-  else
-    return false
-  end
+M.treesitter_is_active = function(buf)
+  return vim.treesitter.highlighter.active[buf or api.nvim_get_current_buf()] ~= nil and true or false
 end
 
 M.smart_rename_ts = function()
-  if M.get_treesitter() then
+  if M.treesitter_is_active() then
     require("nvim-treesitter-refactor.smart_rename").smart_rename(api.nvim_win_get_buf(0))
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.rename_cmd, true, true, true), "", true)
@@ -212,7 +193,7 @@ M.smart_rename_ts = function()
 end
 
 M.highlight_usages = function()
-  if M.get_treesitter() then
+  if M.treesitter_is_active() then
     require("nvim-treesitter-refactor.highlight_definitions").highlight_usages(api.nvim_win_get_buf(0))
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.highlight_cmd_word, true, true, true), "", true)
@@ -220,7 +201,7 @@ M.highlight_usages = function()
 end
 
 M.clear_highlight_usages = function()
-  if M.get_treesitter() then
+  if M.treesitter_is_active() then
     require("nvim-treesitter-refactor.highlight_definitions").clear_usage_highlights(api.nvim_win_get_buf(0))
   end
   api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.clear_highlight_cmd, true, true, true), "", true)

@@ -24,13 +24,20 @@ return {
         lsp.pylsp.setup({
           capabilities = capabilities,
           settings = {
-            pylsp = {}
+            pylsp = {
+              plugins = {
+                mccabe = { enabled = true },
+                pyflakes = { enabled = true },
+                pylint = { enabled = true },
+              }
+            }
           }
         })
       end
       if 1 == vim.fn.executable("ruff") then
         lsp.ruff.setup({
           capabilities = capabilities,
+          trace = 'messages',
           init_options = {
             settings = {
               logLevel = "debug"
@@ -103,19 +110,27 @@ return {
           vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, { desc = "Code Actions" })
           vim.keymap.set({ "n", "x" }, "sf", vim.lsp.buf.format, { desc = "Format document (lsp)" })
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
-          vim.keymap.set("n", "<Space>sh", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch source and header" })
           local methods = vim.lsp.protocol.Methods
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
-          if client and client.supports_method(methods.textDocument_inlayHint) then
+          if not client then
+            return
+          end
+          if client.supports_method(methods.textDocument_inlayHint) then
             vim.keymap.set("n", "si", function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ buf = ev.buf }), { buf = ev.buf })
             end, { desc = "Toggle inlay hints" })
             vim.lsp.inlay_hint.enable(false, { buf = ev.buf })
           end
-          if client and client.supports_method(methods.textDocument_rename) then
+          if client.supports_method(methods.textDocument_rename) then
             vim.keymap.set("n", "ss", function()
               require("cfg.utils").smart_rename_lsp(client, ev.buf)
             end, { desc = "LSP rename", buffer = ev.buf })
+          end
+          if client.name == "clangd" then
+            vim.keymap.set("n", "<Space>sh", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch source and header" })
+          end
+          if client.name == "ruff" then -- disable ruff hover
+            client.server_capabilities.hoverProvider = false
           end
         end,
       })
@@ -318,7 +333,7 @@ return {
     },
     dependencies = {
       { "nvim-treesitter/nvim-treesitter", lazy = true },
-      { "nvim-tree/nvim-web-devicons", lazy = true }
+      { "nvim-tree/nvim-web-devicons",     lazy = true }
     },
   },
 }

@@ -655,6 +655,11 @@ return {
           input = { enabled = false },
           select = {
             backend = { "builtin", "telescope", "nui" },
+            builtin = {
+              relative = "cursor",
+              min_width = { 50, 0.25 },
+              min_height = { 12, 0.25 },
+            }
           }
         },
       }

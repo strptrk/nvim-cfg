@@ -12,44 +12,54 @@ return {
       { "suh", nil, mode = { "n", "x" }, desc = "Surround: Hightlight" },
       { "sun", nil, mode = { "n", "x" }, desc = "Surround: Update searched line count" },
     },
-    opts = {
-      mappings = {
-        add = "sa",             -- Add surrounding in Normal and Visual modes
-        delete = "sd",          -- Delete surrounding
-        replace = "sr",         -- Replace surrounding
-        find = "sur",           -- Find surrounding (to the right)
-        find_left = "sul",      -- Find surrounding (to the left)
-        highlight = "suh",      -- Highlight surrounding
-        update_n_lines = "sun", -- Update `n_lines`
-        suffix_last = "l",      -- Suffix to search with "prev" method
-        suffix_next = "n",      -- Suffix to search with "next" method
-      },
-      n_lines = 20,             -- Number of lines within which surrounding is searched
-      respect_selection_type = false,
-      custom_surroundings = {
-        -- by default, left {parentheses, brackets, tags, braces} add spaces and right ones don't, swap that
-        [')'] = { output = { left = '( ', right = ' )' } },
-        ['('] = { output = { left = '(', right = ')' } },
-        ['>'] = { output = { left = '< ', right = ' >' } },
-        ['<'] = { output = { left = '<', right = '>' } },
-        ['{'] = { output = { left = '{', right = '}' } },
-        ['}'] = { output = { left = '{ ', right = ' }' } },
-        -- never add spaces for []
-        ['['] = { output = { left = '[', right = ']' } },
-        [']'] = { output = { left = '[', right = ']' } },
-        -- by default, b adds (), change it to p and b to {}
-        ['b'] = { output = { left = '{', right = '}' } },
-        ['p'] = { output = { left = '(', right = ')' } },
-        -- escaped [Q]uotes
-        ['Q'] = { output = { left = '\\"', right = '\\"' } },
-        -- [o]utput
-        ['o'] = { output = { left = '$(', right = ')' } },
-        -- [v]alue
-        ['v'] = { output = { left = '"${', right = '}"' } },
-        -- [L]ua function
-        ['L'] = { output = { left = 'function() ', right = ' end' } },
-      }
-    },
+    config = function()
+      local minisurround = require('mini.surround')
+      minisurround.setup({
+        mappings = {
+          add = "sa",             -- Add surrounding in Normal and Visual modes
+          delete = "sd",          -- Delete surrounding
+          replace = "sr",         -- Replace surrounding
+          find = "sur",           -- Find surrounding (to the right)
+          find_left = "sul",      -- Find surrounding (to the left)
+          highlight = "suh",      -- Highlight surrounding
+          update_n_lines = "sun", -- Update `n_lines`
+          suffix_last = "l",      -- Suffix to search with "prev" method
+          suffix_next = "n",      -- Suffix to search with "next" method
+        },
+        n_lines = 20,             -- Number of lines within which surrounding is searched
+        respect_selection_type = false,
+        custom_surroundings = {
+          -- by default, left {parentheses, brackets, tags, braces} add spaces and right ones don't, swap that
+          [')'] = { output = { left = '( ', right = ' )' } },
+          ['('] = { output = { left = '(', right = ')' } },
+          ['>'] = { output = { left = '< ', right = ' >' } },
+          ['<'] = { output = { left = '<', right = '>' } },
+          ['{'] = { output = { left = '{', right = '}' } },
+          ['}'] = { output = { left = '{ ', right = ' }' } },
+          -- never add spaces for []
+          ['['] = { output = { left = '[', right = ']' } },
+          [']'] = { output = { left = '[', right = ']' } },
+          -- by default, b adds (), change it to p and b to {}
+          ['b'] = { output = { left = '{', right = '}' } },
+          ['p'] = { output = { left = '(', right = ')' } },
+          -- escaped [Q]uotes
+          ['Q'] = { output = { left = '\\"', right = '\\"' } },
+          -- [o]utput
+          ['o'] = { output = { left = '$(', right = ')' } },
+          -- [v]alue
+          ['v'] = { output = { left = '"${', right = '}"' } },
+          -- [L]ua function
+          ['L'] = { output = { left = 'function() ', right = ' end' } },
+          -- python type [h]int
+          ['h'] = {
+            output = function()
+              local type = minisurround.user_input("Type Hint")
+              return { left = type .. "[", right = "]" }
+            end
+          },
+        }
+      })
+    end,
   },
   {
     'echasnovski/mini.ai',
@@ -133,13 +143,13 @@ return {
   {
     "numToStr/Comment.nvim",
     keys = {
-      { "<Space>c",  nil, mode = { "x", "o" },  desc = "Comment linewise" },
-      { "<Space>x",  nil, mode = { "x", "o" },  desc = "Comment blockwise" },
-      { "<Space>cc", nil, mode = "n",           desc = "Comment linewise" },
-      { "<Space>cx", nil, mode = "n",           desc = "Comment linewise" },
-      { "<Space>cO", nil, mode = "n",           desc = "Comment line above" },
-      { "<Space>co", nil, mode = "n",           desc = "Comment line below" },
-      { "<Space>cl", nil, mode = "n",           desc = "Comment end of line" },
+      { "<Space>c",  nil, mode = { "x", "o" }, desc = "Comment linewise" },
+      { "<Space>x",  nil, mode = { "x", "o" }, desc = "Comment blockwise" },
+      { "<Space>cc", nil, mode = "n",          desc = "Comment linewise" },
+      { "<Space>cx", nil, mode = "n",          desc = "Comment linewise" },
+      { "<Space>cO", nil, mode = "n",          desc = "Comment line above" },
+      { "<Space>co", nil, mode = "n",          desc = "Comment line below" },
+      { "<Space>cl", nil, mode = "n",          desc = "Comment end of line" },
     },
     opts = {
       padding = true,
