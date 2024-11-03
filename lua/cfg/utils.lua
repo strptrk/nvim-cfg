@@ -78,7 +78,7 @@ M.winmove = function(key)
         ["k"] = "-U",
         ["l"] = "-R",
       }
-      if vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']]) == "0" .. string.char(10) then
+      if vim.fn.trim(vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']])) == "0" then
         vim.fn.system("tmux select-pane " .. dir[key])
       end
     elseif vim.env["TERM_PROGRAM"] == "WezTerm" then
