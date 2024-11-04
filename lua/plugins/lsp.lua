@@ -9,6 +9,9 @@ return {
       "cpp",
       "cmake",
       "tex",
+      "sh",
+      "bash",
+      "zsh",
     },
     lazy = true,
     config = function()
@@ -43,6 +46,11 @@ return {
               logLevel = "debug"
             }
           }
+        })
+      end
+      if 1 == vim.fn.executable("bash-language-server") then
+        lsp.bashls.setup({
+          filetypes = { "sh", "bash", "zsh" }
         })
       end
       if 1 == vim.fn.executable("clangd") then

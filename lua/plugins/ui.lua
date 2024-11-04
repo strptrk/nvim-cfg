@@ -259,9 +259,19 @@ return {
           hex_color = hipatterns.gen_highlighter.hex_color(),
         },
       })
-      vim.api.nvim_create_user_command("HipatToggle", function()
-        hipatterns.toggle(0)
-      end, { force = true })
+      vim.api.nvim_create_user_command("Hipat", function(args)
+        if args.args == "" or arg.args == "toggle" then
+          hipatterns.toggle(0)
+        elseif args.args == "enable" then
+          hipatterns.enable(0)
+        elseif args.args == "disable" then
+          hipatterns.disable(0)
+        end
+      end, {
+        force = true,
+        nargs = "?",
+        complete = function() return { "toggle", "enable", "disable" } end,
+      })
     end,
   },
   {
@@ -544,6 +554,23 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     lazy = true,
+    init = function()
+      vim.api.nvim_create_user_command("Hls", function()
+        require("noice").redirect("hi")
+        require('mini.hipatterns').enable(0)
+      end, {})
+      vim.api.nvim_create_user_command("Ins", function()
+        require("noice").redirect("Inspect")
+        require('mini.hipatterns').enable(0)
+      end, {})
+    end,
+    keys = { ---@format disable
+      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
+      { "<c-f>",     function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll forward" },
+      { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll backward" },
+      { ",n",        function() require("noice").cmd("dismiss") end, silent = true, mode = "n", desc = "Clear Noice" },
+      { "<Space>I", "<cmd>Ins<cr>", desc = "Inspect Highlight for Token"}
+    }, ---@format enable
     opts = {
       cmdline = {
         view = "cmdline",
@@ -576,6 +603,10 @@ return {
             },
           },
           view = "mini",
+        },
+        {
+          view = "split",
+          filter = { event = "msg_show", min_height = 20 },
         },
       },
       presets = {
@@ -620,12 +651,6 @@ return {
         },
       },
     },
-    keys = { ---@format disable
-      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end,                 mode = "c",    desc = "Redirect Cmdline" },
-      { "<c-f>",     function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,  silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll forward" },
-      { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll backward" },
-      { ",n",        function() require("noice").cmd("dismiss") end,                                silent = true, mode = "n",  desc = "Clear Noice" },
-    }, ---@format enable
     dependencies = {
       {
         "rcarriga/nvim-notify",

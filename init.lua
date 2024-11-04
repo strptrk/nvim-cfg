@@ -15,7 +15,10 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-vim.keymap.set({ "n", "v" }, "s", "<Nop>") -- disable, so which-key does not fall back to it
+-- disable, so which-key does not fall back to it
+vim.keymap.set({ "n", "v" }, "s", "<Nop>")
+vim.keymap.set({ "n", "x" }, "gc", "<Nop>")
+vim.keymap.set({ "n", "x" }, "gcc", "<Nop>")
 vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
 vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
 vim.g.solutionfmt = {
