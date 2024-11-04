@@ -65,6 +65,8 @@ map("n", "*", function()
   return require("cfg.utils").highlight_cmd_word()
 end, { expr = true, desc = "Highlight Usages" })
 
+map("n", "#", "gD", { noremap = true, desc = "Go to Definition (builtin)" })
+
 map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]],
   { desc = "Escape and Clear Highlights" })
 map({ "n", "t" }, "<A-Esc>", function()
@@ -126,7 +128,7 @@ end)
 
 -- paste last yanked thing, not deleted
 map({ "n", "x" }, "<Space>p", 'mz"0P`z', { desc = "Paste (yanked)", silent = true })
-map("n", "<Space>w", 'mzviw"0P`z', { desc = "Replace word with last yanked text.", silent = true })
+map("n", "<Space>x", 'mzviw"0P`z', { desc = "Replace word with last yanked text.", silent = true })
 
 map({ "n", "i", "t", "v" }, "<A-h>", function()
   require("cfg.utils").winmove("h")
