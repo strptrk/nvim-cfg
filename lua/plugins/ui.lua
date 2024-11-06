@@ -555,6 +555,9 @@ return {
     event = "VeryLazy",
     lazy = true,
     init = function()
+      vim.api.nvim_create_user_command("Redir", function(args)
+        require("noice").redirect(args.args)
+      end, { nargs = "+" })
       vim.api.nvim_create_user_command("Hls", function()
         require("noice").redirect("hi")
         require('mini.hipatterns').enable(0)
