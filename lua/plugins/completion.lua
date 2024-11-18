@@ -19,7 +19,7 @@ return {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
-      local too_big = require("cfg.utils").file_too_big(128)
+      local too_big = require("cfg.utils").file_too_big(96)
       local get_bufnrs = function()
         local bufs = vim.api.nvim_list_bufs()
         local result = {}

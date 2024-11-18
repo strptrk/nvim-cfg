@@ -130,8 +130,13 @@ return {
       {
         "andymass/vim-matchup",
         lazy = true,
-        enabled = true, -- experiment
         init = function()
+          vim.g.matchup_matchparen_deferred_show_delay = 1000
+          vim.g.matchup_matchparen_deferred_hide_delay = 1000
+          vim.g.matchup_matchparen_timeout = 20
+          vim.g.matchup_matchparen_insert_timeout = 20
+          vim.g.matchup_matchparen_deferred = 1
+          vim.g.matchup_matchparen_nomode = 'i'
           vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end,
       },

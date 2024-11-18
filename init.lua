@@ -78,6 +78,11 @@ vim.opt.synmaxcol = 240
 vim.opt.showmode = false
 vim.opt.exrc = true
 
+vim.opt.list = true
+vim.opt.listchars = {
+  trail = "•"
+}
+
 vim.opt.updatetime = 2000
 if vim.env["NVIM_SWAP_DIR"] then
   if vim.env["NVIM_SWAP_DIR"] == "ram" then

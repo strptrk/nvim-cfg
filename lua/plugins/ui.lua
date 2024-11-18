@@ -242,35 +242,70 @@ return {
   {
     'echasnovski/mini.hipatterns',
     version = false,
-    event = { "BufAdd", "BufNewFile", "BufReadPost" },
-    config = function()
+    lazy    = true,
+    cmd     = { "Hi" },
+    keys    = {
+      { "<Space>hp", "<cmd>Hi<cr>", desc = "Toggle Highlight Patterns" }
+    },
+    config  = function()
       local hipatterns = require('mini.hipatterns')
+
       hipatterns.setup({
-        delay = {
-          text_change = 500
-        },
-        highlighters = {
-          -- _ = { pattern = function(buf_id) return nil|string|[string] end, group = "..." },
-          -- fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-          -- hack  = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
-          -- todo  = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
-          -- note  = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
-          trailing_space = { pattern = '%f[%s]%s*$', group = 'MiniHipatternsFixme' },
-          hex_color = hipatterns.gen_highlighter.hex_color(),
-        },
+        delay = { text_change = 300 }
       })
-      vim.api.nvim_create_user_command("Hipat", function(args)
-        if args.args == "" or arg.args == "toggle" then
+
+      vim.api.nvim_create_user_command("Hi", function(args)
+        if args.args == "" or args.args == "toggle" then
           hipatterns.toggle(0)
         elseif args.args == "enable" then
           hipatterns.enable(0)
         elseif args.args == "disable" then
+          vim.b.minihipatterns_config = nil
           hipatterns.disable(0)
+        elseif args.args == "todo" then
+          vim.b.minihipatterns_config = vim.b.minihipatterns_config or { highlighters = {} }
+          if not vim.b.minihipatterns_config.highlighters.fixme then
+            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+              highlighters = {
+                -- more or less emulates treesitter-comment's behaviour, but is activated
+                -- everywhere, not just in comments
+                ---@format disable
+                fixme  = { pattern = '%f[%w]()FIXME()%f[%W]', group = '@comment.error' },
+                fixme_ = { pattern = 'FIXME%(()[^)]*()%)',    group = 'Number' },
+                fix    = { pattern = '%f[%w]()FIX()%f[%W]',   group = '@comment.warning' },
+                fix_   = { pattern = 'FIX%(()[^)]*()%)',      group = 'Number' },
+                hack   = { pattern = '%f[%w]()HACK()%f[%W]',  group = '@comment.warning' },
+                hack_  = { pattern = 'HACK%(()[^)]*()%)',     group = 'Number' },
+                todo   = { pattern = '%f[%w]()TODO()%f[%W]',  group = '@comment.todo' },
+                todo_  = { pattern = 'TODO%(()[^)]*()%)',     group = 'Number' },
+                note   = { pattern = '%f[%w]()NOTE()%f[%W]',  group = '@comment.note' },
+                note_  = { pattern = 'NOTE%(()[^)]*()%)',     group = 'Number' },
+                xxx    = { pattern = '%f[%w]()XXX()%f[%W]',   group = '@comment.note' },
+                xxx_   = { pattern = 'XXX%(()[^)]*()%)',      group = 'Number' },
+                ---@format enable
+              }
+            })
+          end
+          hipatterns.disable(0)
+          hipatterns.enable(0)
+        elseif args.args == "color" then
+          vim.b.minihipatterns_config = vim.b.minihipatterns_config or { highlighters = {} }
+          if not vim.b.minihipatterns_config.highlighters.hex_color then
+            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+              highlighters = {
+                hex_color = hipatterns.gen_highlighter.hex_color()
+              }
+            })
+          end
+          hipatterns.disable(0)
+          hipatterns.enable(0)
+        else
+          vim.notify("No such argument: " .. args.args, vim.log.levels.WARN, { title = "Highlight Pattern" })
         end
       end, {
         force = true,
         nargs = "?",
-        complete = function() return { "toggle", "enable", "disable" } end,
+        complete = function() return { "todo", "color", "toggle", "enable", "disable" } end,
       })
     end,
   },
@@ -560,11 +595,11 @@ return {
       end, { nargs = "+" })
       vim.api.nvim_create_user_command("Hls", function()
         require("noice").redirect("hi")
-        require('mini.hipatterns').enable(0)
+        vim.cmd([[Hi color]])
       end, {})
       vim.api.nvim_create_user_command("Ins", function()
         require("noice").redirect("Inspect")
-        require('mini.hipatterns').enable(0)
+        vim.cmd([[Hi color]])
       end, {})
     end,
     keys = { ---@format disable
