@@ -14,40 +14,90 @@ return {
         dashboard.button("g", "  Find word", [[<cmd>lua require('telescope.builtin').live_grep()<CR>]]),
         dashboard.button("s", "󰥨  Load Session", "<cmd>SessionManager load_session<CR>"),
         dashboard.button("l", "󰝉  Load Last Session", "<cmd>SessionManager load_last_session<CR>"),
-        dashboard.button("c", "  Config", [[<cmd>cd ]] .. cfgdir .. [[ | lua require('telescope.builtin').find_files({ cwd = ']] .. cfgdir .. [[' })<CR>]]),
+        dashboard.button("c", "  Config", [[<cmd>cd ]] .. cfgdir .. [[<bar>lua require('telescope.builtin').find_files({ cwd = ']] .. cfgdir .. [[' })<CR>]]),
         dashboard.button("u", "󰅢  Update Packages", "<cmd>Lazy sync<CR>"),
         dashboard.button("q", "󰿅  Quit NVIM", "<cmd>qa<CR>"),
       } ---@format enable
-      vim.api.nvim_set_hl(0, "StartLogo1", { fg = "#51D8FF" })
-      vim.api.nvim_set_hl(0, "StartLogo2", { fg = "#51D8FF" })
-      vim.api.nvim_set_hl(0, "StartLogo3", { fg = "#46C7FF" })
-      vim.api.nvim_set_hl(0, "StartLogo4", { fg = "#3DB5FF" })
-      vim.api.nvim_set_hl(0, "StartLogo5", { fg = "#239BFE" })
-      vim.api.nvim_set_hl(0, "StartLogo6", { fg = "#1672F9" })
-      vim.api.nvim_set_hl(0, "StartLogo7", { fg = "#044EE3" })
-      vim.api.nvim_set_hl(0, "StartLogo8", { fg = "#044EE3" })
+
       local header = {
-        "                                                     ",
-        "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-        "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-        "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-        "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-        "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-        "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-        "                                                     ",
+        [[  ███       ███  ]],
+        [[  ████      ████ ]],
+        [[  ████     █████ ]],
+        [[ █ ████    █████ ]],
+        [[ ██ ████   █████ ]],
+        [[ ███ ████  █████ ]],
+        [[ ████ ████ ████ ]],
+        [[ █████  ████████ ]],
+        [[ █████   ███████ █████ ██████ █    █ █ █    █ ]],
+        [[ █████    ██████ ██      ██    ██ ██    ██ ██ ███  ███ ]],
+        [[ █████     █████ █████   ██    ██ ██    ██ ██ ██████ ]],
+        [[ ████      ████ ██      ██    ██ █  █ ██ ██ ██ ██ ]],
+        [[  ███       ███  █████ ██████  ████  █ █      █ ]],
       }
-      local function colorize_header()
-        local lines = {}
-        for i, chars in pairs(header) do
-          local line = {
-            type = "text",
-            val = chars,
-            opts = { hl = "StartLogo" .. i, shrink_margin = false, position = "center" },
-          }
-          table.insert(lines, line)
+      local header_colors = {
+        [[  kkkka       gggg  ]],
+        [[  kkkkaa      ggggg ]],
+        [[ b kkkaaa     ggggg ]],
+        [[ bb kkaaaa    ggggg ]],
+        [[ bbb kaaaaa   ggggg ]],
+        [[ bbbb aaaaaa  ggggg ]],
+        [[ bbbbb aaaaaa igggg ]],
+        [[ bbbbb  aaaaaahiggg ]],
+        [[ bbbbb   aaaaajhigg bbbbbbb bbbbbbbb bb    bb bb bbb    bbb ]],
+        [[ bbbbb    aaaaajhig bb      bb    bb bb    bb bb bbbb  bbbb ]],
+        [[ bbbbb     aaaaajhi bbbbb   bb    bb bb    bb bb bbbbbbbbbb ]],
+        [[ bbbbb      aaaaajh bb      bb    bb bbb  bbb bb bb bbbb bb ]],
+        [[  bbbb       aaaaa  bbbbbbb bbbbbbbb  bbbbbb  bb bb      bb ]],
+        -- [[ bbbbb   aaaaajhigg █████ ██████ █    █ █ █    █ ]],
+        -- [[ bbbbb    aaaaajhig ██      ██    ██ ██    ██ ██ ███  ███ ]],
+        -- [[ bbbbb     aaaaajhi █████   ██    ██ ██    ██ ██ ██████ ]],
+        -- [[ bbbbb      aaaaajh ██      ██    ██ █  █ ██ ██ ██ ██ ]],
+        -- [[  bbbb       aaaaa  █████ ██████  ████  █ █      █ ]],
+      }
+      local header_color_defs = {
+        ["b"] = { fg = "#3399ff", ctermfg = 33 },
+        ["a"] = { fg = "#53C670", ctermfg = 35 },
+        ["g"] = { fg = "#39ac56", ctermfg = 29 },
+        ["h"] = { fg = "#33994d", ctermfg = 23 },
+        ["i"] = { fg = "#33994d", bg = "#39ac56", ctermfg = 23, ctermbg = 29 },
+        ["j"] = { fg = "#53C670", bg = "#33994d", ctermfg = 35, ctermbg = 23 },
+        ["k"] = { fg = "#30A572", ctermfg = 36 },
+      }
+
+      local function char_len(s, pos)
+        local byte = string.byte(s, pos)
+        if not byte then
+          return nil
         end
-        return lines
+        return (byte < 0x80 and 1) or (byte < 0xE0 and 2) or (byte < 0xF0 and 3) or (byte < 0xF8 and 4) or 1
       end
+
+      dashboard.section.header.val = header
+      local hls = {}
+      for key, hl in pairs(header_color_defs) do
+        local name = "Alpha_" .. key
+        vim.api.nvim_set_hl(0, name, hl)
+        hls[key] = name
+      end
+
+      dashboard.section.header.opts.hl = {}
+      for i, line in ipairs(header_colors) do
+        local highlights = {}
+        local pos = 0
+
+        for j = 1, #line do
+          local opos = pos
+          pos = pos + char_len(header[i], opos + 1)
+
+          local color_name = hls[line:sub(j, j)]
+          if color_name then
+            table.insert(highlights, { color_name, opos, pos })
+          end
+        end
+
+        table.insert(dashboard.section.header.opts.hl, highlights)
+      end
+
       dashboard.section.footer.val = fortune()
       local group = vim.api.nvim_create_augroup("CleanDashboard", {})
       vim.api.nvim_create_autocmd("User", {
@@ -71,7 +121,7 @@ return {
       alpha.setup({
         layout = {
           { type = "padding", val = 4 },
-          { type = "group",   val = colorize_header() },
+          dashboard.section.header,
           { type = "padding", val = 2 },
           dashboard.section.buttons,
           dashboard.section.footer,
