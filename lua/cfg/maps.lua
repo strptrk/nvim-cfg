@@ -39,7 +39,7 @@ map("n", "<Space>dl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "<Space>mm", "<cmd>Man<cr>", { desc = "Man (horizontal split)" })
 map("n", "<Space>mj", "<cmd>horizontal Man<cr>", { desc = "Man (horizontal split)" })
 map("n", "<Space>ml", "<cmd>vertical Man<cr>", { desc = "Man (vertical split)" })
-map("n", "<Space>mc", ":hide Man ", { desc = "Man (current window)" })
+map("n", "<Space>mw", ":hide Man ", { desc = "Man (current window)" })
 
 map("n", "<C-M-h>", function()
   require("cfg.utils").resize("h", 1)
