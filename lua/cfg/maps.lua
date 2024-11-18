@@ -36,6 +36,11 @@ map("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.s
 map("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end, { desc = "Go to next error" })
 map("n", "<Space>dl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
+map("n", "<Space>mm", "<cmd>Man<cr>", { desc = "Man (horizontal split)" })
+map("n", "<Space>mj", "<cmd>horizontal Man<cr>", { desc = "Man (horizontal split)" })
+map("n", "<Space>ml", "<cmd>vertical Man<cr>", { desc = "Man (vertical split)" })
+map("n", "<Space>mc", ":hide Man ", { desc = "Man (current window)" })
+
 map("n", "<C-M-h>", function()
   require("cfg.utils").resize("h", 1)
 end)

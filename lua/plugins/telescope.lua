@@ -9,7 +9,7 @@ return {
       { "<Space>,",  function() require("telescope.builtin").resume() end,                              desc = "Resume previous telescope" },
       { "<Space>F",  function() require("telescope.builtin").git_files() end,                           desc = "Find Files (Git)" },
       { "<Space>g",  function() require("telescope.builtin").live_grep() end,                           desc = "Grep" },
-      { "<Space>m",  function() require("telescope.builtin").marks() end,                               desc = "Marks" },
+      { "<Space>M",  function() require("telescope.builtin").marks() end,                               desc = "Marks" },
       { "<Space>h;", function() require("telescope.builtin").command_history() end,                     desc = "Command History" },
       { "<Space>h:", function() require("telescope.builtin").command_history() end,                     desc = "Command History" },
       { "<Space>h/", function() require("telescope.builtin").search_history() end,                      desc = "Search History" },
