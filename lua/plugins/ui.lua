@@ -7,6 +7,7 @@ end
 local symbols = {
   left_five_eights_block = "▋",
   right_five_eights_block = "🮉",
+  full_block = "█"
 }
 
 local colors = {
@@ -245,25 +246,32 @@ return {
     lazy    = true,
     cmd     = { "Hi" },
     keys    = {
-      { "<Space>hp", "<cmd>Hi<cr>", desc = "Toggle Highlight Patterns" }
+      { "<Space>hi", "<cmd>Hi<cr>", desc = "Toggle Highlight Patterns" }
     },
     config  = function()
       local hipatterns = require('mini.hipatterns')
+      local default = {
+        delay = { text_change = 200 },
+        highlighters = {}
+      }
+      hipatterns.setup(default)
 
-      hipatterns.setup({
-        delay = { text_change = 300 }
-      })
+      vim.api.nvim_set_hl(0, "MiniHippaterns_trail_virtualtext", { fg = "#fc2d2d" })
 
       vim.api.nvim_create_user_command("Hi", function(args)
+        vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
         if args.args == "" or args.args == "toggle" then
           hipatterns.toggle(0)
         elseif args.args == "enable" then
           hipatterns.enable(0)
         elseif args.args == "disable" then
+          hipatterns.disable(0)
+        elseif args.args == "clear" then
           vim.b.minihipatterns_config = nil
           hipatterns.disable(0)
+        elseif args.args == "config" then
+          print(vim.inspect(vim.b.minihipatterns_config))
         elseif args.args == "todo" then
-          vim.b.minihipatterns_config = vim.b.minihipatterns_config or { highlighters = {} }
           if not vim.b.minihipatterns_config.highlighters.fixme then
             vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
               highlighters = {
@@ -282,6 +290,8 @@ return {
                 note_  = { pattern = 'NOTE%(()[^)]*()%)',     group = 'Number' },
                 xxx    = { pattern = '%f[%w]()XXX()%f[%W]',   group = '@comment.note' },
                 xxx_   = { pattern = 'XXX%(()[^)]*()%)',      group = 'Number' },
+                error  = { pattern = '%f[%w]()ERROR()%f[%W]', group = '@comment.error' },
+                error_ = { pattern = 'ERROR%(()[^)]*()%)',    group = 'Number' },
                 ---@format enable
               }
             })
@@ -289,11 +299,42 @@ return {
           hipatterns.disable(0)
           hipatterns.enable(0)
         elseif args.args == "color" then
-          vim.b.minihipatterns_config = vim.b.minihipatterns_config or { highlighters = {} }
           if not vim.b.minihipatterns_config.highlighters.hex_color then
             vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
               highlighters = {
                 hex_color = hipatterns.gen_highlighter.hex_color()
+              }
+            })
+          end
+          hipatterns.disable(0)
+          hipatterns.enable(0)
+        elseif args.args == "trail" then
+          if not vim.b.minihipatterns_config.highlighters.trail then
+            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+              highlighters = {
+                trail = {
+                  pattern = "%f[%s]()%s*()$",
+                  group = "",
+                  extmark_opts = function(_, match, _)
+                    local mask = ""
+                    for char in string.gmatch(match, ".") do
+                      if char == string.char(9) then -- TAB
+                        mask = mask ..
+                            string.rep(
+                              symbols.full_block,
+                              vim.api.nvim_get_option_value("tabstop", { scope = "local" }) or 4)
+                      else
+                        mask = mask .. symbols.full_block
+                      end
+                    end
+                    return {
+                      virt_text = { { mask, 'Error' } },
+                      virt_text_pos = 'overlay',
+                      priority = 100,
+                      right_gravity = false,
+                    }
+                  end,
+                }
               }
             })
           end
@@ -305,7 +346,18 @@ return {
       end, {
         force = true,
         nargs = "?",
-        complete = function() return { "todo", "color", "toggle", "enable", "disable" } end,
+        complete = function()
+          return {
+            "todo",
+            "color",
+            "toggle",
+            "trail",
+            "config",
+            "enable",
+            "disable",
+            "clear",
+          }
+        end,
       })
     end,
   },
