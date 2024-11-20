@@ -37,6 +37,7 @@ return {
       { "<Space>sw", function() require("telescope.builtin").lsp_workspace_symbols({ symbol_width = 50 }) end,  desc = "LSP Symbols (workspace)" },
       { "<Space>sf", function() require("telescope.builtin").lsp_document_symbols({ symbols = { "function", "method" }, symbol_width = 50 }) end, desc = "LSP Functions (document)" },
       { "<Space>sF", function() require("telescope.builtin").lsp_workspace_symbols({ symbols = { "function", "method" }, symbol_width = 50 }) end, desc = "LSP Functions (workspace)" },
+      { "<Space>W",  function() require("telescope.builtin").grep_string({ search = vim.fn.expand("%:t")}) end, desc = "Grep current file name" },
       { "gdh",       function() require("cfg.utils").split("h", require("telescope.builtin").lsp_definitions, { zz = true }) end, desc = "Go to Definition (split left)" },
       { "gdj",       function() require("cfg.utils").split("j", require("telescope.builtin").lsp_definitions, { zz = true }) end, desc = "Go to Definition (split down)" },
       { "gdk",       function() require("cfg.utils").split("k", require("telescope.builtin").lsp_definitions, { zz = true }) end, desc = "Go to Definition (split up)" },
