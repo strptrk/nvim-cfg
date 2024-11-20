@@ -5,7 +5,6 @@ return {
     version = false,
     event = "InsertEnter",
     keys = {
-      { ":", ":", mode = { "x", "n" } },
       { ";", ":", mode = { "x", "n" } },
       { "/", "/", mode = { "x", "n" } },
     },
@@ -13,6 +12,7 @@ return {
       local cmp = require("cmp")
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
       local luasnip = require("luasnip")
+      ---@diagnostic disable-next-line: unused-local, unused-function
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))

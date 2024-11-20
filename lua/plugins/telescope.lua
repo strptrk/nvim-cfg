@@ -4,6 +4,7 @@ return {
     lazy = true,
     cmd = "Telescope",
     keys = { ---@format disable
+      { ":",         function() require("telescope.builtin").commands() end,                            desc = "Commands" },
       { "gI",        function() require("telescope.builtin").lsp_implementations() end,                 desc = "Go to Implementation" },
       { "<Space>f",  function() require("telescope.builtin").find_files() end,                          desc = "Find Files" },
       { "<Space>,",  function() require("telescope.builtin").resume() end,                              desc = "Resume previous telescope" },
