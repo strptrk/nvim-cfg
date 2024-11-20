@@ -62,6 +62,39 @@ return {
     end,
   },
   {
+    'echasnovski/mini.operators',
+    version = false,
+    keys = {
+      { "g=",       nil },
+      { "gx",       nil },
+      { "gm",       nil },
+      { "<Space>r", nil },
+      { "gss",      nil },
+    },
+    opts = {
+      evaluate = { -- Evaluate text and replace with output
+        prefix = 'g=',
+        func = nil,
+      },
+      exchange = { -- Exchange text regions
+        prefix = 'gx',
+        reindent_linewise = true,
+      },
+      multiply = { -- Multiply (duplicate) text
+        prefix = 'gm',
+        func = nil,
+      },
+      replace = { -- Replace text with register
+        prefix = '<Space>r',
+        reindent_linewise = true,
+      },
+      sort = { -- Sort text
+        prefix = 'gss',
+        func = nil,
+      }
+    }
+  },
+  {
     'echasnovski/mini.ai',
     version = false,
     lazy = true,

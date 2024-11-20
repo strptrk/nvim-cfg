@@ -15,7 +15,7 @@ return {
       { "<Space>h:", function() require("telescope.builtin").command_history() end,                     desc = "Command History" },
       { "<Space>h/", function() require("telescope.builtin").search_history() end,                      desc = "Search History" },
       { "<Space>H",  function() require("telescope.builtin").help_tags() end,                           desc = "Help tags" },
-      { "<Space>r",  function() require("telescope.builtin").registers() end,                           desc = "Registers" },
+      { "<Space>R",  function() require("telescope.builtin").registers() end,                           desc = "Registers" },
       { "<Space>st", function() require("telescope.builtin").treesitter() end,                          desc = "Treesitter Symbols" },
       { "<Space>l",  function() require("telescope.builtin").loclist() end,                             desc = "Diagnostic Loclist" },
       { "gr",        function() require("telescope.builtin").lsp_references() end,                      desc = "Go to References" },
