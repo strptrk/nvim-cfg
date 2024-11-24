@@ -5,6 +5,7 @@ return {
     version = false,
     event = "InsertEnter",
     keys = {
+      { ":", ":", mode = { "x", "n" } },
       { ";", ":", mode = { "x", "n" } },
       { "/", "/", mode = { "x", "n" } },
     },
