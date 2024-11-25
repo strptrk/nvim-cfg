@@ -57,6 +57,19 @@ return {
               return { left = type .. "[", right = "]" }
             end
           },
+          ['i'] = {
+            output = function()
+              local s = minisurround.user_input("Surrounding")
+              return { left = s, right = s }
+            end
+          },
+          ['w'] = {
+            output = function()
+              local s = minisurround.user_input("Surrounding")
+              if not s then return {} end
+              return { left = s .. " ", right = " " .. s }
+            end
+          },
         }
       })
     end,
@@ -65,11 +78,11 @@ return {
     'echasnovski/mini.operators',
     version = false,
     keys = {
-      { "g=",       nil },
-      { "gx",       nil },
-      { "gm",       nil },
-      { "<Space>r", nil },
-      { "gss",      nil },
+      { "g=",  nil, mode = { "n", "x" } },
+      { "gx",  nil, mode = { "n", "x" } },
+      { "gm",  nil, mode = { "n", "x" } },
+      { "X",   nil, mode = { "n", "x" } },
+      { "gss", nil, mode = { "n", "x" } },
     },
     opts = {
       evaluate = { -- Evaluate text and replace with output
@@ -85,7 +98,7 @@ return {
         func = nil,
       },
       replace = { -- Replace text with register
-        prefix = '<Space>r',
+        prefix = 'X',
         reindent_linewise = true,
       },
       sort = { -- Sort text
