@@ -749,6 +749,7 @@ return {
           require("notify").setup({
             background_colour = "#2e3440",
             top_down = false,
+            render = "wrapped-compact",
           })
           vim.notify = require("notify")
         end,
