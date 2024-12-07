@@ -11,7 +11,7 @@ return {
         dashboard.button("e", "  New file", [[<cmd>ene<CR>]]),
         dashboard.button("t", "󱏒  File tree", [[<cmd>ene<bar>Neotree focus filesystem position=left<CR>]]),
         dashboard.button("f", "󰈞  Find file", [[<cmd>lua require('telescope.builtin').find_files()<CR>]]),
-        dashboard.button("g", "  Find word", [[<cmd>lua require('telescope.builtin').live_grep()<CR>]]),
+        dashboard.button("w", "  Find word", [[<cmd>lua require('telescope.builtin').live_grep()<CR>]]),
         dashboard.button("s", "󰥨  Load Session", "<cmd>SessionManager load_session<CR>"),
         dashboard.button("l", "󰝉  Load Last Session", "<cmd>SessionManager load_last_session<CR>"),
         dashboard.button("c", "  Config", [[<cmd>cd ]] .. cfgdir .. [[ | lua require('telescope.builtin').find_files({ cwd = ']] .. cfgdir .. [[' })<CR>]]),

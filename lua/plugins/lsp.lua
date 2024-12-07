@@ -29,9 +29,10 @@ return {
           settings = {
             pylsp = {
               plugins = {
-                mccabe = { enabled = true },
+                mccabe   = { enabled = true },
                 pyflakes = { enabled = true },
-                pylint = { enabled = true },
+                pylint   = { enabled = true },
+                yapf     = { enabled = false },
               }
             }
           }

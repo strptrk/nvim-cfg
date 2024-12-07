@@ -188,14 +188,15 @@ return {
   },
   {
     "numToStr/Comment.nvim",
+    lazy = true,
     keys = {
-      { "<Space>c",  nil, mode = { "x", "o" }, desc = "Comment linewise" },
-      { "<Space>x",  nil, mode = { "x", "o" }, desc = "Comment blockwise" },
-      { "<Space>cc", nil, mode = "n",          desc = "Comment linewise" },
-      { "<Space>cx", nil, mode = "n",          desc = "Comment linewise" },
-      { "<Space>cO", nil, mode = "n",          desc = "Comment line above" },
-      { "<Space>co", nil, mode = "n",          desc = "Comment line below" },
-      { "<Space>cl", nil, mode = "n",          desc = "Comment end of line" },
+      { "<Space>c",  nil, mode = { "n", "x", "o" }, desc = "Comment linewise" },
+      { "<Space>x",  nil, mode = { "n", "x", "o" }, desc = "Comment blockwise" },
+      { "<Space>cc", nil, mode = "n",               desc = "Comment linewise" },
+      { "<Space>cx", nil, mode = "n",               desc = "Comment linewise" },
+      { "<Space>cO", nil, mode = "n",               desc = "Comment line above" },
+      { "<Space>co", nil, mode = "n",               desc = "Comment line below" },
+      { "<Space>cl", nil, mode = "n",               desc = "Comment end of line" },
     },
     opts = {
       padding = true,
