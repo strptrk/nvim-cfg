@@ -55,16 +55,16 @@ snippet getopt
             case "\${opt}" in
                 h)
                     usage
-                    exit 0
+                    return 0
                     ;;
                 v)
                     echo "\${__VERSION__}"
-                    exit 0
+                    return 0
                     ;;
                 *)
                     echo -e "\\n  Option does not exist : \${OPTARG}\\n"
                     usage
-                    exit 1
+                    return 1
                     ;;
             esac
         done
