@@ -61,6 +61,7 @@ return {
       end
       dashboard.section.footer.val = fortune()
       local group = vim.api.nvim_create_augroup("CleanDashboard", {})
+      -- fired upon entering the dashboard
       vim.api.nvim_create_autocmd("User", {
         group = group,
         pattern = "AlphaReady",
@@ -71,6 +72,7 @@ return {
           vim.g.dashboard_shown = true
         end,
       })
+      -- fired upon exiting the dashboard
       vim.api.nvim_create_autocmd("BufUnload", {
         group = group,
         pattern = "<buffer>",
@@ -78,6 +80,7 @@ return {
           vim.opt.showtabline = 2
           vim.opt.ruler = true
           vim.opt.laststatus = 3
+          vim.api.nvim_exec_autocmds("User", { pattern = "VeryVeryLazy" })
         end,
       })
       alpha.setup({

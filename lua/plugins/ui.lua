@@ -71,7 +71,7 @@ local colorscheme = {
 return {
   {
     "folke/edgy.nvim",
-    event = "VeryLazy",
+    event = "User VeryVeryLazy",
     opts = function()
       local opts = {
         options = {
@@ -161,11 +161,7 @@ return {
   {
     "b0o/incline.nvim",
     lazy = true,
-    event = {
-      "BufNewFile",
-      "BufReadPost",
-      "User VeryVeryLazy",
-    },
+    event = "User VeryVeryLazy",
     config = function()
       require("incline").setup({
         debounce_threshold = {
@@ -368,12 +364,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     lazy = true,
-    event = {
-      "BufAdd",
-      "BufNewFile",
-      "BufReadPost",
-      "User VeryVeryLazy",
-    },
+    event = "User VeryVeryLazy",
     dependencies = {
       { "nvim-tree/nvim-web-devicons", lazy = true },
     },
@@ -616,12 +607,7 @@ return {
   {
     "akinsho/bufferline.nvim",
     lazy = true,
-    event = {
-      "BufAdd",
-      "BufNewFile",
-      "BufReadPost",
-      "User VeryVeryLazy",
-    },
+    event = "User VeryVeryLazy",
     opts = {
       -- highlights = require("catppuccin.groups.integrations.bufferline").get(),
       options = {
@@ -645,7 +631,7 @@ return {
   },
   {
     "folke/noice.nvim",
-    event = "VeryLazy",
+    event = "User VeryVeryLazy",
     lazy = true,
     init = function()
       vim.api.nvim_create_user_command("Redir", function(args)
@@ -763,6 +749,7 @@ return {
       {
         "stevearc/dressing.nvim",
         lazy = true,
+        event = "User VeryVeryLazy",
         init = function()
           vim.api.nvim_create_autocmd("FileType", {
             pattern = "DressingSelect",
@@ -772,7 +759,6 @@ return {
             end
           })
         end,
-        event = "VeryLazy",
         opts = {
           input = { enabled = false },
           select = {
