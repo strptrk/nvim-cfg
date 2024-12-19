@@ -161,7 +161,11 @@ return {
   {
     "b0o/incline.nvim",
     lazy = true,
-    event = { "BufNewFile", "BufReadPost" },
+    event = {
+      "BufNewFile",
+      "BufReadPost",
+      "User VeryVeryLazy",
+    },
     config = function()
       require("incline").setup({
         debounce_threshold = {
@@ -171,7 +175,7 @@ return {
         hide = {
           cursorline = false,
           focused_win = false,
-          only_win = false,
+          only_win = true,
         },
         highlight = {
           groups = {
@@ -368,6 +372,7 @@ return {
       "BufAdd",
       "BufNewFile",
       "BufReadPost",
+      "User VeryVeryLazy",
     },
     dependencies = {
       { "nvim-tree/nvim-web-devicons", lazy = true },
@@ -615,6 +620,7 @@ return {
       "BufAdd",
       "BufNewFile",
       "BufReadPost",
+      "User VeryVeryLazy",
     },
     opts = {
       -- highlights = require("catppuccin.groups.integrations.bufferline").get(),

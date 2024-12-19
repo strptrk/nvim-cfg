@@ -2,6 +2,17 @@ return {
   {
     "goolord/alpha-nvim",
     lazy = false,
+    init = function()
+      vim.g.dashboard_shown = false
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          if not vim.g.dashboard_shown then
+            vim.api.nvim_exec_autocmds("User", { pattern = "VeryVeryLazy" })
+          end
+        end,
+      })
+    end,
     config = function()
       local alpha = require("alpha")
       local dashboard = require("alpha.themes.dashboard")
@@ -57,6 +68,7 @@ return {
           vim.opt.showtabline = 0
           vim.opt.laststatus = 0
           vim.opt.ruler = false
+          vim.g.dashboard_shown = true
         end,
       })
       vim.api.nvim_create_autocmd("BufUnload", {
