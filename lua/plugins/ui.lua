@@ -258,26 +258,31 @@ return {
 
       vim.api.nvim_set_hl(0, "MiniHippaterns_trail_virtualtext", { fg = "#fc2d2d" })
 
-      vim.api.nvim_create_user_command("Hi", function(args)
-        vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
-        if args.args == "" or args.args == "toggle" then
-          hipatterns.toggle(0)
-        elseif args.args == "enable" then
-          hipatterns.enable(0)
-        elseif args.args == "disable" then
-          hipatterns.disable(0)
-        elseif args.args == "clear" then
-          vim.b.minihipatterns_config = nil
-          hipatterns.disable(0)
-        elseif args.args == "config" then
-          print(vim.inspect(vim.b.minihipatterns_config))
-        elseif args.args == "todo" then
-          if not vim.b.minihipatterns_config.highlighters.fixme then
-            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
-              highlighters = {
-                -- more or less emulates treesitter-comment's behaviour, but is activated
-                -- everywhere, not just in comments
-                ---@format disable
+      local hi_commands = {}
+      local hi_command = function(name, fn)
+        if fn == nil then
+          return hi_commands[name]
+        else
+          hi_commands[name] = fn
+        end
+      end
+
+      hi_command("", function() hipatterns.toggle(0) end)
+      hi_command("toggle", function() hipatterns.toggle(0) end)
+      hi_command("enable", function() hipatterns.enable(0) end)
+      hi_command("disable", function() hipatterns.disable(0) end)
+      hi_command("clear", function()
+        vim.b.minihipatterns_config = nil
+        hipatterns.disable(0)
+      end)
+      hi_command("config", function() print(vim.inspect(vim.b.minihipatterns_config)) end)
+      hi_command("todo", function()
+        if not vim.b.minihipatterns_config.highlighters.fixme then
+          vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+            highlighters = {
+              -- more or less emulates treesitter-comment's behaviour, but is activated
+              -- everywhere, not just in comments
+              ---@format disable
                 fixme  = { pattern = '%f[%w]()FIXME()%f[%W]', group = '@comment.error' },
                 fixme_ = { pattern = 'FIXME%(()[^)]*()%)',    group = 'Number' },
                 fix    = { pattern = '%f[%w]()FIX()%f[%W]',   group = '@comment.warning' },
@@ -293,70 +298,77 @@ return {
                 error  = { pattern = '%f[%w]()ERROR()%f[%W]', group = '@comment.error' },
                 error_ = { pattern = 'ERROR%(()[^)]*()%)',    group = 'Number' },
                 ---@format enable
-              }
-            })
-          end
-          hipatterns.disable(0)
-          hipatterns.enable(0)
-        elseif args.args == "color" then
-          if not vim.b.minihipatterns_config.highlighters.hex_color then
-            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
-              highlighters = {
-                hex_color = hipatterns.gen_highlighter.hex_color()
-              }
-            })
-          end
-          hipatterns.disable(0)
-          hipatterns.enable(0)
-        elseif args.args == "trail" then
-          if not vim.b.minihipatterns_config.highlighters.trail then
-            vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
-              highlighters = {
-                trail = {
-                  pattern = "%f[%s]()%s*()$",
-                  group = "",
-                  extmark_opts = function(_, match, _)
-                    local mask = ""
-                    for char in string.gmatch(match, ".") do
-                      if char == string.char(9) then -- TAB
-                        mask = mask ..
-                            string.rep(
-                              symbols.full_block,
-                              vim.api.nvim_get_option_value("tabstop", { scope = "local" }) or 4)
-                      else
-                        mask = mask .. symbols.full_block
-                      end
+            }
+          })
+        end
+        hipatterns.disable(0)
+        hipatterns.enable(0)
+      end)
+
+      hi_command("color", function()
+        if not vim.b.minihipatterns_config.highlighters.hex_color then
+          vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+            highlighters = {
+              hex_color = hipatterns.gen_highlighter.hex_color()
+            }
+          })
+        end
+        hipatterns.disable(0)
+        hipatterns.enable(0)
+      end)
+
+      hi_command("trail", function()
+        if not vim.b.minihipatterns_config.highlighters.trail then
+          vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
+            highlighters = {
+              trail = {
+                pattern = "%f[%s]()%s*()$",
+                group = "",
+                extmark_opts = function(_, match, _)
+                  local mask = ""
+                  for char in string.gmatch(match, ".") do
+                    if char == string.char(9) then -- TAB
+                      mask = mask ..
+                          string.rep(
+                            symbols.full_block,
+                            vim.api.nvim_get_option_value("tabstop", { scope = "local" }) or 4)
+                    else
+                      mask = mask .. symbols.full_block
                     end
-                    return {
-                      virt_text = { { mask, 'Error' } },
-                      virt_text_pos = 'overlay',
-                      priority = 100,
-                      right_gravity = false,
-                    }
-                  end,
-                }
+                  end
+                  return {
+                    virt_text = { { mask, 'Error' } },
+                    virt_text_pos = 'overlay',
+                    priority = 100,
+                    right_gravity = false,
+                  }
+                end,
               }
-            })
-          end
-          hipatterns.disable(0)
-          hipatterns.enable(0)
-        else
+            }
+          })
+        end
+        hipatterns.disable(0)
+        hipatterns.enable(0)
+      end)
+
+      local hi_completion = {}
+      for command, _ in pairs(hi_commands) do
+        table.insert(hi_completion, command)
+      end
+
+      vim.api.nvim_create_user_command("Hi", function(args)
+        vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
+        local hi_cmd = hi_commands[args.args]
+        if hi_cmd == nil then
           vim.notify("No such argument: " .. args.args, vim.log.levels.WARN, { title = "Highlight Pattern" })
+        else
+          hi_cmd()
         end
       end, {
         force = true,
         nargs = "?",
         complete = function()
-          return {
-            "todo",
-            "color",
-            "toggle",
-            "trail",
-            "config",
-            "enable",
-            "disable",
-            "clear",
-          }
+          return hi_completion
         end,
       })
     end,
@@ -667,6 +679,11 @@ return {
           input       = { icon = "󰥻 " },
         }
       },
+      popupmenu = {
+        enabled = false, -- enables the Noice popupmenu UI
+        ---@type 'nui'|'cmp'
+        backend = "nui", -- backend to use to show regular cmdline completions
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -737,13 +754,16 @@ return {
       {
         "rcarriga/nvim-notify",
         lazy = true,
+        init = function()
+          ---@diagnostic disable-next-line: duplicate-set-field
+          vim.notify = function(...) require("notify")(...) end
+        end,
         config = function()
           require("notify").setup({
             background_colour = "#2e3440",
             top_down = false,
             render = "wrapped-compact",
           })
-          vim.notify = require("notify")
         end,
       },
       {

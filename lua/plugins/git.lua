@@ -88,6 +88,7 @@ return {
             vim.opt_local.wrap = false
             vim.opt_local.list = false
             vim.opt_local.number = false
+            vim.opt_local.cursorline = true
             vim.opt_local.colorcolumn = "80,100,120"
           end,
         },
