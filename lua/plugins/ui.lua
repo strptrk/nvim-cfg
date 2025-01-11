@@ -643,7 +643,7 @@ return {
   },
   {
     "folke/noice.nvim",
-    event = "User VeryVeryLazy",
+    event = "VeryLazy",
     lazy = true,
     init = function()
       vim.api.nvim_create_user_command("Redir", function(args)
