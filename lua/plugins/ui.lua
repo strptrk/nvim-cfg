@@ -259,24 +259,17 @@ return {
       vim.api.nvim_set_hl(0, "MiniHippaterns_trail_virtualtext", { fg = "#fc2d2d" })
 
       local hi_commands = {}
-      local hi_command = function(name, fn)
-        if fn == nil then
-          return hi_commands[name]
-        else
-          hi_commands[name] = fn
-        end
-      end
 
-      hi_command("", function() hipatterns.toggle(0) end)
-      hi_command("toggle", function() hipatterns.toggle(0) end)
-      hi_command("enable", function() hipatterns.enable(0) end)
-      hi_command("disable", function() hipatterns.disable(0) end)
-      hi_command("clear", function()
+      hi_commands[""] = function() hipatterns.toggle(0) end
+      hi_commands["toggle"] = function() hipatterns.toggle(0) end
+      hi_commands["enable"] = function() hipatterns.enable(0) end
+      hi_commands["disable"] = function() hipatterns.disable(0) end
+      hi_commands["clear"] = function()
         vim.b.minihipatterns_config = nil
         hipatterns.disable(0)
-      end)
-      hi_command("config", function() print(vim.inspect(vim.b.minihipatterns_config)) end)
-      hi_command("todo", function()
+      end
+      hi_commands["config"] = function() print(vim.inspect(vim.b.minihipatterns_config)) end
+      hi_commands["todo"] = function()
         if not vim.b.minihipatterns_config.highlighters.fixme then
           vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
             highlighters = {
@@ -286,7 +279,7 @@ return {
                 fixme  = { pattern = '%f[%w]()FIXME()%f[%W]', group = '@comment.error' },
                 fixme_ = { pattern = 'FIXME%(()[^)]*()%)',    group = 'Number' },
                 fix    = { pattern = '%f[%w]()FIX()%f[%W]',   group = '@comment.warning' },
-                fix_   = { pattern = 'FIX%(()[^)]*()%)',      group = 'Number' },
+                fix_   = { pattern = 'FIX%(()[^)]*()%',       group = 'Number' },
                 hack   = { pattern = '%f[%w]()HACK()%f[%W]',  group = '@comment.warning' },
                 hack_  = { pattern = 'HACK%(()[^)]*()%)',     group = 'Number' },
                 todo   = { pattern = '%f[%w]()TODO()%f[%W]',  group = '@comment.todo' },
@@ -303,9 +296,9 @@ return {
         end
         hipatterns.disable(0)
         hipatterns.enable(0)
-      end)
+      end
 
-      hi_command("color", function()
+      hi_commands["color"] = function()
         if not vim.b.minihipatterns_config.highlighters.hex_color then
           vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
             highlighters = {
@@ -315,9 +308,9 @@ return {
         end
         hipatterns.disable(0)
         hipatterns.enable(0)
-      end)
+      end
 
-      hi_command("trail", function()
+      hi_commands["trail"] = function()
         if not vim.b.minihipatterns_config.highlighters.trail then
           vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
             highlighters = {
@@ -349,12 +342,9 @@ return {
         end
         hipatterns.disable(0)
         hipatterns.enable(0)
-      end)
-
-      local hi_completion = {}
-      for command, _ in pairs(hi_commands) do
-        table.insert(hi_completion, command)
       end
+
+      local hi_completion = vim.tbl_keys(hi_commands)
 
       vim.api.nvim_create_user_command("Hi", function(args)
         vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
