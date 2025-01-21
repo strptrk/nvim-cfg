@@ -9,7 +9,7 @@ return {
       local transparent = (vim.env["W_TRANSPARENT"] or vim.env["TRANSPARENT"]) and true or false
       vim.o.termguicolors = true
       require("catppuccin").setup({
-        flavour = "frappe", -- latte, frappe, macchiato, mocha
+        flavour = vim.g.catppuccin_flavour,
         transparent_background = transparent,
         show_end_of_buffer = true,
         term_colors = false,
@@ -33,6 +33,17 @@ return {
           properties = {},
           types = {},
           operators = {},
+        },
+        color_overrides = {
+          all = {
+            -- TODO: finish
+            -- surface2 = "#6d6d6d",
+            -- surface1 = "#4f4f4f",
+            -- surface0 = "#3a3a3a",
+            -- base = "#242424",
+            -- mantle = "#1f1f1f",
+            -- crust = "#1b1b1b",
+          }
         },
         custom_highlights = function(C)
           return {
@@ -74,7 +85,7 @@ return {
             },
             LualineCustom = {
               fg = C.text,
-              bg = transparent and "" or C.mantle,
+              bg = transparent and "" or C.crust,
             },
             NoiceCmdlineIcon = {
               fg = C.rosewater,

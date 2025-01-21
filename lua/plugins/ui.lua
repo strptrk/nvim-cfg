@@ -10,64 +10,6 @@ local symbols = {
   full_block = "█"
 }
 
-local colors = {
-  blue = "#61afef",
-  green = "#98c379",
-  purple = "#c678dd",
-  cyan = "#56b6c2",
-  red1 = "#ea7272",
-  red2 = "#be5046",
-  yellow = "#e5c07b",
-  fg = "#abb2bf",
-  teal = "#81c8be",
-  bg = "#232323",
-  gray1 = "#302f2f",
-  gray2 = "#302f2f",
-  gray3 = "#444444",
-}
-
-local mode_color = {
-  n = colors.blue,
-  i = colors.green,
-  v = colors.purple,
-  [''] = colors.purple,
-  V = colors.purple,
-  c = colors.yellow,
-  no = colors.blue,
-  s = colors.red1,
-  S = colors.red1,
-  [''] = colors.red1,
-  ic = colors.yellow,
-  R = colors.red1,
-  Rv = colors.red1,
-  cv = colors.red1,
-  ce = colors.red1,
-  r = colors.cyan,
-  rm = colors.cyan,
-  ['r?'] = colors.cyan,
-  ['!'] = colors.red2,
-  t = colors.yellow,
-}
-
----@diagnostic disable-next-line: unused-local
-local colorscheme = {
-  normal = {
-    a = { fg = colors.bg, bg = colors.blue, gui = "bold" },
-    b = { fg = colors.fg, bg = colors.gray3 },
-    c = { fg = colors.fg, bg = colors.gray2 },
-  },
-  command = { a = { fg = colors.bg, bg = colors.purple, gui = "bold" } },
-  insert = { a = { fg = colors.bg, bg = colors.green, gui = "bold" } },
-  visual = { a = { fg = colors.bg, bg = colors.yellow, gui = "bold" } },
-  terminal = { a = { fg = colors.bg, bg = colors.green, gui = "bold" } },
-  replace = { a = { fg = colors.bg, bg = colors.red1, gui = "bold" } },
-  inactive = {
-    a = { fg = colors.gray1, bg = colors.bg, gui = "bold" },
-    b = { fg = colors.gray1, bg = colors.bg },
-    c = { fg = colors.gray1, bg = colors.gray2 },
-  },
-}
-
 return {
   {
     "folke/edgy.nvim",
@@ -437,6 +379,43 @@ return {
         end
       }
 
+
+      local flavour = require("catppuccin.palettes").get_palette(vim.g.catppuccin_flavour)
+      local colors = {
+        blue = flavour.blue,
+        green = flavour.green,
+        purple = flavour.mauve,
+        cyan = flavour.sapphire,
+        red1 = flavour.red,
+        red2 = flavour.maroon,
+        yellow = flavour.yellow,
+        fg = flavour.text,
+        teal = flavour.teal,
+      }
+
+      local mode_color = {
+        n = colors.blue,
+        i = colors.green,
+        v = colors.purple,
+        [''] = colors.purple,
+        V = colors.purple,
+        c = colors.yellow,
+        no = colors.blue,
+        s = colors.red1,
+        S = colors.red1,
+        [''] = colors.red1,
+        ic = colors.yellow,
+        R = colors.red1,
+        Rv = colors.red1,
+        cv = colors.red1,
+        ce = colors.red1,
+        r = colors.cyan,
+        rm = colors.cyan,
+        ['r?'] = colors.cyan,
+        ['!'] = colors.red2,
+        t = colors.yellow,
+      }
+
       local opts = {
         options = {
           icons_enabled = true,
@@ -750,7 +729,6 @@ return {
         end,
         config = function()
           require("notify").setup({
-            background_colour = "#2e3440",
             top_down = false,
             render = "wrapped-compact",
           })

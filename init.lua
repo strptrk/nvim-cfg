@@ -25,6 +25,8 @@ vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
   ["end"] = "@solution end"
 }
+---@type "latte" | "frappe" | "macchiato" | "mocha"
+vim.g.catppuccin_flavour = "frappe"
 
 require("lazy").setup("plugins", {
   performance = {

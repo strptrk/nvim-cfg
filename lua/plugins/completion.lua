@@ -160,7 +160,7 @@ return {
     end,
     dependencies = {
       {
-        "strptrk/lspkinder.nvim",
+        "onsails/lspkind.nvim",
         config = function()
           require("lspkind").setup({
             symbol_map = {},
