@@ -1,3 +1,1 @@
-vim.cmd[[
-  Hi color
-]]
+vim.cmd([[Hi color]])

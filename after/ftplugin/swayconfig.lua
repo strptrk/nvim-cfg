@@ -1,4 +1,4 @@
-vim.cmd[[
+vim.cmd([[
   Hi color
   Hi todo
-]]
+]])
