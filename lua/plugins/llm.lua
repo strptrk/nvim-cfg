@@ -41,7 +41,7 @@ return {
             name = "PerplexityChat",
             chat = true,
             command = false,
-            ---@type "sonar" | "sonar-pro" | "sonar-reasoning"
+            ---@type "sonar" | "sonar-pro" | "sonar-reasoning" | "sonar-reasoning-pro"
             model = "sonar",
             system_prompt = require("gp.defaults").chat_system_prompt,
           },
@@ -50,7 +50,7 @@ return {
             name = "PerplexityCode",
             chat = false,
             command = true,
-            ---@type "sonar" | "sonar-pro" | "sonar-reasoning"
+            ---@type "sonar" | "sonar-pro" | "sonar-reasoning" | "sonar-reasoning-pro"
             model = "sonar",
             system_prompt = require("gp.defaults").code_system_prompt,
           },
