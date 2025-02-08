@@ -81,6 +81,8 @@ M.winmove = function(key)
       if vim.fn.trim(vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']])) == "0" then
         vim.fn.system("tmux select-pane " .. dir[key])
       end
+    elseif vim.env["KITTY_PID"] then
+      (function() end)() -- TODO: implement
     elseif vim.env["TERM_PROGRAM"] == "WezTerm" then
       local dir = {
         ["h"] = "Left",

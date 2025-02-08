@@ -379,7 +379,6 @@ return {
         end
       }
 
-
       local flavour = require("catppuccin.palettes").get_palette(vim.g.catppuccin_flavour)
       local colors = {
         blue = flavour.blue,
@@ -389,8 +388,9 @@ return {
         red1 = flavour.red,
         red2 = flavour.maroon,
         yellow = flavour.yellow,
-        fg = flavour.text,
         teal = flavour.teal,
+        fg = flavour.text,
+        bg = flavour.crust,
       }
 
       local mode_color = {
@@ -489,7 +489,10 @@ return {
               cond = function()
                 return require("noice").api.status.mode.has()
               end,
-              color = { fg = colors.yellow },
+              color = {
+                fg = colors.yellow,
+                bg = colors.bg,
+              },
             },
             {
               function()
@@ -498,7 +501,10 @@ return {
               cond = function()
                 return require("noice").api.status.search.has()
               end,
-              color = { fg = colors.cyan },
+              color = {
+                fg = colors.cyan,
+                bg = colors.bg,
+              },
             },
             {
               "diagnostics",
@@ -640,8 +646,8 @@ return {
         format = {
           -- integrate into lualine
           cmdline     = { icon = symbols.left_five_eights_block .. "   " },
-          search_down = { icon = symbols.left_five_eights_block .. "     " },
-          search_up   = { icon = symbols.left_five_eights_block .. "     " },
+          search_down = { icon = symbols.left_five_eights_block .. "    " },
+          search_up   = { icon = symbols.left_five_eights_block .. "    " },
           filter      = { icon = symbols.left_five_eights_block .. "   󰈲 " },
           lua         = { icon = symbols.left_five_eights_block .. "    " },
           help        = { icon = symbols.left_five_eights_block .. "    " },

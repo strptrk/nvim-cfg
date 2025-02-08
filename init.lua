@@ -25,8 +25,10 @@ vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
   ["end"] = "@solution end"
 }
----@type "latte" | "frappe" | "macchiato" | "mocha"
-vim.g.catppuccin_flavour = "frappe"
+---@type "latte" | "frappe" | "macchiato" | "mocha" | "custom"
+vim.g.catppuccin_flavour = "custom"
+
+vim.hl = vim.hl or vim.highlight -- workaround for 0.10.3 bug
 
 require("lazy").setup("plugins", {
   performance = {
@@ -37,7 +39,6 @@ require("lazy").setup("plugins", {
     },
     rtp = {
       disabled_plugins = {
-        "tohtml",
         "tutor",
         "netrwPlugin"
       },

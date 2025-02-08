@@ -6,7 +6,14 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      local transparent = (vim.env["W_TRANSPARENT"] or vim.env["TRANSPARENT"]) and true or false
+      -- "mocha" is just used as a custom colorscheme not related to
+      -- catppuccin, instead of creating a new plugin
+      local override = "_"
+      if vim.g.catppuccin_flavour == "custom" then
+        vim.g.catppuccin_flavour = "mocha"
+        override = "mocha"
+      end
+      local transparent = vim.env["TERM_TRANSPARENT"] ~= nil
       vim.o.termguicolors = true
       require("catppuccin").setup({
         flavour = vim.g.catppuccin_flavour,
@@ -35,14 +42,33 @@ return {
           operators = {},
         },
         color_overrides = {
-          all = {
-            -- TODO: finish
-            -- surface2 = "#6d6d6d",
-            -- surface1 = "#4f4f4f",
-            -- surface0 = "#3a3a3a",
-            -- base = "#242424",
-            -- mantle = "#1f1f1f",
-            -- crust = "#1b1b1b",
+          [override] = {
+            rosewater = "#f2d5cf",
+            flamingo = "#eebebe",
+            pink = "#f4b8e4",
+            mauve = "#ca9ee6",
+            red = "#de6e7c",
+            maroon = "#ea999c",
+            peach = "#ef9f76",
+            yellow = "#d8be75",
+            green = "#a6d189",
+            teal = "#75bab0",
+            sky = "#8cc4ce",
+            sapphire = "#65b8c1",
+            blue = "#8caaee",
+            lavender = "#c0c1f9",
+            text = "#d7d7d7",
+            subtext1 = "#b3b8cc",
+            subtext0 = "#a2a8bf",
+            overlay2 = "#969cb5",
+            overlay1 = "#8a91aa",
+            overlay0 = "#737994",
+            surface2 = "#777777", -- 󰥓
+            surface1 = "#666666", -- 󰇴
+            surface0 = "#2c2c2c",
+            base = "#191919",
+            mantle = "#141414",
+            crust = "#101010",
           }
         },
         custom_highlights = function(C)
@@ -75,8 +101,10 @@ return {
             HopNextKey = { fg = "#F72044", style = { "bold" } },
             HopNextKey1 = { fg = "#F72044", style = { "bold" } },
             HopNextKey2 = { fg = "#F7A156" },
-            ["@lsp.typemod.function.defaultLibrary"] = { fg = C.sapphire },
+            ["@lsp.typemod.function.defaultLibrary"] = { fg = C.sky },
             ["@constant.builtin"] = { style = { "bold" } },
+            -- clear this one because it colors everything red??
+            ["@lsp.type.unresolvedReference.rust"] = {},
             FloatBorder = { style = { "bold" } },
             TelescopeBorder = {
               fg = C.blue,
@@ -90,6 +118,9 @@ return {
             NoiceCmdlineIcon = {
               fg = C.rosewater,
             },
+            NoiceCmdline = {
+              bg = C.crust
+            }
           }
         end,
         integrations = {
