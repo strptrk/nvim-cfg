@@ -20,10 +20,6 @@ return {
     },
     version = '*',
     opts = {
-      -- 'default' for mappings similar to built-in completion
-      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-      -- See the full "keymap" documentation for information on defining your own keymap.
       keymap = {
         ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<C-e>'] = { 'hide', 'fallback' },
@@ -48,7 +44,7 @@ return {
           ['<C-e>'] = { 'hide', 'fallback' },
           ['<CR>'] = {
             function(cmp)
-              cmp.accept({
+              return cmp.accept({
                 callback = function()
                   vim.api.nvim_feedkeys('\n', 'n', true)
                 end,
@@ -107,7 +103,14 @@ return {
       },
 
       sources = {
-        default = { "lsp", "path", "snippets", "buffer" },
+        default = function()
+          local success, node = pcall(vim.treesitter.get_node)
+          if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+            return { 'buffer', 'path', 'snippets' }
+          else
+            return { 'lsp', 'path', 'snippets', 'buffer' }
+          end
+        end,
         providers = {
           lsp = { name = " LSP" },
           path = { name = "PATH" },
