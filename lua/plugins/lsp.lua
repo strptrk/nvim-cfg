@@ -16,7 +16,7 @@ return {
     lazy = true,
     config = function()
       local lsp = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
       if 1 == vim.fn.executable("gopls") then
         lsp.gopls.setup({ capabilities = capabilities })
       end
@@ -115,7 +115,11 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          vim.keymap.set("n", "sh", vim.lsp.buf.hover, { desc = "Symbol hover information" })
+          --- handler-based border config will be deprecated in 0.11, but in 0.10 luals gives warnings
+          --- TODO: remove in 0.11
+          ---@diagnostic disable-next-line: redundant-parameter
+          vim.keymap.set("n", "sh", function() vim.lsp.buf.hover({ border = { style = 'single' } }) end,
+            { desc = "Symbol hover information" })
           vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, { desc = "Code Actions" })
           vim.keymap.set({ "n", "x" }, "sf", vim.lsp.buf.format, { desc = "Format document (lsp)" })
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
@@ -188,10 +192,10 @@ return {
         },
       },
       memory_usage = {
-        border = "rounded",
+        border = vim.g.float_border_style,
       },
       symbol_info = {
-        border = "rounded",
+        border = vim.g.float_border_style,
       },
     },
   },
@@ -203,7 +207,7 @@ return {
       local rt = require("rust-tools")
       rt.setup({
         server = {
-          capabilities = require("cmp_nvim_lsp").default_capabilities(),
+          capabilities = require('blink.cmp').get_lsp_capabilities(),
           on_attach = function(_, bufnr)
             -- Hover actions
             vim.keymap.set("n", "sH", rt.hover_actions.hover_actions, { buffer = bufnr })
@@ -236,7 +240,7 @@ return {
     }, ---@format enable
     opts = {
       win = {
-        border = "rounded",
+        border = vim.g.float_border_style,
       },
       keys = {
         i = "inspect",

@@ -36,33 +36,38 @@ return {
           ['<'] = { output = { left = '<', right = '>' } },
           ['{'] = { output = { left = '{', right = '}' } },
           ['}'] = { output = { left = '{ ', right = ' }' } },
-          -- never add spaces for []
           ['['] = { output = { left = '[', right = ']' } },
-          [']'] = { output = { left = '[', right = ']' } },
+          [']'] = { output = { left = '[ ', right = ' ]' } },
+          -- [d]ouble brackets
+          ['d'] = { output = { left = '[[', right = ']]' } },
+          -- [D]ouble brackets, with whitespace 
+          ['D'] = { output = { left = '[[ ', right = ' ]]' } },
           -- by default, b adds (), change it to p and b to {}
           ['b'] = { output = { left = '{', right = '}' } },
           ['p'] = { output = { left = '(', right = ')' } },
           -- escaped [Q]uotes
           ['Q'] = { output = { left = '\\"', right = '\\"' } },
-          -- [o]utput
+          -- [o]utput (shell)
           ['o'] = { output = { left = '$(', right = ')' } },
-          -- [v]alue
+          -- [v]alue (shell)
           ['v'] = { output = { left = '"${', right = '}"' } },
-          -- [L]ua function
-          ['L'] = { output = { left = 'function() ', right = ' end' } },
-          -- python type [h]int
+          -- [l]ua function
+          ['l'] = { output = { left = 'function() ', right = ' end' } },
+          -- python type [h]int, like `str` -> `Optional[str]`
           ['h'] = {
             output = function()
               local type = minisurround.user_input("Type Hint")
               return { left = type .. "[", right = "]" }
             end
           },
+          -- [i]nteractive
           ['i'] = {
             output = function()
               local s = minisurround.user_input("Surrounding")
               return { left = s, right = s }
             end
           },
+          -- interactive with [w]hitespace
           ['w'] = {
             output = function()
               local s = minisurround.user_input("Surrounding")

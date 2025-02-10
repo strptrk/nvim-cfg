@@ -48,7 +48,7 @@ return {
         close_on_exit = true,
         autochdir = true,
         autoscroll = true,
-        float_opts = { border = "single", winblend = 0 },
+        float_opts = { border = vim.g.float_border_style, winblend = 0 },
         winbar = {
           enabled = false,
           name_formatter = function(term)
@@ -130,40 +130,40 @@ return {
           return
         end
         pickers
-          .new(opts, {
-            prompt_title = title or "Terminal",
-            finder = finders.new_table({
-              results = Term.Terminals,
-              entry_maker = function(entry)
-                local name = (entry.term.display_name or "Terminal")
-                  .. " #"
-                  .. entry.term.count
-                  .. " ("
-                  .. entry.term.direction
-                  .. ")"
-                return {
-                  value = entry,
-                  display = name,
-                  ordinal = name,
-                }
+            .new(opts, {
+              prompt_title = title or "Terminal",
+              finder = finders.new_table({
+                results = Term.Terminals,
+                entry_maker = function(entry)
+                  local name = (entry.term.display_name or "Terminal")
+                      .. " #"
+                      .. entry.term.count
+                      .. " ("
+                      .. entry.term.direction
+                      .. ")"
+                  return {
+                    value = entry,
+                    display = name,
+                    ordinal = name,
+                  }
+                end,
+              }),
+              previewer = previewers.new_buffer_previewer({
+                title = "Terminal",
+                define_preview = Term.preview_term,
+              }),
+              sorter = conf.generic_sorter(opts),
+              attach_mappings = function(prompt_bufnr, _)
+                actions.select_default:replace(function()
+                  actions.close(prompt_bufnr)
+                  local entry = action_state.get_selected_entry()
+                  Term.focus_term(entry.value.term.count, nil)
+                  Term.Terminals[entry.value.term.count].term:set_mode("i")
+                end)
+                return true
               end,
-            }),
-            previewer = previewers.new_buffer_previewer({
-              title = "Terminal",
-              define_preview = Term.preview_term,
-            }),
-            sorter = conf.generic_sorter(opts),
-            attach_mappings = function(prompt_bufnr, _)
-              actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
-                local entry = action_state.get_selected_entry()
-                Term.focus_term(entry.value.term.count, nil)
-                Term.Terminals[entry.value.term.count].term:set_mode("i")
-              end)
-              return true
-            end,
-          })
-          :find()
+            })
+            :find()
       end
 
       Term.rename_term = function(opts, title)
@@ -173,44 +173,44 @@ return {
           return
         end
         pickers
-          .new(opts, {
-            prompt_title = title or "Rename Terminal",
-            finder = finders.new_table({
-              results = Term.Terminals,
-              entry_maker = function(entry)
-                local name = (entry.term.display_name or "Terminal")
-                  .. " #"
-                  .. entry.term.count
-                  .. " ("
-                  .. entry.term.direction
-                  .. ")"
-                return {
-                  value = entry,
-                  display = name,
-                  ordinal = name,
-                }
-              end,
-            }),
-            previewer = previewers.new_buffer_previewer({
-              title = "Terminal",
-              define_preview = Term.preview_term,
-            }),
-            sorter = conf.generic_sorter(opts),
-            attach_mappings = function(prompt_bufnr, _)
-              actions.select_default:replace(function()
-                actions.close(prompt_bufnr)
-                local entry = action_state.get_selected_entry()
-                vim.ui.input({ prompt = "Set Name of " .. entry.display, kind = "center" }, function(input)
-                  if not input or input == "" then
-                    return
-                  end
-                  entry.value.term.display_name = input
+            .new(opts, {
+              prompt_title = title or "Rename Terminal",
+              finder = finders.new_table({
+                results = Term.Terminals,
+                entry_maker = function(entry)
+                  local name = (entry.term.display_name or "Terminal")
+                      .. " #"
+                      .. entry.term.count
+                      .. " ("
+                      .. entry.term.direction
+                      .. ")"
+                  return {
+                    value = entry,
+                    display = name,
+                    ordinal = name,
+                  }
+                end,
+              }),
+              previewer = previewers.new_buffer_previewer({
+                title = "Terminal",
+                define_preview = Term.preview_term,
+              }),
+              sorter = conf.generic_sorter(opts),
+              attach_mappings = function(prompt_bufnr, _)
+                actions.select_default:replace(function()
+                  actions.close(prompt_bufnr)
+                  local entry = action_state.get_selected_entry()
+                  vim.ui.input({ prompt = "Set Name of " .. entry.display, kind = "center" }, function(input)
+                    if not input or input == "" then
+                      return
+                    end
+                    entry.value.term.display_name = input
+                  end)
                 end)
-              end)
-              return true
-            end,
-          })
-          :find()
+                return true
+              end,
+            })
+            :find()
       end
 
       Term.runterm = Terminal:new({

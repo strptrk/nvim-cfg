@@ -196,7 +196,7 @@ return {
         status_formatter = nil,
         max_file_length = 40000,
         preview_config = {
-          border = "single",
+          border = vim.g.float_border_style,
           style = "minimal",
           relative = "cursor",
           row = 0,

@@ -89,7 +89,7 @@ return {
           highlight_separator_active = "NeoTreeTabSeparatorActive",
         },
         close_if_last_window = true,
-        popup_border_style = "rounded",
+        popup_border_style = vim.g.float_border_style,
         enable_git_status = true,
         enable_diagnostics = false,
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" },

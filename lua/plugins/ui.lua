@@ -656,14 +656,17 @@ return {
       },
       popupmenu = {
         enabled = false, -- enables the Noice popupmenu UI
-        ---@type 'nui'|'cmp'
-        backend = "nui", -- backend to use to show regular cmdline completions
       },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
+        },
+        signature = {
+          enabled = true
+        },
+        hover = {
+          enabled = true,
         },
       },
       routes = {
@@ -688,7 +691,16 @@ return {
         command_palette = true,
         long_message_to_split = true,
         inc_rename = true,
-        lsp_doc_border = true,
+        lsp_doc_border = {
+          views = {
+            hover = {
+              border = {
+                style = vim.g.float_border_style,
+              },
+              position = { row = 2, col = 2 },
+            },
+          },
+        },
       },
       views = {
         cmdline_popup = {
@@ -716,7 +728,7 @@ return {
             height = 10,
           },
           border = {
-            style = "rounded",
+            style = vim.g.float_border_style,
             padding = { 0, 1 },
           },
           win_options = {

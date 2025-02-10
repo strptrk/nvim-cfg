@@ -5,7 +5,6 @@ return {
     dependencies = {
       { "nvim-telescope/telescope-dap.nvim", lazy = true },
       { "nvim-telescope/telescope.nvim",     lazy = true },
-      { "rcarriga/cmp-dap",                  lazy = true },
       { "theHamsta/nvim-dap-virtual-text",   lazy = true },
       { "nvim-neotest/nvim-nio",             lazy = true },
       {
@@ -93,7 +92,7 @@ return {
               },
             },
             floating = {
-              border = "single",
+              border = vim.g.float_border_style,
               mappings = {
                 close = { "q", "<Esc>" },
               },
@@ -417,11 +416,6 @@ return {
       end
 
       require("nvim-dap-virtual-text").setup({})
-      require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-        sources = {
-          { name = "dap" },
-        },
-      })
     end,
   },
 }

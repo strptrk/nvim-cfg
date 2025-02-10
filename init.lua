@@ -15,12 +15,13 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.hl = vim.hl or vim.highlight -- workaround for 0.10.3 bug
+
 -- disable, so which-key does not fall back to it
 vim.keymap.set({ "n", "v" }, "s", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gc", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gcc", "<Nop>")
-vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
-vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
+
 vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
   ["end"] = "@solution end"
@@ -28,7 +29,8 @@ vim.g.solutionfmt = {
 ---@type "latte" | "frappe" | "macchiato" | "mocha" | "custom"
 vim.g.catppuccin_flavour = "custom"
 
-vim.hl = vim.hl or vim.highlight -- workaround for 0.10.3 bug
+---@type "none" | "single" | "rounded" | "solid" | "shadow"
+vim.g.float_border_style = "single"
 
 require("lazy").setup("plugins", {
   performance = {
@@ -49,6 +51,8 @@ require("lazy").setup("plugins", {
   },
 })
 
+vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
+vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.syntax = "enable"

@@ -318,7 +318,7 @@ return {
           },
           lsp_interop = {
             enable = false,
-            border = "single",
+            border = vim.g.float_border_style,
             floating_preview_opts = {},
             peek_definition_code = {
               -- ["<Space>pf"] = "@function.outer",

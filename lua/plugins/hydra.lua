@@ -48,7 +48,7 @@ return {
           color = "pink",
           invoke_on_body = true,
           hint = {
-            border = "rounded",
+            border = vim.g.float_border_style,
           },
           on_enter = function()
             if vim.api.nvim_buf_get_name(0) ~= "" then
@@ -184,7 +184,7 @@ return {
           color = "amaranth",
           invoke_on_body = true,
           hint = {
-            border = "rounded",
+            border = vim.g.float_border_style,
             position = "bottom",
             funcs = {
               cc = function()
@@ -321,7 +321,7 @@ return {
           color = "amaranth",
           invoke_on_body = true,
           hint = {
-            border = "rounded",
+            border = vim.g.float_border_style,
             position = "bottom",
             funcs = {},
           },

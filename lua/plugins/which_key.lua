@@ -60,8 +60,7 @@ return {
         scroll_up = "<c-k>",
       },
       win = {
-        ---@type false | "none" | "single" | "double" | "rounded" | "solid" | "shadow"
-        border = (vim.env["W_TRANSPARENT"] or vim.env["TRANSPARENT"]) and "rounded" or "none",
+        border = vim.g.float_border_style,
       },
       disable = {
         buftypes = {},
