@@ -269,20 +269,21 @@ return {
       "Oil",
     },
     keys = {
-      { "<A-o>", function() require("oil").toggle_float() end },
-      { ",o", function() require("oil").open() end },
+      { "<A-o>", function()
+        if vim.w.is_oil_win then
+          require("oil").close()
+        else
+          require("oil").open_float(nil, {}, function()
+            require("oil").open_preview()
+          end)
+        end
+      end },
+      { ",o", function()
+        require("oil").open(nil, {}, function()
+          require("oil").open_preview()
+        end)
+      end },
     },
-    -- init = function()
-      -- vim.api.nvim_create_autocmd("User", {
-      --   pattern = "OilEnter",
-      --   callback = vim.schedule_wrap(function(args)
-      --     local oil = require("oil")
-      --     if vim.api.nvim_get_current_buf() == args.data.buf and oil.get_cursor_entry() then
-      --       oil.open_preview()
-      --     end
-      --   end),
-      -- })
-    -- end,
     opts = {
       watch_for_changes = true,
       keymaps = {
