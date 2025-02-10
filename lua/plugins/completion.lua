@@ -69,7 +69,8 @@ return {
         list = {
           selection = {
             preselect = false
-          }
+          },
+          max_items = 100
         },
         documentation = {
           auto_show = true,
@@ -107,6 +108,7 @@ return {
           path = { name = "PATH" },
           snippets = { name = "SNIP" },
           buffer = { name = " BUF" },
+          cmdline = { name = "" },
         }
       },
     },
