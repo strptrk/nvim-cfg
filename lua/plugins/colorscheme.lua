@@ -52,7 +52,7 @@ return {
             peach = "#ef9f76",
             yellow = "#d8be75",
             green = "#a6d189",
-            teal = "#81cdc6",
+            teal = "#82CBB2",
             sky = "#8cdaf2",
             sapphire = "#6FA3F3",
             blue = "#8caaee",
@@ -96,6 +96,7 @@ return {
             NoicePopupmenu = { bg = C.base },
             NoicePopupBorder = { fg = C.blue, bg = C.base },
             NoicePopup = { bg = C.base },
+            Operator = { fg = C.teal }
           }
         end,
         integrations = {
