@@ -36,12 +36,17 @@ return {
             ["@type.builtin"] = { fg = "palette.yellow", style = "italic" },
             ["@constant.builtin"] = { style = "bold" },
             ["@lsp.type.unresolvedReference.rust"] = {},
-            -- TabLinexxx guifg=#abb1bb guibg=#39404f
-            -- TabLineSelxxx guifg=#2e3440 guibg=#7e8188
-            -- TabLineFillxxx guibg=#232831
             TelescopeBorder = {
               fg = "palette.blue",
               bg = transparent and "" or "palette.bg1",
+            },
+            NormalFloat = {
+              fg = "palette.fg1",
+              bg = transparent and "" or "palette.bg1",
+            },
+            MatchParen = {
+              fg = "palette.orange.bright",
+              style = "underline"
             },
             LualineCustom = {
               fg = "palette.fg2",

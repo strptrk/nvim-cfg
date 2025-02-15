@@ -39,7 +39,10 @@ return {
 
         ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
 
-        cmdline = {
+      },
+
+      cmdline = {
+        keymap = {
           ['<C-space>'] = { 'show', 'fallback' },
           ['<C-e>'] = { 'hide', 'fallback' },
           ['<CR>'] = {
@@ -56,7 +59,7 @@ return {
           ['<S-Tab>'] = { 'select_prev', 'fallback' },
           ['<Up>'] = { 'select_prev', 'fallback' },
           ['<Down>'] = { 'select_next', 'fallback' },
-        }
+        },
       },
 
       snippets = { preset = "luasnip" },
