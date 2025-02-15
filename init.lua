@@ -26,12 +26,14 @@ vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
   ["end"] = "@solution end"
 }
----@type "latte" | "frappe" | "macchiato" | "mocha" | "custom"
-vim.g.catppuccin_flavour = "custom"
+---@type "nightfox" | "dayfox" | "dawnfox" | "duskfox" | "nordfox" | "terafox" | "carbonfox"
+vim.g.nightfox_flavour = "nordfox"
 
 ---@type "none" | "single" | "rounded" | "solid" | "shadow"
 vim.g.float_border_style = "single"
 
+vim.opt.cmdheight = 0
+vim.opt.laststatus = 3
 require("lazy").setup("plugins", {
   performance = {
     cache = { enabled = true },

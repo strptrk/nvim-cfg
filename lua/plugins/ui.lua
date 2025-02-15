@@ -378,19 +378,18 @@ return {
           end
         end
       }
-
-      local flavour = require("catppuccin.palettes").get_palette(vim.g.catppuccin_flavour)
+      local palette = require('nightfox.palette').load(vim.g.nightfox_flavour)
       local colors = {
-        blue = flavour.blue,
-        green = flavour.green,
-        purple = flavour.mauve,
-        cyan = flavour.sapphire,
-        red1 = flavour.red,
-        red2 = flavour.maroon,
-        yellow = flavour.yellow,
-        teal = flavour.teal,
-        fg = flavour.text,
-        bg = flavour.crust,
+        blue = palette.blue.base,
+        green = palette.green.base,
+        purple = palette.magenta.base,
+        cyan = palette.cyan.base,
+        red = palette.red.base,
+        orange = palette.orange.base,
+        yellow = palette.yellow.base,
+        teal = palette.cyan.dim,
+        fg = palette.fg2,
+        bg = palette.bg0,
       }
 
       local mode_color = {
@@ -401,18 +400,18 @@ return {
         V = colors.purple,
         c = colors.yellow,
         no = colors.blue,
-        s = colors.red1,
-        S = colors.red1,
-        [''] = colors.red1,
+        s = colors.red,
+        S = colors.red,
+        [''] = colors.red,
         ic = colors.yellow,
-        R = colors.red1,
-        Rv = colors.red1,
-        cv = colors.red1,
-        ce = colors.red1,
+        R = colors.red,
+        Rv = colors.red,
+        cv = colors.red,
+        ce = colors.red,
         r = colors.cyan,
         rm = colors.cyan,
         ['r?'] = colors.cyan,
-        ['!'] = colors.red2,
+        ['!'] = colors.orange,
         t = colors.yellow,
       }
 
