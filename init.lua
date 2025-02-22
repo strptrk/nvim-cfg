@@ -32,6 +32,13 @@ vim.g.nightfox_flavour = "nordfox"
 ---@type "none" | "single" | "rounded" | "solid" | "shadow"
 vim.g.float_border_style = "single"
 
+vim.g.signs = {
+  Error = "",
+  Warn = " ",
+  Hint = "",
+  Info = "",
+}
+
 vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
 require("lazy").setup("plugins", {

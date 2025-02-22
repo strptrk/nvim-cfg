@@ -6,6 +6,10 @@ return {
     priority = 1000,
     config = function()
       local transparent = vim.env["TERM_TRANSPARENT"] ~= nil
+      local custom_palette = {
+        red = "#f72044",
+        orange = "#f7a156",
+      }
       require('nightfox').setup({
         options = {
           transparent = transparent,
@@ -29,13 +33,9 @@ return {
         specs = {},
         groups = {
           all = {
-            HopNextKey = { fg = "#F72044", style = "bold" },
-            HopNextKey1 = { fg = "#F72044", style = "bold" },
-            HopNextKey2 = { fg = "#F7A156" },
-            ["@lsp.typemod.function.defaultLibrary"] = { fg = "palette.cyan" },
-            ["@type.builtin"] = { fg = "palette.yellow", style = "italic" },
-            ["@constant.builtin"] = { style = "bold" },
-            ["@lsp.type.unresolvedReference.rust"] = {},
+            HopNextKey = { fg = custom_palette.red, style = "bold" },
+            HopNextKey1 = { fg = custom_palette.red, style = "bold" },
+            HopNextKey2 = { fg = custom_palette.orange },
             TelescopeBorder = {
               fg = "palette.blue",
               bg = transparent and "" or "palette.bg1",
@@ -52,9 +52,20 @@ return {
               fg = "palette.fg2",
               bg = transparent and "" or "palette.bg0",
             },
+            IblIndent = { fg = "palette.bg2" },
+            IblScope = { fg = "palette.black.bright" },
+            ["@lsp.typemod.function.defaultLibrary"] = { fg = "palette.cyan.bright" },
+            ["@type.builtin"] = { fg = "palette.yellow", style = "italic" },
+            ["@constant.builtin"] = { style = "bold" },
+            ["@lsp.type.unresolvedReference.rust"] = {},
+            ["@parameter"] = { fg = "palette.red.bright" },
           }
         },
       })
+      for type, icon in pairs(vim.g.signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      end
       vim.cmd.colorscheme(vim.g.nightfox_flavour)
     end,
   }

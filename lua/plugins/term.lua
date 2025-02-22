@@ -2,7 +2,7 @@ return {
   {
     "akinsho/toggleterm.nvim",
     lazy = true,
-    cmd = { "TermExec", "ToggleTerm", "Lazygit" },
+    cmd = { "TermExec", "ToggleTerm" },
     keys = {
       { "<A-f>",   nil, desc = "Open Terminal" },
       { "<A-F>",   nil, desc = "Open Terminal (floating)" },
@@ -58,22 +58,6 @@ return {
       })
 
       local Terminal = require("toggleterm.terminal").Terminal
-      local lazygit = Terminal:new({
-        cmd = "lazygit",
-        direction = "tab",
-        hidden = true,
-        count = 1001,
-      })
-      Term.lazygit_toggle = function()
-        if 1 == vim.fn.executable("lazygit") then
-          lazygit:toggle()
-        else
-          vim.notify("lazygit is not installed or is not in PATH", vim.log.levels.WARN)
-        end
-      end
-      if 1 == vim.fn.executable("lazygit") then
-        vim.api.nvim_create_user_command("Lazygit", Term.lazygit_toggle, { force = true })
-      end
 
       Term.Terminals = {}
       Term.Last = -1

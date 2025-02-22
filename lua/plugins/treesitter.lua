@@ -81,11 +81,8 @@ return {
       "IBLToggleScope",
     },
     opts = {
-      indent = {
-        char = "│",
-      },
       scope = {
-        enabled = false,
+        enabled = true,
       },
       exclude = {
         filetypes = {
@@ -252,6 +249,7 @@ return {
               ["al"] = "@loop.outer",
               ["il"] = "@loop.inner",
               ["as"] = "@statement.outer",
+              ["is"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
               ["ax"] = "@block.outer",

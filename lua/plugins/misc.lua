@@ -148,7 +148,7 @@ return {
           goto_right = 'g]',
         },
         n_lines = 50,
-        -- 'cover', 'cover_or_next', 'cover_or_prev', 'cover_or_nearest', 'next', 'previous', 'nearest'.
+        ---@type "cover" | "cover_or_next" | "cover_or_prev" | "cover_or_nearest" | "next" | "previous" | "nearest"
         search_method = 'cover_or_next',
         silent = false,
       })

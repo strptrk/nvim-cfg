@@ -1,31 +1,34 @@
+local prefix = "C"
+
 return {
   {
     "robitx/gp.nvim",
     cmd = {
-      "GpChatNew",       -- open a chat in the current window
-      "GpChatPaste",     -- paste the selection into the last chat
-      "GpChatToggle",    -- toggle chat window (or create)
-      "GpChatFinder",    -- search through past chats
-      "GpChatRespond",   -- request a new response in the current chat
-      "GpChatDelete",    -- delete the current chat
-      "GpRewrite",       -- replace given context using a prompt
-      "GpAppend",        -- append given context using a prompt
-      "GpPrepend",       -- prepend given context using a prompt
-      "GpEnew",          -- like GpRewrite, but in a new buffer in the current window
-      "GpNew",           -- like GpRewrite, but in a new horizontally split window
-      "GpVnew",          -- like GpRewrite, but in a new vertically split window
-      "GpTabnew",        -- like GpRewrite, but in a new tab
-      "GpPopup",         -- like GpRewrite, but in a new popup window
-      "GpImplement",     -- write code using a comment
-      "GpContext",       -- provides context per repository in `.gp.md`
-      "GpNextAgent",     -- use next configured agent
-      "GpAgent",         -- display or set used agent
-      "GpStop",          -- stop all running responses and jobs
-      "GpInspectPlugin", -- inspect prompt plugin in scratch buffer
+      prefix .. "ChatNew",       -- open a chat in the current window
+      prefix .. "ChatPaste",     -- paste the selection into the last chat
+      prefix .. "ChatToggle",    -- toggle chat window (or create)
+      prefix .. "ChatFinder",    -- search through past chats
+      prefix .. "ChatRespond",   -- request a new response in the current chat
+      prefix .. "ChatDelete",    -- delete the current chat
+      prefix .. "Rewrite",       -- replace given context using a prompt
+      prefix .. "Append",        -- append given context using a prompt
+      prefix .. "Prepend",       -- prepend given context using a prompt
+      prefix .. "Enew",          -- like GpRewrite, but in a new buffer in the current window
+      prefix .. "New",           -- like GpRewrite, but in a new horizontally split window
+      prefix .. "Vnew",          -- like GpRewrite, but in a new vertically split window
+      prefix .. "Tabnew",        -- like GpRewrite, but in a new tab
+      prefix .. "Popup",         -- like GpRewrite, but in a new popup window
+      prefix .. "Implement",     -- write code using a comment
+      prefix .. "Context",       -- provides context per repository in `.gp.md`
+      prefix .. "NextAgent",     -- use next configured agent
+      prefix .. "Agent",         -- display or set used agent
+      prefix .. "Stop",          -- stop all running responses and jobs
+      prefix .. "InspectPlugin", -- inspect prompt plugin in scratch buffer
     },
     lazy = true,
     config = function()
       require("gp").setup({
+        prefix = prefix,
         providers = {
           pplx = {
             endpoint = "https://api.perplexity.ai/chat/completions",

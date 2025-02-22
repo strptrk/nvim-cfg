@@ -667,6 +667,9 @@ return {
         hover = {
           enabled = true,
         },
+        progress = {
+          enabled = false
+        }
       },
       routes = {
         {
@@ -735,47 +738,6 @@ return {
           },
         },
       },
-    },
-    dependencies = {
-      {
-        "rcarriga/nvim-notify",
-        lazy = true,
-        init = function()
-          ---@diagnostic disable-next-line: duplicate-set-field
-          vim.notify = function(...) require("notify")(...) end
-        end,
-        config = function()
-          require("notify").setup({
-            top_down = false,
-            render = "wrapped-compact",
-          })
-        end,
-      },
-      {
-        "stevearc/dressing.nvim",
-        lazy = true,
-        event = "User VeryVeryLazy",
-        init = function()
-          vim.api.nvim_create_autocmd("FileType", {
-            pattern = "DressingSelect",
-            callback = function(ev)
-              vim.api.nvim_win_set_cursor(0, { 1, 1 })
-              vim.keymap.set("n", "q", "<cmd>q<cr>", { buffer = ev.buf })
-            end
-          })
-        end,
-        opts = {
-          input = { enabled = false },
-          select = {
-            backend = { "builtin", "telescope", "nui" },
-            builtin = {
-              relative = "cursor",
-              min_width = { 50, 0.25 },
-              min_height = { 12, 0.25 },
-            }
-          }
-        },
-      }
     },
   },
 }

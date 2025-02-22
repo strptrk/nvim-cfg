@@ -239,9 +239,9 @@ return {
           mapbuf("n", ",i", gs.preview_hunk_inline, { desc = "Preview Hunk Inline" })
           mapbuf("n", ",q", gs.setqflist, { desc = "QuickFix List of Hunks" })
           mapbuf("n", ",w", ":Gitsigns show ", { desc = "Show Revision of file" })
-          mapbuf("n", ",B", function()
+          mapbuf("n", ",b", function()
             gs.blame_line({ full = true })
-          end, { desc = "Blame Line" })
+          end, { desc = "Blame Line (float)" })
           mapbuf({ "o", "x" }, "ih", ":Gitsigns select_hunk<cr>", { silent = true, desc = "Select Hunk" })
           mapbuf({ "o", "x" }, "ah", ":Gitsigns select_hunk<cr>", { silent = true, desc = "Select Hunk" })
         end,

@@ -54,7 +54,16 @@ return {
       vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
       vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
       vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+
+      local function on_move(data)
+        Snacks.rename.on_rename_file(data.source, data.destination)
+      end
+
       require("neo-tree").setup({
+        event_handlers = {
+          { event = "file_moved",   handler = on_move },
+          { event = "file_renamed", handler = on_move },
+        },
         source_selector = {
           winbar = false,
           statusline = false,
@@ -269,60 +278,78 @@ return {
       "Oil",
     },
     keys = {
-      { "<A-o>", function()
-        if vim.w.is_oil_win then
-          require("oil").close()
-        else
-          require("oil").open_float(nil, {}, function()
+      {
+        "<A-o>",
+        function()
+          if vim.w.is_oil_win then
+            require("oil").close()
+          else
+            require("oil").open_float(nil, {}, function()
+              require("oil").open_preview()
+            end)
+          end
+        end,
+        desc = "Oil (float)"
+      },
+      {
+        ",o",
+        function()
+          require("oil").open(nil, {}, function()
             require("oil").open_preview()
           end)
-        end
-      end },
-      { ",o", function()
-        require("oil").open(nil, {}, function()
-          require("oil").open_preview()
-        end)
-      end },
-    },
-    opts = {
-      watch_for_changes = true,
-      keymaps = {
-        ["g?"] = "actions.show_help",
-        ["<CR>"] = "actions.select",
-        ["<A-v>"] = "actions.select_vsplit",
-        ["<A-s>"] = "actions.select_split",
-        ["<A-t>"] = "actions.select_tab",
-        ["<A-p>"] = "actions.preview",
-        ["<A-c>"] = "actions.close",
-        ["<A-r>"] = "actions.refresh",
-        ["<A-a>"] = "actions.refresh",
-        ["<C-s>"] = function() require("oil").save() end,
-        ["-"] = "actions.parent",
-        ["_"] = "actions.open_cwd",
-        ["`"] = "actions.cd",
-        ["~"] = "actions.tcd",
-        ["gs"] = "actions.change_sort",
-        ["gx"] = "actions.open_external",
-        ["<A-u>"] = function() require("oil").discard_all_changes() end,
-        ["<A-H>"] = "actions.toggle_hidden",
-        ["H"] = "actions.toggle_hidden",
-        ["<A-T>"] = "actions.toggle_trash",
-        ["<A-y>"] = "actions.yank_entry",
-        ["<A-f>"] = function()
-          if oil_long_format then
-            require("oil").set_columns({ "icon" })
-          else
-            require("oil").set_columns({
-              "icon",
-              { "permissions", highlight = "Tag" },
-              { "size",        highlight = "Special" },
-              { "mtime",       highlight = "Question" },
-            })
-          end
-          oil_long_format = not oil_long_format
         end,
+        desc = "Oil (current window)"
       },
     },
+    config = function()
+      require("oil").setup({
+        watch_for_changes = true,
+        keymaps = {
+          ["g?"] = "actions.show_help",
+          ["<CR>"] = "actions.select",
+          ["<A-v>"] = "actions.select_vsplit",
+          ["<A-s>"] = "actions.select_split",
+          ["<A-t>"] = "actions.select_tab",
+          ["<A-p>"] = "actions.preview",
+          ["<A-c>"] = "actions.close",
+          ["<A-r>"] = "actions.refresh",
+          ["<A-a>"] = "actions.refresh",
+          ["<C-s>"] = function() require("oil").save() end,
+          ["-"] = "actions.parent",
+          ["_"] = "actions.open_cwd",
+          ["`"] = "actions.cd",
+          ["~"] = "actions.tcd",
+          ["gs"] = "actions.change_sort",
+          ["gx"] = "actions.open_external",
+          ["<A-u>"] = function() require("oil").discard_all_changes() end,
+          ["<A-H>"] = "actions.toggle_hidden",
+          ["H"] = "actions.toggle_hidden",
+          ["<A-T>"] = "actions.toggle_trash",
+          ["<A-y>"] = "actions.yank_entry",
+          ["<A-f>"] = function()
+            if oil_long_format then
+              require("oil").set_columns({ "icon" })
+            else
+              require("oil").set_columns({
+                "icon",
+                { "permissions", highlight = "Tag" },
+                { "size",        highlight = "Special" },
+                { "mtime",       highlight = "Question" },
+              })
+            end
+            oil_long_format = not oil_long_format
+          end,
+        },
+      })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "OilActionsPost",
+        callback = function(event)
+          if event.data.actions.type == "move" then
+            Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
+          end
+        end,
+      })
+    end,
     dependencies = {
       { "nvim-tree/nvim-web-devicons", lazy = true }
     },
