@@ -67,43 +67,75 @@ M.file_too_big = function(size)
   end
 end
 
-M.winmove = function(key)
-  local current_win = vim.fn.winnr()
-  vim.cmd.wincmd(key)
-  if current_win == vim.fn.winnr() then
-    if vim.env["TMUX"] then
-      local dir = {
-        ["h"] = "-L",
-        ["j"] = "-D",
-        ["k"] = "-U",
-        ["l"] = "-R",
-      }
+local Nav = {
+  direction = {
+    tmux = {
+      ["h"] = "-L",
+      ["j"] = "-D",
+      ["k"] = "-U",
+      ["l"] = "-R",
+    },
+    wezterm = {
+      ["h"] = "Left",
+      ["j"] = "Down",
+      ["k"] = "Up",
+      ["l"] = "Right",
+    },
+    kitty = {
+      ["h"] = "left",
+      ["j"] = "bottom",
+      ["k"] = "top",
+      ["l"] = "right",
+    }
+  },
+  multiplexer = {
+    tmux = function(self, dir)
       if vim.fn.trim(vim.fn.system([[tmux display-message -p '#{window_zoomed_flag}']])) == "0" then
-        vim.fn.system("tmux select-pane " .. dir[key])
+        vim.fn.system("tmux select-pane " .. self.direction.tmux[dir])
       end
-    elseif vim.env["KITTY_PID"] then
-      (function() end)() -- TODO: implement
-    elseif vim.env["TERM_PROGRAM"] == "WezTerm" then
-      local dir = {
-        ["h"] = "Left",
-        ["j"] = "Down",
-        ["k"] = "Up",
-        ["l"] = "Right",
-      }
-      local function is_zoomed()
-        local pane_info = vim.json.decode(vim.fn.system([[wezterm cli list --format json]]))
-        local pane_id = tonumber(vim.env["WEZTERM_PANE"])
-        for _, pane in ipairs(pane_info) do
-          if pane.pane_id == pane_id then
-            return pane.is_zoomed
+    end,
+    wezterm = function(self, dir)
+      local pane_info = vim.json.decode(vim.fn.system([[wezterm cli list --format json]]))
+      local pane_id = tonumber(vim.env["WEZTERM_PANE"])
+      for _, pane in ipairs(pane_info) do
+        if pane.pane_id == pane_id then
+          if not pane.is_zoomed then
+            vim.fn.system("wezterm cli activate-pane-direction " .. self.direction.wezterm[dir])
           end
+          return
         end
-        return false
       end
-      if not is_zoomed() then
-        vim.fn.system("wezterm cli activate-pane-direction " .. dir[key])
-      end
+    end,
+    kitty = function(self, dir)
+      vim.fn.system("kitty @ kitten focus.py " .. self.direction.kitty[dir])
     end
+  },
+  configure_multiplexer = function(self)
+    if self.configured then
+      return
+    end
+    if vim.env["TMUX"] then
+      setmetatable(self, { __call = self.multiplexer.tmux })
+    elseif vim.env["KITTY_PID"] then
+      setmetatable(self, { __call = self.multiplexer.kitty })
+    elseif vim.env["TERM_PROGRAM"] == "WezTerm" then
+      setmetatable(self, { __call = self.multiplexer.wezterm })
+    else
+      setmetatable(self, { __call = function() end })
+    end
+    self.configured = true
+  end,
+}
+
+Nav:configure_multiplexer()
+
+
+---@param dir "h" | "j" | "k" | "l"
+M.winmove = function(dir)
+  local current_win = vim.fn.winnr()
+  vim.cmd.wincmd(dir)
+  if current_win == vim.fn.winnr() then
+    Nav(dir)
   end
 end
 
@@ -143,7 +175,7 @@ M.split = function(dir, fn, opts)
     fn(opts.args)
   end
   if opts.zz then
-    vim.cmd([[norm zz]])
+    vim.cmd.normal("zz")
   end
 end
 
@@ -170,15 +202,15 @@ M.fntab = function(fn, opts)
   if not filetype or M.fntab_ignored_ft[filetype] then
     vim.cmd("tabnew")
   else
-    vim.cmd("norm mz")
-    vim.cmd("tabedit %")
-    vim.cmd("norm `z")
+    vim.cmd.normal("mz")
+    vim.cmd.tabedit("%")
+    vim.cmd.normal("z")
   end
   if type(fn) == "function" then
     fn(opts.args)
   end
   if opts.zz then
-    vim.cmd("norm zz")
+    vim.cmd.normal("zz")
   end
 end
 
