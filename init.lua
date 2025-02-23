@@ -39,8 +39,11 @@ vim.g.signs = {
   Info = "",
 }
 
+vim.g.transparent = vim.env["TERM_TRANSPARENT"] ~= nil
+
 vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
+
 require("lazy").setup("plugins", {
   performance = {
     cache = { enabled = true },

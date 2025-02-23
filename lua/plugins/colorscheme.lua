@@ -5,16 +5,15 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      local transparent = vim.env["TERM_TRANSPARENT"] ~= nil
       local custom_palette = {
         red = "#f72044",
         orange = "#f7a156",
       }
       require('nightfox').setup({
         options = {
-          transparent = transparent,
+          transparent = vim.g.transparent,
           terminal_colors = true,
-          dim_inactive = true,
+          dim_inactive = not vim.g.transparent,
           module_default = true,
           styles = {
             comments = "NONE",
@@ -38,11 +37,11 @@ return {
             HopNextKey2 = { fg = custom_palette.orange },
             TelescopeBorder = {
               fg = "palette.blue",
-              bg = transparent and "" or "palette.bg1",
+              bg = vim.g.transparent and "" or "palette.bg1",
             },
             NormalFloat = {
               fg = "palette.fg1",
-              bg = transparent and "" or "palette.bg1",
+              bg = vim.g.transparent and "" or "palette.bg1",
             },
             MatchParen = {
               fg = "palette.orange.bright",
@@ -50,7 +49,7 @@ return {
             },
             LualineCustom = {
               fg = "palette.fg2",
-              bg = transparent and "" or "palette.bg0",
+              bg = vim.g.transparent and "" or "palette.bg0",
             },
             IblIndent = { fg = "palette.bg2" },
             IblScope = { fg = "palette.black.bright" },
