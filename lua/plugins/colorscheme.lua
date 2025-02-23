@@ -53,6 +53,7 @@ return {
             },
             IblIndent = { fg = "palette.bg2" },
             IblScope = { fg = "palette.black.bright" },
+            MiniHippaterns_trail_virtualtext = { fg = "palette.red.base" },
             ["@lsp.typemod.function.defaultLibrary"] = { fg = "palette.cyan.bright" },
             ["@type.builtin"] = { fg = "palette.yellow", style = "italic" },
             ["@constant.builtin"] = { style = "bold" },

@@ -198,12 +198,10 @@ return {
       }
       hipatterns.setup(default)
 
-      vim.api.nvim_set_hl(0, "MiniHippaterns_trail_virtualtext", { fg = "#fc2d2d" })
-
       local hi_commands = {}
 
-      hi_commands[""] = function() hipatterns.toggle(0) end
       hi_commands["toggle"] = function() hipatterns.toggle(0) end
+      hi_commands[""] = function() hi_commands["toggle"]() end
       hi_commands["enable"] = function() hipatterns.enable(0) end
       hi_commands["disable"] = function() hipatterns.disable(0) end
       hi_commands["clear"] = function()
@@ -286,7 +284,7 @@ return {
         hipatterns.enable(0)
       end
 
-      local hi_completion = vim.tbl_keys(hi_commands)
+      local hi_completion = vim.tbl_filter(function(v) return v ~= "" end, vim.tbl_keys(hi_commands))
 
       vim.api.nvim_create_user_command("Hi", function(args)
         vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
