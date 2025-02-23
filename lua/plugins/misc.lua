@@ -124,9 +124,8 @@ return {
           -- use treesitter's instead
           a = false,
           f = false,
-          -- `i` instead of `f` as it is reserved for treesitter
-          -- `i` for "invocation"
-          i = gen_spec.function_call(),
+          -- `j` instead of `f` as it is reserved for treesitter
+          j = gen_spec.function_call(),
           -- whole buffer
           g = function()
             local from = { line = 1, col = 1 }

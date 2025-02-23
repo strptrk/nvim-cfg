@@ -256,6 +256,8 @@ return {
               ["ix"] = "@block.inner",
               ["ak"] = "@comment.outer",
               ["ik"] = "@comment.outer",
+              ["ai"] = "@conditional.outer",
+              ["ii"] = "@conditional.inner",
               ["ia"] = { query = "@parameter.inner" },
               ["aa"] = { query = "@parameter.outer" },
             },
