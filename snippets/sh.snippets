@@ -16,10 +16,13 @@ snippet elif
     elif [[ $1 ]]; then
         ${0:${VISUAL}}
 
-snippet wh
+snippet while
     while [[ $1 ]]; do
         ${0:${VISUAL}}
     done
+
+snippet !q quiet
+    >/dev/null 2>&1
 
 snippet until
     until [[ $1 ]]; do
