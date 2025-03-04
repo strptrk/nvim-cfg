@@ -119,7 +119,9 @@ local Nav = {
       end
     end,
     kitty = function(self, dir)
-      vim.fn.system("kitty @ kitten focus.py " .. self.direction.kitty[dir])
+      if vim.fn.trim(vim.fn.system("kitty @ kitten is_zoomed.py")) == "False" then
+        vim.fn.system("kitty @ kitten focus.py " .. self.direction.kitty[dir])
+      end
     end
   },
   configure_multiplexer = function(self)
