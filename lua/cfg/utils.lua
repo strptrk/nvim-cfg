@@ -20,6 +20,12 @@ M.split_ignore_ft = {
   ["terminal"] = true,
   ["trouble"] = true,
   ["TelescopePrompt"] = true,
+  ["dap-repl"] = true,
+  ["dapui_watches"] = true,
+  ["dapui_stacks"] = true,
+  ["dapui_breakpoints"] = true,
+  ["dapui_scopes"] = true,
+  ["dapui_console"] = true,
 }
 
 M.fntab_ignored_ft = {
@@ -35,6 +41,12 @@ M.fntab_ignored_ft = {
   ["nofile"] = true,
   [""] = true,
   ["TelescopePrompt"] = true,
+  ["dap-repl"] = true,
+  ["dapui_watches"] = true,
+  ["dapui_stacks"] = true,
+  ["dapui_breakpoints"] = true,
+  ["dapui_scopes"] = true,
+  ["dapui_console"] = true,
 }
 
 local filesize_cache = {}
