@@ -34,7 +34,7 @@ vim.g.float_border_style = "single"
 
 vim.g.signs = {
   Error = "",
-  Warn = " ",
+  Warn = "",
   Hint = "",
   Info = "",
 }
@@ -119,13 +119,6 @@ vim.api.nvim_create_autocmd("User", {
   callback = function()
     require("cfg.maps")
     require("cfg.commands")
-    -- abbreviations
-    vim.cmd([[
-      cnoreabbrev qt tabclose
-      cnoreabbrev qq q!
-      cnoreabbrev qqa qa!
-      cnoreabbrev Splitws s/\ /\ \\\r/g
-    ]])
   end,
 })
 require("cfg.autocmds")

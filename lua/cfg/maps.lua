@@ -13,6 +13,11 @@ local mmap = function(mode, lhs, rhs, opts)
   end
 end
 
+-- abbreviations
+map("ca", "qq", "q!")
+map("ca", "qqa", "qa!")
+map("ca", "qw", "tabclose")
+
 map("n", "<A-a>", "<cmd>tabprevious<cr>")
 map("n", "<A-d>", "<cmd>tabnext<cr>")
 map("n", "<A-A>", "<cmd>tabmove -1<cr>")

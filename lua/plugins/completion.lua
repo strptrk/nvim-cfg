@@ -38,22 +38,23 @@ return {
         ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
         ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
-
       },
 
       cmdline = {
+        completion = {
+          ghost_text = { enabled = false },
+          menu = { auto_show = function(_) return vim.fn.getcmdtype() == ':' end },
+        },
         keymap = {
           ['<C-space>'] = { 'show', 'fallback' },
           ['<C-e>'] = { 'hide', 'fallback' },
           ['<CR>'] = {
-            function(cmp)
-              return cmp.accept({
-                callback = function()
-                  vim.api.nvim_feedkeys('\n', 'n', true)
-                end,
-              })
+            'accept_and_enter',
+            function()
+              -- <C-]> to expand abbreviations
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-]><CR>", true, false, true), "n", false)
+              return true
             end,
-            "fallback"
           },
           ['<Tab>'] = { 'select_next', 'fallback' },
           ['<S-Tab>'] = { 'select_prev', 'fallback' },
