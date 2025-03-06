@@ -44,16 +44,15 @@ return {
         completion = {
           ghost_text = { enabled = false },
           menu = { auto_show = function(_) return vim.fn.getcmdtype() == ':' end },
+          list = { selection = { preselect = false } },
         },
         keymap = {
           ['<C-space>'] = { 'show', 'fallback' },
           ['<C-e>'] = { 'hide', 'fallback' },
           ['<CR>'] = {
-            'accept_and_enter',
             function()
               -- <C-]> to expand abbreviations
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-]><CR>", true, false, true), "n", false)
-              return true
             end,
           },
           ['<Tab>'] = { 'select_next', 'fallback' },

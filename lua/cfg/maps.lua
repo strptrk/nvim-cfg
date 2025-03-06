@@ -16,7 +16,7 @@ end
 -- abbreviations
 map("ca", "qq", "q!")
 map("ca", "qqa", "qa!")
-map("ca", "qw", "tabclose")
+map("ca", "qt", "tabclose")
 
 map("n", "<A-a>", "<cmd>tabprevious<cr>")
 map("n", "<A-d>", "<cmd>tabnext<cr>")
