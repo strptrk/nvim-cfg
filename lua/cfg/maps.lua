@@ -80,7 +80,7 @@ map("n", "#", "gD", { noremap = true, desc = "Go to Definition (builtin)" })
 map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]],
   { desc = "Escape and Clear Highlights" })
 map({ "n", "t" }, "<A-Esc>", function()
-  if vim.bo.buftype == "terminal" then
+  if vim.bo.filetype == "toggleterm" or vim.bo.filetype == "snacks_terminal" then
     vim.cmd([[stopinsert]])
   else
     vim.cmd([[qa!]])
