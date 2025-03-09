@@ -119,8 +119,9 @@ local Nav = {
       end
     end,
     kitty = function(self, dir)
-      if vim.fn.trim(vim.fn.system("kitty @ kitten is_zoomed.py")) == "False" then
-        vim.fn.system("kitty @ kitten focus.py " .. self.direction.kitty[dir])
+      local kittencmd = "kitty @ --password-file " .. vim.env["HOME"] .. "/.config/kitty/rc-pass "
+      if vim.fn.trim(vim.fn.system(kittencmd .. "kitten is_zoomed.py")) == "False" then
+        vim.fn.system(kittencmd .. "focus-window -m neighbor:" .. self.direction.kitty[dir])
       end
     end
   },
