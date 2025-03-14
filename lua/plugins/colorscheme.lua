@@ -9,7 +9,7 @@ return {
         red = "#f72044",
         orange = "#f7a156",
       }
-      require('nightfox').setup({
+      require("nightfox").setup({
         options = {
           transparent = vim.g.transparent,
           terminal_colors = true,
@@ -45,7 +45,7 @@ return {
             },
             MatchParen = {
               fg = "palette.orange.bright",
-              style = "underline"
+              style = "underline",
             },
             LualineCustom = {
               fg = "palette.fg2",
@@ -59,7 +59,7 @@ return {
             ["@constant.builtin"] = { style = "bold" },
             ["@lsp.type.unresolvedReference.rust"] = {},
             ["@parameter"] = { fg = "palette.red.bright" },
-          }
+          },
         },
       })
       for type, icon in pairs(vim.g.signs) do
@@ -68,5 +68,5 @@ return {
       end
       vim.cmd.colorscheme(vim.g.nightfox_flavour)
     end,
-  }
+  },
 }

@@ -30,7 +30,7 @@ local ts_parsers = {
   "latex",
   "comment",
   "regex",
-  "vim"
+  "vim",
 }
 
 local ts_filetypes = {
@@ -133,7 +133,7 @@ return {
           vim.g.matchup_matchparen_timeout = 20
           vim.g.matchup_matchparen_insert_timeout = 20
           vim.g.matchup_matchparen_deferred = 1
-          vim.g.matchup_matchparen_nomode = 'i'
+          vim.g.matchup_matchparen_nomode = "i"
           vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end,
       },
@@ -329,7 +329,7 @@ return {
         playground = {
           enable = false,
           disable = require("cfg.utils").file_too_big(512),
-          updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+          updatetime = 25,         -- Debounced time for highlighting nodes in the playground from source code
           persist_queries = false, -- Whether the query persists across vim sessions
           keybindings = {
             toggle_query_editor = "o",
@@ -354,10 +354,14 @@ return {
   {
     "cshuaimin/ssr.nvim",
     lazy = true,
-    ft = ts_filetypes,
     keys = {
-      { "<Space>sr", function() require("ssr").open() end, mode = { "x", "n" }, desc = "Structural Search & Replace" }
+      {
+        "<Space>sr",
+        function() require("ssr").open() end,
+        mode = { "x", "n" },
+        desc = "Structural Search & Replace",
+      },
     },
-    opts = {}
-  }
+    opts = {},
+  },
 }

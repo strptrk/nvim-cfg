@@ -7,7 +7,7 @@ end
 local symbols = {
   left_five_eights_block = "▋",
   right_five_eights_block = "🮉",
-  full_block = "█"
+  full_block = "█",
 }
 
 return {
@@ -21,8 +21,7 @@ return {
           left = { size = 28 },
         },
         animate = {
-          fps = 60,
-          cps = 120,
+          enabled = false,
         },
         keys = { ---@format disable
           ["<A-C-h>"] = function(win) resize_edgy(win, "h", 2) end,
@@ -62,30 +61,27 @@ return {
           { ft = "qf", title = "QuickFix List" },
         },
       }
-      --   ({ "top", "bottom", "left", "right" })
       for _, pos in ipairs({ "bottom", "right" }) do
         opts[pos] = opts[pos] or {}
-        for mode, title in pairs({
+        for mode, title in pairs({ ---@format disable
           ["diagnostics"]          = "Diagnostics",
           ["lsp"]                  = "LSP",
           ["lsp_declarations"]     = "LSP Declarations",
           ["lsp_definitions"]      = "LSP Definitions",
-          ["lsp_document_symbols"] = "LSP Document Symbols",
-          ["lsp_implementations"]  = "LSP Implementations",
-          ["lsp_incoming_calls"]   = "LSP Incoming Calls",
-          ["lsp_outgoing_calls"]   = "LSP Outgoing Calls",
+          ["lsp_document_symbols"] = false,
+          ["lsp_implementations"]  = false,
+          ["lsp_incoming_calls"]   = false,
+          ["lsp_outgoing_calls"]   = false,
           ["lsp_references"]       = "LSP References",
           ["lsp_type_definitions"] = "LSP Type Definitions",
           ["loclist"]              = "Location List",
-          ["qflist"]               = "Quickfix List",
-          ["quickfix"]             = "Quickfix List",
-          ["symbols"]              = "LSP Document Symbols",
-          ["telescope"]            = "Telescope",
-        }) do
-          table.insert(opts[pos], {
-            title = title,
+          ["qflist"]               = "QuickFix List",
+          ["quickfix"]             = "QuickFix List",
+          ["symbols"]              = false,
+          ["telescope"]            = false,
+        }) do ---@format enable
+          local conf = {
             ft = "trouble",
-
             filter = function(_, win)
               return vim.w[win].trouble
                   and vim.w[win].trouble.position == pos
@@ -94,7 +90,13 @@ return {
                   and vim.w[win].trouble.relative == "editor"
                   and not vim.w[win].trouble_preview
             end,
-          })
+          }
+          if title == false then
+            conf.wo = { winbar = "" }
+          else
+            conf.title = title
+          end
+          table.insert(opts[pos], conf)
         end
       end
       return opts
@@ -183,18 +185,18 @@ return {
     end,
   },
   {
-    'echasnovski/mini.hipatterns',
-    version = false,
-    lazy    = true,
-    cmd     = { "Hi" },
-    keys    = {
-      { "<Space>hi", "<cmd>Hi<cr>", desc = "Toggle Highlight Patterns" }
+    "echasnovski/mini.hipatterns",
+    lazy = true,
+    cmd  = { "Hi" },
+    keys = {
+      { "<Space>hi", "<cmd>Hi<cr>", desc = "Toggle Highlight Patterns" },
     },
+    version = false,
     config  = function()
-      local hipatterns = require('mini.hipatterns')
+      local hipatterns = require("mini.hipatterns")
       local default = {
         delay = { text_change = 200 },
-        highlighters = {}
+        highlighters = {},
       }
       hipatterns.setup(default)
 
@@ -216,21 +218,21 @@ return {
               -- more or less emulates treesitter-comment's behaviour, but is activated
               -- everywhere, not just in comments
               ---@format disable
-                fixme  = { pattern = '%f[%w]()FIXME()%f[%W]', group = '@comment.error' },
-                fixme_ = { pattern = 'FIXME%(()[^)]*()%)',    group = 'Number' },
-                fix    = { pattern = '%f[%w]()FIX()%f[%W]',   group = '@comment.warning' },
-                fix_   = { pattern = 'FIX%(()[^)]*()%',       group = 'Number' },
-                hack   = { pattern = '%f[%w]()HACK()%f[%W]',  group = '@comment.warning' },
-                hack_  = { pattern = 'HACK%(()[^)]*()%)',     group = 'Number' },
-                todo   = { pattern = '%f[%w]()TODO()%f[%W]',  group = '@comment.todo' },
-                todo_  = { pattern = 'TODO%(()[^)]*()%)',     group = 'Number' },
-                note   = { pattern = '%f[%w]()NOTE()%f[%W]',  group = '@comment.note' },
-                note_  = { pattern = 'NOTE%(()[^)]*()%)',     group = 'Number' },
-                xxx    = { pattern = '%f[%w]()XXX()%f[%W]',   group = '@comment.note' },
-                xxx_   = { pattern = 'XXX%(()[^)]*()%)',      group = 'Number' },
-                error  = { pattern = '%f[%w]()ERROR()%f[%W]', group = '@comment.error' },
-                error_ = { pattern = 'ERROR%(()[^)]*()%)',    group = 'Number' },
-                ---@format enable
+              fixme  = { pattern = '%f[%w]()FIXME()%f[%W]', group = '@comment.error' },
+              fixme_ = { pattern = 'FIXME%(()[^)]*()%)',    group = 'Number' },
+              fix    = { pattern = '%f[%w]()FIX()%f[%W]',   group = '@comment.warning' },
+              fix_   = { pattern = 'FIX%(()[^)]*()%',       group = 'Number' },
+              hack   = { pattern = '%f[%w]()HACK()%f[%W]',  group = '@comment.warning' },
+              hack_  = { pattern = 'HACK%(()[^)]*()%)',     group = 'Number' },
+              todo   = { pattern = '%f[%w]()TODO()%f[%W]',  group = '@comment.todo' },
+              todo_  = { pattern = 'TODO%(()[^)]*()%)',     group = 'Number' },
+              note   = { pattern = '%f[%w]()NOTE()%f[%W]',  group = '@comment.note' },
+              note_  = { pattern = 'NOTE%(()[^)]*()%)',     group = 'Number' },
+              xxx    = { pattern = '%f[%w]()XXX()%f[%W]',   group = '@comment.note' },
+              xxx_   = { pattern = 'XXX%(()[^)]*()%)',      group = 'Number' },
+              error  = { pattern = '%f[%w]()ERROR()%f[%W]', group = '@comment.error' },
+              error_ = { pattern = 'ERROR%(()[^)]*()%)',    group = 'Number' },
+              ---@format enable
             }
           })
         end
@@ -242,8 +244,8 @@ return {
         if not vim.b.minihipatterns_config.highlighters.hex_color then
           vim.b.minihipatterns_config = vim.tbl_deep_extend("force", vim.b.minihipatterns_config, {
             highlighters = {
-              hex_color = hipatterns.gen_highlighter.hex_color()
-            }
+              hex_color = hipatterns.gen_highlighter.hex_color(),
+            },
           })
         end
         hipatterns.disable(0)
@@ -261,30 +263,33 @@ return {
                   local mask = ""
                   for char in string.gmatch(match, ".") do
                     if char == string.char(9) then -- TAB
-                      mask = mask ..
-                          string.rep(
+                      mask = mask
+                          .. string.rep(
                             symbols.full_block,
-                            vim.api.nvim_get_option_value("tabstop", { scope = "local" }) or 4)
+                            vim.api.nvim_get_option_value("tabstop", { scope = "local" }) or 4
+                          )
                     else
                       mask = mask .. symbols.full_block
                     end
                   end
                   return {
-                    virt_text = { { mask, 'Error' } },
-                    virt_text_pos = 'overlay',
+                    virt_text = { { mask, "Error" } },
+                    virt_text_pos = "overlay",
                     priority = 100,
                     right_gravity = false,
                   }
                 end,
-              }
-            }
+              },
+            },
           })
         end
         hipatterns.disable(0)
         hipatterns.enable(0)
       end
 
-      local hi_completion = vim.tbl_filter(function(v) return v ~= "" end, vim.tbl_keys(hi_commands))
+      local hi_completion = vim.tbl_filter(function(v)
+        return v ~= ""
+      end, vim.tbl_keys(hi_commands))
 
       vim.api.nvim_create_user_command("Hi", function(args)
         vim.b.minihipatterns_config = vim.b.minihipatterns_config or default
@@ -318,7 +323,7 @@ return {
         symbols = {
           get = function() return "" end,
           has = function() return false end,
-        }
+        },
       }
       local get_lsp = function(bufnr)
         bufnr = bufnr or vim.api.nvim_win_get_buf(0)
@@ -340,17 +345,17 @@ return {
             })
             trouble.loaded = true
           end
-        end
+        end,
       })
       vim.api.nvim_create_autocmd("LspDetach", {
         callback = function(args)
           lsps[args.buf] = nil
-        end
+        end,
       })
 
       local conditions = {
         has_filename = function()
-          return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
+          return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
         end,
         window_width_over = function(w)
           return function()
@@ -371,12 +376,12 @@ return {
             return {
               added = gitsigns.added,
               modified = gitsigns.changed,
-              removed = gitsigns.removed
+              removed = gitsigns.removed,
             }
           end
-        end
+        end,
       }
-      local palette = require('nightfox.palette').load(vim.g.nightfox_flavour)
+      local palette = require("nightfox.palette").load(vim.g.nightfox_flavour)
       local colors = {
         blue = palette.blue.base,
         green = palette.green.base,
@@ -394,13 +399,13 @@ return {
         n = colors.blue,
         i = colors.green,
         v = colors.purple,
-        [''] = colors.purple,
+        [""] = colors.purple,
         V = colors.purple,
         c = colors.yellow,
         no = colors.blue,
         s = colors.red,
         S = colors.red,
-        [''] = colors.red,
+        [""] = colors.red,
         ic = colors.yellow,
         R = colors.red,
         Rv = colors.red,
@@ -408,8 +413,8 @@ return {
         ce = colors.red,
         r = colors.cyan,
         rm = colors.cyan,
-        ['r?'] = colors.cyan,
-        ['!'] = colors.orange,
+        ["r?"] = colors.cyan,
+        ["!"] = colors.orange,
         t = colors.yellow,
       }
 
@@ -432,10 +437,10 @@ return {
           lualine_c = {
             {
               function()
-                return symbols.left_five_eights_block .. ' '
+                return symbols.left_five_eights_block .. " "
               end,
               color = function()
-                return { fg = mode_color[vim.fn.mode()], }
+                return { fg = mode_color[vim.fn.mode()] }
               end,
               padding = { right = 1 },
             },
@@ -448,7 +453,7 @@ return {
                   gui = "bold",
                 }
               end,
-              padding = { left = 1, right = 1 }
+              padding = { left = 1, right = 1 },
             },
             {
               "b:gitsigns_head",
@@ -464,17 +469,15 @@ return {
             },
             {
               function()
-                return '%='
-              end
+                return "%="
+              end,
             },
             {
               function()
                 return trouble.symbols.get()
               end,
               cond = function()
-                return conditions.has_filename()
-                    and conditions.editor_width_over(110)()
-                    and trouble.symbols.has()
+                return conditions.has_filename() and conditions.editor_width_over(110)() and trouble.symbols.has()
               end,
             },
           },
@@ -513,13 +516,13 @@ return {
               function()
                 return lsps[vim.api.nvim_get_current_buf()] or ""
               end,
-              icon = '',
-              color = { fg = colors.green, gui = 'bold' },
+              icon = "",
+              color = { fg = colors.green, gui = "bold" },
             },
             {
               "filetype",
-              color = { gui = 'bold' },
-              padding = { left = 1, right = 0 }
+              color = { gui = "bold" },
+              padding = { left = 1, right = 0 },
             },
             {
               "location",
@@ -529,7 +532,7 @@ return {
                   gui = "bold",
                 }
               end,
-              padding = { left = 1, right = 1 }
+              padding = { left = 1, right = 1 },
             },
             {
               "selectioncount",
@@ -538,34 +541,34 @@ return {
               padding = { left = 0, right = 1 },
             },
             {
-              'fileformat',
+              "fileformat",
               icons_enabled = false,
               color = function()
-                return { fg = mode_color[vim.fn.mode()], }
+                return { fg = mode_color[vim.fn.mode()] }
               end,
               cond = conditions.has_filename,
-              padding = { left = 0, right = 0 }
+              padding = { left = 0, right = 0 },
             },
             {
               "encoding",
               color = function()
-                return { fg = mode_color[vim.fn.mode()], }
+                return { fg = mode_color[vim.fn.mode()] }
               end,
               padding = { left = 1, right = 0 },
             },
             {
               "filesize",
               color = function()
-                return { fg = mode_color[vim.fn.mode()], }
+                return { fg = mode_color[vim.fn.mode()] }
               end,
-              padding = { left = 1, right = 0 }
+              padding = { left = 1, right = 0 },
             },
             {
               function()
                 return symbols.right_five_eights_block
               end,
               color = function()
-                return { fg = mode_color[vim.fn.mode()], }
+                return { fg = mode_color[vim.fn.mode()] }
               end,
               padding = { left = 1 },
             },
@@ -630,13 +633,50 @@ return {
         vim.cmd([[Hi color]])
       end, {})
     end,
-    keys = { ---@format disable
-      { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
-      { "<c-f>",     function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll forward" },
-      { "<c-b>",     function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, mode = { "i", "n", "s" }, desc = "Scroll backward" },
-      { ",n",        function() require("noice").cmd("dismiss") end, silent = true, mode = "n", desc = "Clear Noice" },
-      { "<Space>I", "<cmd>Ins<cr>", desc = "Inspect Highlight for Token"}
-    }, ---@format enable
+    keys = {
+      {
+        "<S-Enter>",
+        function()
+          require("noice").redirect(vim.fn.getcmdline())
+        end,
+        mode = "c",
+        desc = "Redirect Cmdline"
+      },
+      {
+        "<c-f>",
+        function()
+          if not require("noice.lsp").scroll(4) then
+            return "<c-f>"
+          end
+        end,
+        silent = true,
+        expr = true,
+        mode = { "i", "n", "s" },
+        desc = "Scroll forward"
+      },
+      {
+        "<c-b>",
+        function()
+          if not require("noice.lsp").scroll(-4) then
+            return "<c-b>"
+          end
+        end,
+        silent = true,
+        expr = true,
+        mode = { "i", "n", "s" },
+        desc = "Scroll backward"
+      },
+      {
+        ",n",
+        function()
+          require("noice").cmd("dismiss")
+        end,
+        silent = true,
+        mode = "n",
+        desc = "Clear Noice"
+      },
+      { "<Space>I", "<cmd>Ins<cr>", desc = "Inspect Highlight for Token" }
+    },
     opts = {
       cmdline = {
         view = "cmdline",
@@ -660,14 +700,14 @@ return {
           ["vim.lsp.util.stylize_markdown"] = true,
         },
         signature = {
-          enabled = true
+          enabled = true,
         },
         hover = {
           enabled = true,
         },
         progress = {
-          enabled = false
-        }
+          enabled = false,
+        },
       },
       routes = {
         {

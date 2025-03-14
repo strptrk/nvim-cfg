@@ -13,7 +13,7 @@ return {
       { "sun", nil, mode = { "n", "x" }, desc = "Surround: Update searched line count" },
     },
     config = function()
-      local minisurround = require('mini.surround')
+      local minisurround = require("mini.surround")
       minisurround.setup({
         mappings = {
           add = "sa",             -- Add surrounding in Normal and Visual modes
@@ -30,57 +30,59 @@ return {
         respect_selection_type = false,
         custom_surroundings = {
           -- by default, left {parentheses, brackets, tags, braces} add spaces and right ones don't, swap that
-          [')'] = { output = { left = '( ', right = ' )' } },
-          ['('] = { output = { left = '(', right = ')' } },
-          ['>'] = { output = { left = '< ', right = ' >' } },
-          ['<'] = { output = { left = '<', right = '>' } },
-          ['{'] = { output = { left = '{', right = '}' } },
-          ['}'] = { output = { left = '{ ', right = ' }' } },
-          ['['] = { output = { left = '[', right = ']' } },
-          [']'] = { output = { left = '[ ', right = ' ]' } },
+          [")"] = { output = { left = "( ", right = " )" } },
+          ["("] = { output = { left = "(", right = ")" } },
+          [">"] = { output = { left = "< ", right = " >" } },
+          ["<"] = { output = { left = "<", right = ">" } },
+          ["{"] = { output = { left = "{", right = "}" } },
+          ["}"] = { output = { left = "{ ", right = " }" } },
+          ["["] = { output = { left = "[", right = "]" } },
+          ["]"] = { output = { left = "[ ", right = " ]" } },
           -- [d]ouble brackets
-          ['d'] = { output = { left = '[[', right = ']]' } },
-          -- [D]ouble brackets, with whitespace 
-          ['D'] = { output = { left = '[[ ', right = ' ]]' } },
+          ["d"] = { output = { left = "[[", right = "]]" } },
+          -- [D]ouble brackets, with whitespace
+          ["D"] = { output = { left = "[[ ", right = " ]]" } },
           -- by default, b adds (), change it to p and b to {}
-          ['b'] = { output = { left = '{', right = '}' } },
-          ['p'] = { output = { left = '(', right = ')' } },
+          ["b"] = { output = { left = "{", right = "}" } },
+          ["p"] = { output = { left = "(", right = ")" } },
           -- escaped [Q]uotes
-          ['Q'] = { output = { left = '\\"', right = '\\"' } },
+          ["Q"] = { output = { left = '\\"', right = '\\"' } },
           -- [o]utput (shell)
-          ['o'] = { output = { left = '$(', right = ')' } },
+          ["o"] = { output = { left = "$(", right = ")" } },
           -- [v]alue (shell)
-          ['v'] = { output = { left = '"${', right = '}"' } },
+          ["v"] = { output = { left = '"${', right = '}"' } },
           -- [l]ua function
-          ['l'] = { output = { left = 'function() ', right = ' end' } },
+          ["l"] = { output = { left = "function() ", right = " end" } },
           -- python type [h]int, like `str` -> `Optional[str]`
-          ['h'] = {
+          ["h"] = {
             output = function()
               local type = minisurround.user_input("Type Hint")
               return { left = type .. "[", right = "]" }
-            end
+            end,
           },
           -- [i]nteractive
-          ['i'] = {
+          ["i"] = {
             output = function()
               local s = minisurround.user_input("Surrounding")
               return { left = s, right = s }
-            end
+            end,
           },
           -- interactive with [w]hitespace
-          ['w'] = {
+          ["w"] = {
             output = function()
               local s = minisurround.user_input("Surrounding")
-              if not s then return {} end
+              if not s then
+                return {}
+              end
               return { left = s .. " ", right = " " .. s }
-            end
+            end,
           },
-        }
+        },
       })
     end,
   },
   {
-    'echasnovski/mini.operators',
+    "echasnovski/mini.operators",
     version = false,
     keys = {
       { "g=",  nil, mode = { "n", "x" } },
@@ -91,34 +93,34 @@ return {
     },
     opts = {
       evaluate = { -- Evaluate text and replace with output
-        prefix = 'g=',
+        prefix = "g=",
         func = nil,
       },
       exchange = { -- Exchange text regions
-        prefix = 'gx',
+        prefix = "gx",
         reindent_linewise = true,
       },
       multiply = { -- Multiply (duplicate) text
-        prefix = 'gm',
+        prefix = "gm",
         func = nil,
       },
       replace = { -- Replace text with register
-        prefix = 'X',
+        prefix = "X",
         reindent_linewise = true,
       },
       sort = { -- Sort text
-        prefix = 'gss',
+        prefix = "gss",
         func = nil,
-      }
-    }
+      },
+    },
   },
   {
-    'echasnovski/mini.ai',
+    "echasnovski/mini.ai",
     version = false,
     lazy = true,
     event = { "BufAdd", "BufNewFile", "BufReadPost" },
     config = function()
-      local gen_spec = require('mini.ai').gen_spec
+      local gen_spec = require("mini.ai").gen_spec
       require("mini.ai").setup({
         custom_textobjects = {
           -- use treesitter's instead
@@ -130,25 +132,25 @@ return {
           g = function()
             local from = { line = 1, col = 1 }
             local to = {
-              line = vim.fn.line('$'),
-              col = math.max(vim.fn.getline('$'):len(), 1)
+              line = vim.fn.line("$"),
+              col = math.max(vim.fn.getline("$"):len(), 1),
             }
             return { from = from, to = to }
           end,
         },
         mappings = {
-          around = 'a',
-          inside = 'i',
-          around_next = '', -- an
-          inside_next = '', -- in
-          around_last = '', -- al
-          inside_last = '', -- il
-          goto_left = 'g[',
-          goto_right = 'g]',
+          around      = "a",
+          inside      = "i",
+          around_next = "", -- an
+          inside_next = "", -- in
+          around_last = "", -- al
+          inside_last = "", -- il
+          goto_left   = "g[",
+          goto_right  = "g]",
         },
         n_lines = 50,
         ---@type "cover" | "cover_or_next" | "cover_or_prev" | "cover_or_nearest" | "next" | "previous" | "nearest"
-        search_method = 'cover_or_next',
+        search_method = "cover_or_next",
         silent = false,
       })
     end,
@@ -161,7 +163,7 @@ return {
       { "ga", nil, mode = { "n", "x" } },
       { "gA", nil, mode = { "n", "x" } },
     },
-    opts = {}
+    opts = {},
   },
   {
     "Shatur/neovim-session-manager",
@@ -208,9 +210,9 @@ return {
       ignore = "^$",
       toggler = { line = "<Space>cc", block = "<Space>cx" },
       opleader = { line = "<Space>c", block = "<Space>x" },
-      extra = { above = '<Space>cO', below = '<Space>co', eol = '<Space>cl' },
+      extra = { above = "<Space>cO", below = "<Space>co", eol = "<Space>cl" },
       mappings = { basic = true, extra = true, extended = false },
-    }
+    },
   },
   {
     "nvim-lua/plenary.nvim",
@@ -222,7 +224,7 @@ return {
     event = "InsertEnter",
     opts = {
       disable_filetype = { "TelescopePrompt", "spectre_panel", "dap-repl" },
-    }
+    },
   },
   {
     -- TODO replace (unmaintained)

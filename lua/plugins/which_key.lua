@@ -9,10 +9,10 @@ return {
       ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number
       delay = function(ctx)
         local delays = {
-          ["\""] = 0,
+          ['"'] = 0,
           ["'"] = 0,
           ["`"] = 0,
-          default = 350
+          default = 350,
         }
         return delays[ctx.keys] or delays.default
       end,

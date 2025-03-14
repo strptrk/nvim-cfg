@@ -1,7 +1,3 @@
-------------------
------- LAZY ------
-------------------
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 ---@diagnostic disable-next-line: undefined-field
 if not vim.uv.fs_stat(lazypath) then
@@ -22,36 +18,34 @@ vim.keymap.set({ "n", "v" }, "s", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gc", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gcc", "<Nop>")
 
+-- custom global variables
 vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
   ["end"] = "@solution end"
 }
 ---@type "nightfox" | "dayfox" | "dawnfox" | "duskfox" | "nordfox" | "terafox" | "carbonfox"
 vim.g.nightfox_flavour = "nordfox"
-
 ---@type "none" | "single" | "rounded" | "solid" | "shadow"
 vim.g.float_border_style = "single"
-
 vim.g.signs = {
   Error = "",
   Warn = "",
   Hint = "",
   Info = "",
 }
-
 vim.g.transparent = vim.env["TERM_TRANSPARENT"] ~= nil
 
 vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
 
 require("lazy").setup("plugins", {
+  change_detection = {
+    enabled = false,
+  },
   performance = {
     cache = { enabled = true },
-    change_detection = {
-      enabled = false,
-      notify = false,
-    },
     rtp = {
+      reset = true,
       disabled_plugins = {
         "tutor",
         "netrwPlugin"
@@ -67,35 +61,24 @@ vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
 vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamedplus"
-vim.opt.syntax = "enable"
 vim.opt.virtualedit = "block"
 vim.opt.number = true
 vim.opt.relativenumber = false
-vim.opt.cursorline = false
-vim.opt.linebreak = true
 vim.opt.wrap = false
-vim.opt.showmatch = true
 vim.opt.signcolumn = "yes"
 vim.opt.splitright = true
-vim.opt.splitkeep = "screen"
 vim.opt.splitbelow = true
 vim.opt.smartcase = true
-vim.opt.hlsearch = true
 vim.opt.expandtab = true
-vim.opt.autoindent = true
-vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.conceallevel = 2
-vim.opt.sidescrolloff = 1
+vim.opt.sidescrolloff = 3
 vim.opt.scrolloff = 1
-vim.opt.ruler = true
-vim.opt.hidden = true
 vim.opt.history = 100
-vim.opt.lazyredraw = false
-vim.opt.synmaxcol = 240
 vim.opt.showmode = false
+vim.opt.synmaxcol = 360
 vim.opt.exrc = true
+
 
 vim.opt.updatetime = 2000
 if vim.env["NVIM_SWAP_DIR"] then

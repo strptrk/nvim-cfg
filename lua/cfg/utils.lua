@@ -98,7 +98,7 @@ local Nav = {
       ["j"] = "bottom",
       ["k"] = "top",
       ["l"] = "right",
-    }
+    },
   },
   multiplexer = {
     tmux = function(self, dir)
@@ -123,7 +123,7 @@ local Nav = {
       if vim.fn.trim(vim.fn.system(kittencmd .. "kitten is_zoomed.py")) == "False" then
         vim.fn.system(kittencmd .. "focus-window -m neighbor:" .. self.direction.kitty[dir])
       end
-    end
+    end,
   },
   configure_multiplexer = function(self)
     if self.configured then
@@ -143,7 +143,6 @@ local Nav = {
 }
 
 Nav:configure_multiplexer()
-
 
 ---@param dir "h" | "j" | "k" | "l"
 M.winmove = function(dir)

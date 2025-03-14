@@ -16,7 +16,7 @@ return {
     lazy = true,
     config = function()
       local lsp = require("lspconfig")
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
       if 1 == vim.fn.executable("gopls") then
         lsp.gopls.setup({ capabilities = capabilities })
       end
@@ -33,25 +33,25 @@ return {
                 pyflakes = { enabled = true },
                 pylint   = { enabled = true },
                 yapf     = { enabled = false },
-              }
-            }
-          }
+              },
+            },
+          },
         })
       end
       if 1 == vim.fn.executable("ruff") then
         lsp.ruff.setup({
           capabilities = capabilities,
-          trace = 'messages',
+          trace = "messages",
           init_options = {
             settings = {
-              logLevel = "debug"
-            }
-          }
+              logLevel = "debug",
+            },
+          },
         })
       end
       if 1 == vim.fn.executable("bash-language-server") then
         lsp.bashls.setup({
-          filetypes = { "sh", "bash", "zsh" }
+          filetypes = { "sh", "bash", "zsh" },
         })
       end
       if 1 == vim.fn.executable("clangd") then
@@ -160,8 +160,9 @@ return {
           --- handler-based border config will be deprecated in 0.11, but in 0.10 luals gives warnings
           --- TODO: remove in 0.11
           ---@diagnostic disable-next-line: redundant-parameter
-          vim.keymap.set("n", "sh", function() vim.lsp.buf.hover({ border = { style = 'single' } }) end,
-            { desc = "Symbol hover information" })
+          vim.keymap.set("n", "sh", function()
+            vim.lsp.buf.hover({ border = { style = "single" } })
+          end, { desc = "Symbol hover information" })
           vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, { desc = "Code Actions" })
           vim.keymap.set({ "n", "x" }, "sf", vim.lsp.buf.format, { desc = "Format document (lsp)" })
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
@@ -249,7 +250,7 @@ return {
       local rt = require("rust-tools")
       rt.setup({
         server = {
-          capabilities = require('blink.cmp').get_lsp_capabilities(),
+          capabilities = require("blink.cmp").get_lsp_capabilities(),
           on_attach = function(_, bufnr)
             -- Hover actions
             vim.keymap.set("n", "sH", rt.hover_actions.hover_actions, { buffer = bufnr })
@@ -282,6 +283,9 @@ return {
     }, ---@format enable
     opts = {
       win = {
+        wo = {
+          winhighlight = "Normal:Normal,NormalNC:NormalNC,EndOfBuffer:EndOfBuffer",
+        },
         border = vim.g.float_border_style,
       },
       keys = {
@@ -389,7 +393,7 @@ return {
     },
     dependencies = {
       { "nvim-treesitter/nvim-treesitter", lazy = true },
-      { "nvim-tree/nvim-web-devicons",     lazy = true }
+      { "nvim-tree/nvim-web-devicons",     lazy = true },
     },
   },
 }

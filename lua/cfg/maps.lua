@@ -77,8 +77,10 @@ end, { expr = true, desc = "Highlight Usages" })
 
 map("n", "#", "gD", { noremap = true, desc = "Go to Definition (builtin)" })
 
-map({ "i", "n" }, "<Esc>", [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]],
-  { desc = "Escape and Clear Highlights" })
+map({ "i", "n" }, "<Esc>",
+  [[<cmd>lua require("cfg.utils").clear_highlight_usages()<CR><Esc>]],
+  { desc = "Escape and Clear Highlights" }
+)
 map({ "n", "t" }, "<A-Esc>", function()
   if vim.bo.filetype == "toggleterm" or vim.bo.filetype == "snacks_terminal" then
     vim.cmd([[stopinsert]])
@@ -161,13 +163,12 @@ end)
 map({ "n", "v" }, "<leader>j", function()
   require("cfg.utils").winmove("j")
 end)
-map({ "n",  "v" }, "<leader>k", function()
+map({ "n", "v" }, "<leader>k", function()
   require("cfg.utils").winmove("k")
 end)
-map({ "n",  "v" }, "<leader>l", function()
+map({ "n", "v" }, "<leader>l", function()
   require("cfg.utils").winmove("l")
 end)
-
 
 map({ "n", "i", "t", "v" }, "<A-H>", function()
   require("cfg.utils").split_focus("h")
