@@ -107,6 +107,24 @@ return {
     lazy = true,
   },
   {
+    "Wansmer/treesj",
+    lazy = true,
+    cmd = { "TSJToggle", "TSJSplit", "TSJJoin" },
+    keys = {
+      { "<Space>j", "<cmd>TSJToggle<cr>", desc = "Toggle Block Split" },
+    },
+    config = function()
+      require("treesj").setup({
+        use_default_keymaps = false,
+        check_syntax_error = true,
+        max_join_length = 240,
+        cursor_behavior = "hold",
+        notify = true,
+        -- langs = {},
+      })
+    end,
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     lazy = true,
     build = ":TSUpdate",
@@ -135,24 +153,6 @@ return {
           vim.g.matchup_matchparen_deferred = 1
           vim.g.matchup_matchparen_nomode = "i"
           vim.g.matchup_matchparen_offscreen = { method = "popup" }
-        end,
-      },
-      {
-        "Wansmer/treesj",
-        lazy = true,
-        cmd = { "TSJToggle", "TSJSplit", "TSJJoin" },
-        keys = {
-          { "<Space>j", "<cmd>TSJToggle<cr>", desc = "Toggle Block Split" },
-        },
-        config = function()
-          require("treesj").setup({
-            use_default_keymaps = false,
-            check_syntax_error = true,
-            max_join_length = 240,
-            cursor_behavior = "hold",
-            notify = true,
-            -- langs = {},
-          })
         end,
       },
       { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
