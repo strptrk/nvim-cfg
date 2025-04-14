@@ -223,7 +223,7 @@ return {
     lazy = true,
     event = "InsertEnter",
     opts = {
-      disable_filetype = { "TelescopePrompt", "spectre_panel", "dap-repl" },
+      disable_filetype = { "TelescopePrompt", "spectre_panel", "dap-repl", "snacks-picker-input" },
     },
   },
   {

@@ -99,9 +99,10 @@ end
 -- load config after loading all UI elements
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
+  once = true,
   callback = function()
-    require("cfg.maps")
-    require("cfg.commands")
+    require("config.maps")
+    require("config.commands")
   end,
 })
-require("cfg.autocmds")
+require("config.autocmds")

@@ -1,5 +1,6 @@
 return {
   {
+    -- TODO: refactor, possible replace with snacks terminal
     "akinsho/toggleterm.nvim",
     lazy = true,
     cmd = { "TermExec", "ToggleTerm" },
@@ -20,12 +21,12 @@ return {
     },
     config = function()
       local api = vim.api
-      local pickers = require("telescope.pickers")
+      --[[ local pickers = require("telescope.pickers")
       local finders = require("telescope.finders")
       local conf = require("telescope.config").values
       local actions = require("telescope.actions")
       local previewers = require("telescope.previewers")
-      local action_state = require("telescope.actions.state")
+      local action_state = require("telescope.actions.state") ]]
       Term = {}
       require("toggleterm").setup({
         size = function(term)
@@ -107,7 +108,7 @@ return {
         api.nvim_set_option_value("wrap", false, { win = status.preview_win })
       end
 
-      Term.select_open_term = function(opts, title)
+      --[[ Term.select_open_term = function(opts, title)
         opts = opts or {}
         if not next(Term.Terminals) then
           vim.notify("There are no terminals open")
@@ -148,9 +149,9 @@ return {
               end,
             })
             :find()
-      end
+      end ]]
 
-      Term.rename_term = function(opts, title)
+      --[[ Term.rename_term = function(opts, title)
         opts = opts or {}
         if not next(Term.Terminals) then
           vim.notify("There are no terminals open")
@@ -195,7 +196,7 @@ return {
               end,
             })
             :find()
-      end
+      end ]]
 
       Term.runterm = Terminal:new({
         direction = "vertical",

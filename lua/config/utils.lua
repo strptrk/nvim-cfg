@@ -216,9 +216,11 @@ M.fntab = function(fn, opts)
   if not filetype or M.fntab_ignored_ft[filetype] then
     vim.cmd("tabnew")
   else
-    vim.cmd.normal("mz")
+    local bufnr = api.nvim_win_get_buf(0)
+    local pos = api.nvim_win_get_cursor(0)
     vim.cmd.tabedit("%")
-    vim.cmd.normal("z")
+    api.nvim_win_set_buf(0, bufnr)
+    api.nvim_win_set_cursor(0, pos)
   end
   if type(fn) == "function" then
     fn(opts.args)

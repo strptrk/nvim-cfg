@@ -14,6 +14,26 @@ return {
       "zsh",
     },
     lazy = true,
+    init = function()
+      vim.diagnostic.config({
+        virtual_text = true,
+        virtual_lines = { current_line = true },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = vim.g.signs.Error,
+            [vim.diagnostic.severity.WARN]  = vim.g.signs.Warn,
+            [vim.diagnostic.severity.HINT]  = vim.g.signs.Hint,
+            [vim.diagnostic.severity.INFO]  = vim.g.signs.Info,
+          },
+          numhl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+            [vim.diagnostic.severity.WARN]  = 'DiagnosticSignWarn',
+            [vim.diagnostic.severity.HINT]  = 'DiagnosticSignHint',
+            [vim.diagnostic.severity.INFO]  = 'DiagnosticSignInfo',
+          },
+        },
+      })
+    end,
     config = function()
       local lsp = require("lspconfig")
       local capabilities = require("blink.cmp").get_lsp_capabilities()
@@ -157,9 +177,6 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
-          --- handler-based border config will be deprecated in 0.11, but in 0.10 luals gives warnings
-          --- TODO: remove in 0.11
-          ---@diagnostic disable-next-line: redundant-parameter
           vim.keymap.set("n", "sh", function()
             vim.lsp.buf.hover({ border = { style = "single" } })
           end, { desc = "Symbol hover information" })
@@ -171,15 +188,15 @@ return {
           if not client then
             return
           end
-          if client.supports_method(methods.textDocument_inlayHint) then
+          if client:supports_method(methods.textDocument_inlayHint) then
             vim.keymap.set("n", "si", function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ buf = ev.buf }), { buf = ev.buf })
-            end, { desc = "Toggle inlay hints" })
+            end, { desc = "Toggle inlay hints", buffer = ev.buf })
             vim.lsp.inlay_hint.enable(false, { buf = ev.buf })
           end
-          if client.supports_method(methods.textDocument_rename) then
+          if client:supports_method(methods.textDocument_rename) then
             vim.keymap.set("n", "ss", function()
-              require("cfg.utils").smart_rename_lsp(client, ev.buf)
+              require("config.utils").smart_rename_lsp(client, ev.buf)
             end, { desc = "LSP rename", buffer = ev.buf })
           end
           if client.name == "clangd" then
@@ -279,7 +296,6 @@ return {
       { "sL",        "<cmd>Trouble loclist toggle focus=true win.position=bottom<cr>",      desc = "Location List (Trouble)" },
       { "sq",        "<cmd>Trouble qflist toggle focus=true win.position=bottom<cr>",       desc = "Quickfix List (Trouble)" },
       { "so",        "<cmd>Trouble lsp_document_symbols focus win.position=right<cr>",      desc = "LSP Symbols Outline (Trouble)" },
-      { "<Space>t",  "<cmd>Trouble telescope toggle focus=true win.position=bottom<cr>",    desc = "Trouble Telescope" },
     }, ---@format enable
     opts = {
       win = {

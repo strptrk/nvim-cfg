@@ -35,10 +35,6 @@ return {
             HopNextKey = { fg = custom_palette.red, style = "bold" },
             HopNextKey1 = { fg = custom_palette.red, style = "bold" },
             HopNextKey2 = { fg = custom_palette.orange },
-            TelescopeBorder = {
-              fg = "palette.blue",
-              bg = vim.g.transparent and "" or "palette.bg1",
-            },
             NormalFloat = {
               fg = "palette.fg1",
               bg = vim.g.transparent and "" or "palette.bg1",
@@ -59,13 +55,15 @@ return {
             ["@constant.builtin"] = { style = "bold" },
             ["@lsp.type.unresolvedReference.rust"] = {},
             ["@parameter"] = { fg = "palette.red.bright" },
+            DapBreakpoint = { fg = "palette.red.base" },
+            DapBreakpointCondition = { fg = "palette.orange.bright" },
+            DapLogPoint = { fg = "palette.green.base" },
+            DapStopped = { fg = "palette.yellow.base" },
+            DapBreakpointRejected = { fg = "palette.cyan.bright" },
+            debugPC = { bg = "palette.bg2" }
           },
         },
       })
-      for type, icon in pairs(vim.g.signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      end
       vim.cmd.colorscheme(vim.g.nightfox_flavour)
     end,
   },
