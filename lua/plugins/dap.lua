@@ -5,6 +5,7 @@ return {
     dependencies = {
       { "theHamsta/nvim-dap-virtual-text",   lazy = true },
       { "nvim-neotest/nvim-nio",             lazy = true },
+      { "folke/snacks.nvim",                 lazy = false },
       {
         "rcarriga/nvim-dap-ui",
         lazy = true,
