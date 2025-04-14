@@ -326,6 +326,9 @@ return {
       end
 
       require("nvim-dap-virtual-text").setup({})
+
+      -- for project-specific configs in .nvim.lua files
+      vim.api.nvim_exec_autocmds("User", { pattern = "DapConfigLoaded" })
     end,
   },
 }
