@@ -18,6 +18,15 @@ vim.keymap.set({ "n", "v" }, "s", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gc", "<Nop>")
 vim.keymap.set({ "n", "x" }, "gcc", "<Nop>")
 
+if vim.fn.has("nvim-0.11") then
+  -- delete default lsp-related keybinds (replaced by picker-based)
+  vim.keymap.del("n", "gra") -- code action
+  vim.keymap.del("n", "grr") -- references
+  vim.keymap.del("n", "gri") -- implementation
+  vim.keymap.del("n", "gO")  -- document symbols
+  vim.keymap.del("n", "grn") -- document symbols
+end
+
 -- custom global variables
 vim.g.solutionfmt = {
   ["begin"] = "@solution begin",
