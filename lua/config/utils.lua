@@ -187,6 +187,8 @@ M.split = function(dir, fn, opts)
   api.nvim_win_set_cursor(0, pos)
   if type(fn) == "function" then
     fn(opts.args)
+  elseif type(fn) == "string" then
+    vim.cmd(fn)
   end
   if opts.zz then
     vim.cmd.normal("zz")

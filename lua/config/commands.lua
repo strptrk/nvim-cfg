@@ -37,3 +37,20 @@ vim.api.nvim_create_user_command("Trim", function(opts)
     vim.notify("No trailing whitespace found!", vim.log.levels.INFO)
   end
 end, { nargs = 0, range = "%" })
+
+
+vim.api.nvim_create_user_command("Right", function(args)
+  require("config.utils").split('l', args.args)
+end, { force = true, nargs = '+', complete = "command" })
+
+vim.api.nvim_create_user_command("Left", function(args)
+  require("config.utils").split('h', args.args)
+end, { force = true, nargs = '+', complete = "command" })
+
+vim.api.nvim_create_user_command("Up", function(args)
+  require("config.utils").split('k', args.args)
+end, { force = true, nargs = '+', complete = "command" })
+
+vim.api.nvim_create_user_command("Down", function(args)
+  require("config.utils").split('j', args.args)
+end, { force = true, nargs = '+', complete = "command" })

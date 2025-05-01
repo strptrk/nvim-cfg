@@ -24,7 +24,7 @@ if vim.fn.has("nvim-0.11") then
   vim.keymap.del("n", "grr") -- references
   vim.keymap.del("n", "gri") -- implementation
   vim.keymap.del("n", "gO")  -- document symbols
-  vim.keymap.del("n", "grn") -- document symbols
+  vim.keymap.del("n", "grn") -- rename
 end
 
 -- custom global variables
@@ -105,13 +105,14 @@ if vim.env["NVIM_SWAP_DIR"] then
   end
 end
 
+require("config.autocmds")
+
 -- load config after loading all UI elements
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   once = true,
   callback = function()
-    require("config.maps")
     require("config.commands")
+    require("config.maps")
   end,
 })
-require("config.autocmds")

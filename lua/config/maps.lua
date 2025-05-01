@@ -42,8 +42,8 @@ map("n", "]e", function() vim.diagnostic.jump({ count = 1,  float = true, severi
 map("n", "<Space>dl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
 map("n", "<Space>mm", "<cmd>Man<cr>", { desc = "Man (horizontal split)" })
-map("n", "<Space>mj", "<cmd>horizontal Man<cr>", { desc = "Man (horizontal split)" })
-map("n", "<Space>ml", "<cmd>vertical Man<cr>", { desc = "Man (vertical split)" })
+map("n", "<Space>mj", ":horizontal Man ", { desc = "Man (horizontal split)" })
+map("n", "<Space>ml", ":vertical Man ", { desc = "Man (vertical split)" })
 map("n", "<Space>mw", ":hide Man ", { desc = "Man (current window)" })
 
 map("n", "<C-M-h>", function()
@@ -189,10 +189,12 @@ map("n", "<A-`>", function ()
   vim.cmd.nohlsearch()
 end)
 
-map("n", "<Space>hv", ":vert help ")
+map("n", "<Space>hl", ":Right set buftype=help | help ")
+map("n", "<Space>hj", ":Down set buftype=help | help ")
+map("n", "<Space>hh", ":set buftype=help | help ")
 map("n", "<Space>ht", ":tab help ")
 map("n", "<Space>ho", ":help  | only" .. string.rep("<Left>", 7))
-map("n", "<Space>N", "<cmd>Notifications<cr>")
+map("n", "<Space>N", "<cmd>Noice<cr>")
 
 map({ "n", "x" }, "<leader>t", "<cmd>Trim<cr>", { desc = "Remove trailing whitespaces" })
 
