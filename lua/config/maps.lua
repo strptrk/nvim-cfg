@@ -182,6 +182,13 @@ map({ "n", "i", "t", "v" }, "<A-L>", function()
   require("config.utils").split_focus("l")
 end)
 
+-- return to the location before searching
+map("n", "/", "ms/")
+map("n", "<A-`>", function ()
+  vim.cmd("normal! `s")
+  vim.cmd.nohlsearch()
+end)
+
 map("n", "<Space>hv", ":vert help ")
 map("n", "<Space>ht", ":tab help ")
 map("n", "<Space>ho", ":help  | only" .. string.rep("<Left>", 7))

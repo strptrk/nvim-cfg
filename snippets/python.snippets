@@ -163,8 +163,20 @@ snippet numeric
 
 snippet main
     def main():
-        return 0
+        pass
 
 
     if __name__ == "__main__":
         main()
+
+snippet mainret
+    from sys import exit as sysexit
+
+
+    def main():
+        $1
+        return 0
+
+
+    if __name__ == "__main__":
+        sysexit(main())

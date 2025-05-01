@@ -1,9 +1,8 @@
 return {
   {
-    -- TODO: refactor, possible replace with snacks terminal
     "akinsho/toggleterm.nvim",
     lazy = true,
-    cmd = { "TermExec", "ToggleTerm" },
+    cmd = { "TermExec", "ToggleTerm", "ToggleTermSetName", "TermSelect", "TermNew" },
     keys = {
       { "<A-f>",   nil, desc = "Open Terminal" },
       { "<A-F>",   nil, desc = "Open Terminal (floating)" },
@@ -19,19 +18,29 @@ return {
       { "<A-v>l",  nil, desc = "Open Terminal (vertical)" },
       { "<A-v>j",  nil, desc = "Open Terminal (horizontal)" },
     },
+    init = function()
+      ---@param name string
+      ---@return boolean
+      vim.g.is_term = function(name)
+        return string.match(name, "#toggleterm#") and true or false
+      end
+      ---@param name string
+      ---@return string
+      vim.g.term_name_fmt = function(name)
+        local tname, _ = string.gsub(
+          name,
+          ".*;#toggleterm",
+          "Terminal "
+        )
+        return tname
+      end
+    end,
     config = function()
-      local api = vim.api
-      --[[ local pickers = require("telescope.pickers")
-      local finders = require("telescope.finders")
-      local conf = require("telescope.config").values
-      local actions = require("telescope.actions")
-      local previewers = require("telescope.previewers")
-      local action_state = require("telescope.actions.state") ]]
       Term = {}
       require("toggleterm").setup({
         size = function(term)
           if term.direction == "horizontal" then
-            return 10
+            return 12
           elseif term.direction == "vertical" then
             return vim.o.columns * 0.3
           end
@@ -39,7 +48,7 @@ return {
         open_mapping = nil,
         hide_numbers = true,
         shade_filetypes = {},
-        shade_terminals = true,
+        shade_terminals = false,
         start_in_insert = true,
         insert_mappings = true,
         terminal_mappings = true,
@@ -50,11 +59,21 @@ return {
         autochdir = true,
         autoscroll = true,
         float_opts = { border = vim.g.float_border_style, winblend = 0 },
+        on_create = function(term)
+          term.display_name = vim.g.term_name_fmt(term.name)
+        end,
+        on_open = function (term)
+          if term.direction ~= "float" then
+            vim.wo[term.window].winbar = "%#Title# " .. vim.g.term_name_fmt(term.name)
+          else
+            vim.wo[term.window].winbar = ""
+          end
+          vim.w[term.window].term = {
+            name = term.name,
+          }
+        end,
         winbar = {
-          enabled = false,
-          name_formatter = function(term)
-            return term.name
-          end,
+          enabled = false
         },
       })
 
@@ -66,7 +85,6 @@ return {
       Term.add_term = function(num, dir)
         Term.Terminals[num] = {
           term = Terminal:new({
-            -- cmd = vim.o.shell,
             direction = dir or "float",
             count = num,
             on_exit = Term.delete_term,
@@ -101,102 +119,76 @@ return {
         Term.focus_term(Term.Last, dir)
       end
 
-      Term.preview_term = function(self, entry, status)
-        local from = -1 * (api.nvim_win_get_height(status.preview_win) + 1)
-        local lines = api.nvim_buf_get_lines(entry.value.term.bufnr, from, -1, false)
-        api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines or {})
-        api.nvim_set_option_value("wrap", false, { win = status.preview_win })
+      local picker_get_terminals = function()
+        local items = {}
+        for _, t in pairs(Term.Terminals) do
+          local term = t.term
+          table.insert(items, {
+            text = term.display_name or term.name,
+            preview = {
+              text = term.display_name or term.name,
+            },
+            buf = term.buf,
+            value = term
+          })
+        end
+        return items
       end
 
-      --[[ Term.select_open_term = function(opts, title)
-        opts = opts or {}
-        if not next(Term.Terminals) then
-          vim.notify("There are no terminals open")
-          return
-        end
-        pickers
-            .new(opts, {
-              prompt_title = title or "Terminal",
-              finder = finders.new_table({
-                results = Term.Terminals,
-                entry_maker = function(entry)
-                  local name = (entry.term.display_name or "Terminal")
-                      .. " #"
-                      .. entry.term.count
-                      .. " ("
-                      .. entry.term.direction
-                      .. ")"
-                  return {
-                    value = entry,
-                    display = name,
-                    ordinal = name,
-                  }
-                end,
-              }),
-              previewer = previewers.new_buffer_previewer({
-                title = "Terminal",
-                define_preview = Term.preview_term,
-              }),
-              sorter = conf.generic_sorter(opts),
-              attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                  actions.close(prompt_bufnr)
-                  local entry = action_state.get_selected_entry()
-                  Term.focus_term(entry.value.term.count, nil)
-                  Term.Terminals[entry.value.term.count].term:set_mode("i")
-                end)
-                return true
-              end,
-            })
-            :find()
-      end ]]
+      local picker_preview = function(ctx)
+        ctx.preview:set_buf(ctx.item.value.bufnr)
+        ctx.preview:wo({
+          number = false,
+          relativenumber = false,
+          cursorline = false,
+          signcolumn = "no",
+        })
+      end
 
-      --[[ Term.rename_term = function(opts, title)
+      -- BUG: size and direction persistence dont work with split terminals,
+      -- because it messes with the internals of toggleterm
+      -- workaround: use non-preview pickers for split terminals
+      Term.select_open_term = function(opts)
         opts = opts or {}
-        if not next(Term.Terminals) then
-          vim.notify("There are no terminals open")
-          return
-        end
-        pickers
-            .new(opts, {
-              prompt_title = title or "Rename Terminal",
-              finder = finders.new_table({
-                results = Term.Terminals,
-                entry_maker = function(entry)
-                  local name = (entry.term.display_name or "Terminal")
-                      .. " #"
-                      .. entry.term.count
-                      .. " ("
-                      .. entry.term.direction
-                      .. ")"
-                  return {
-                    value = entry,
-                    display = name,
-                    ordinal = name,
-                  }
-                end,
-              }),
-              previewer = previewers.new_buffer_previewer({
-                title = "Terminal",
-                define_preview = Term.preview_term,
-              }),
-              sorter = conf.generic_sorter(opts),
-              attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                  actions.close(prompt_bufnr)
-                  local entry = action_state.get_selected_entry()
-                  vim.ui.input({ prompt = "Set Name of " .. entry.display, kind = "center" }, function(input)
-                    if not input or input == "" then
-                      return
-                    end
-                    entry.value.term.display_name = input
-                  end)
-                end)
-                return true
-              end,
-            })
-            :find()
-      end ]]
+        local layout = opts.layout and { preset = opts.layout } or nil
+        Snacks.picker.pick({
+          source = "Open Terminal",
+          items = picker_get_terminals(),
+          preview = picker_preview,
+          format = "text",
+          layout = layout,
+          confirm = function(picker, item)
+            picker:close()
+            if not item then
+              return
+            end
+            Term.focus_term(item.value.count)
+            vim.cmd.startinsert()
+          end,
+        })
+      end
+
+      Term.rename_term = function(opts)
+        opts = opts or {}
+        local layout = opts.layout and { preset = opts.layout } or nil
+        Snacks.picker.pick({
+          source = "Rename Terminal",
+          items = picker_get_terminals(),
+          preview = picker_preview,
+          format = "text",
+          layout = layout,
+          confirm = function(picker, item)
+            picker:close()
+            if not item then
+              return
+            end
+            local name = vim.fn.input({ prompt = "Name:" })
+            if name and name ~= "" then
+              item.value.display_name = name
+            end
+          end,
+        })
+      end
 
       Term.runterm = Terminal:new({
         direction = "vertical",
@@ -209,17 +201,15 @@ return {
 
       Term.runterm_run = function()
         if Term.runcmd == nil then
-          vim.ui.input({ prompt = "Command to run: " }, function(input)
-            if not input or input == "" then
-              return
-            else
-              Term.runcmd = input
-              if not Term.runterm:is_open() then
-                Term.runterm:open()
-              end
-              Term.runterm:send(Term.runcmd, true)
-            end
-          end)
+          local input = vim.fn.input("Command to run: ")
+          if not input or input == "" then
+            return
+          end
+          Term.runcmd = input
+          if not Term.runterm:is_open() then
+            Term.runterm:open()
+          end
+          Term.runterm:send(Term.runcmd, true)
         else
           if not Term.runterm:is_open() then
             Term.runterm:open()
@@ -229,13 +219,12 @@ return {
       end
 
       Term.runterm_askcmd = function()
-        vim.ui.input({ prompt = "Command to run: " }, function(input)
-          if not input or input == "" then
-            return
-          else
-            Term.runcmd = input
-          end
-        end)
+        local input = vim.fn.input("Command to run: ")
+        if not input or input == "" then
+          return
+        else
+          Term.runcmd = input
+        end
       end
 
       vim.api.nvim_create_user_command("RunTermDir", function(args)
@@ -248,7 +237,13 @@ return {
         end
         Term.runterm:change_direction(dir)
         Term.runterm:open()
-      end, { force = true, nargs = "?" })
+      end, {
+        force = true,
+        nargs = "?",
+        complete = function()
+          return { "horizontal", "vertical", "float" }
+        end
+      })
 
       vim.keymap.set({ "n", "t", "x" }, "<A-R>", function()
         Term.runterm_toggle()
@@ -269,15 +264,15 @@ return {
       end, { desc = "Open terminal" })
 
       vim.keymap.set({ "n", "v", "t" }, [[<A-B>]], function()
-        Term.select_open_term()
+        Term.select_open_term({ layout = "default" })
       end, { desc = "Select Terminal" })
 
       vim.keymap.set({ "n", "v", "t" }, [[<A-N>]], function()
-        Term.rename_term()
+        Term.rename_term({ layout = "default" })
       end, { desc = "Set Terminal Name" })
 
       vim.keymap.set({ "n", "v", "t" }, [[<A-F>]], function()
-        Term.focus_term(1000, "float")
+        Term.focus_last("float")
       end, { desc = "Open Terminal (floating)" })
 
       local directions = {

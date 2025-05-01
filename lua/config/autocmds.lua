@@ -37,16 +37,24 @@ autocmd("TermOpen", {
   end,
 })
 
--- for <C-x><C-e> commandline editing
+--[[
+for <C-x><C-e> commandline editing
+- defer loading heavy plugins (lsp, treesitter) for a faster startup time
+- while the executed commands will be zsh, both
+  bash-language-server and treesitter are set up for bash
+]]
 autocmd("BufReadPost", {
   pattern = "/tmp/zsh*",
-  callback = function()
+  callback = function(ev)
+    vim.defer_fn(function()
+      vim.api.nvim_set_option_value("filetype", "bash", { buf = ev.buf })
+    end, 0)
     vim.keymap.set("n", "<CR>", ":wq<CR>")
   end,
 })
 
-autocmd("BufReadPost", {
-  pattern = "Dockerfile*",
+autocmd({ "BufReadPost", "BufNewFile" }, {
+  pattern = { "Dockerfile*", "Containerfile*" },
   callback = function(ev)
     vim.api.nvim_set_option_value("filetype", "dockerfile", { buf = ev.buf })
   end,

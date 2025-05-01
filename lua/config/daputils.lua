@@ -24,22 +24,10 @@ local function table_extend(lhs, rhs)
   end
 end
 
-function M.get_dap()
-  if not M.dap then
-    M.dap = require("dap")
-    local success, dap = pcall(require, "dap")
-    if not success or not dap then
-      vim.notify("nvim dap not available", vim.log.levels.ERROR)
-    end
-    M.dap = dap
-  end
-  return M.dap or {}
-end
-
 function M.picker.get_dap_commands()
   if not M.picker.dap_commands then
     M.picker.dap_commands = {}
-    local dap = M.get_dap()
+    local dap = require("dap")
     for k, v in pairs(dap) do
       if type(v) == "function" then
         table.insert(M.picker.dap_commands, { text = k })
@@ -62,7 +50,8 @@ function M.pick_dap_commands(opts)
     if not item then
       return
     end
-    M.get_dap()[item.text]()
+    local dap = require("dap")
+    dap[item.text]()
   end
 
   Snacks.picker.pick({

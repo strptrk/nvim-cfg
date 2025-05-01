@@ -445,7 +445,18 @@ return {
               padding = { right = 1 },
             },
             {
-              "filename",
+              function()
+                local fname = vim.fn.expand("%:t")
+                if vim.g.is_term(fname) then
+                  local win = vim.api.nvim_get_current_win()
+                  if vim.g.is_term(vim.w[win].term.name) then
+                    fname = vim.g.term_name_fmt(vim.w[win].term.name)
+                  else
+                    fname = vim.w[win].term.name
+                  end
+                end
+                return fname
+              end,
               cond = conditions.has_filename,
               color = function()
                 return {

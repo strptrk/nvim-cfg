@@ -43,7 +43,6 @@ local ts_filetypes = {
   "perl",
   "awk",
   "bash",
-  "zsh",
   "sh",
   "toml",
   "yaml",

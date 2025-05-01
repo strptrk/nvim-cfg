@@ -34,6 +34,11 @@ snippet for
         ${4:${VISUAL}}
     done
 
+snippet commandexists command exists
+    if command -v $1 >/dev/null 2>&1; then
+        $2
+    fi
+
 snippet root
     if [ \$(id -u) -ne 0 ]; then exec sudo \$0; fi
 
