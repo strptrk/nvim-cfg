@@ -24,3 +24,15 @@ snippet add
 
 snippet default
 	.DEFAULT_GOAL := ${1:all}
+
+snippet oneshell
+	.ONESHELL:
+
+snippet container
+	ifeq ($(shell command -v podman >/dev/null 2>&1 && echo podman),podman)
+	    CONTAINER = podman
+	else ifeq ($(shell command -v docker >/dev/null 2>&1 && echo docker),docker)
+	    CONTAINER = docker
+	else
+	    $(error 'podman' or 'docker' missing)
+	endif
