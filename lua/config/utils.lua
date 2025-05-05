@@ -302,4 +302,44 @@ utils_local.smart_rename_set_handler = function(fallback)
   end
 end
 
+local ft_interpreter_assoc = {
+  ["sh"] = "bash",
+  ["bash"] = "bash",
+  ["perl"] = "perl",
+  ["lua"] = "lua",
+  ["python"] = "python3",
+  ["awk"] = "awk",
+}
+
+-- place shebang at the top of the file and set +x on it
+M.mkscript = function()
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
+  local interpreter = ft_interpreter_assoc[ft]
+  if not interpreter then return end
+  if not string.match(first_line, "^#!") then
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+      "#!/usr/bin/env " .. interpreter,
+    })
+  end
+  local filename = vim.api.nvim_buf_get_name(0)
+  if filename then
+    if not vim.uv.fs_access(filename, "x") then
+      local stat = vim.uv.fs_stat(filename)
+      if not stat then
+        vim.cmd("write")
+        stat = vim.uv.fs_stat(filename)
+        if not stat then return end
+      end
+      local success = vim.uv.fs_chmod(filename, stat.mode + tonumber("110", 8))
+      if not success then
+        vim.notify(
+          "Could not set " .. filename .. " to be executable",
+          vim.log.levels.WARN
+        )
+      end
+    end
+  end
+end
+
 return M

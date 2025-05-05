@@ -206,6 +206,8 @@ map("n", "s,", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 
 map("n", "sv", [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 map("n", "s/", [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
 
+map("n", "<leader>S", function() require("config.utils").mkscript() end)
+
 -- Yanks only the solution for LeetCode or similar contest sites.
 -- Within the local copy of the problem:
 -- /* @solution begin */
