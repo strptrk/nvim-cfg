@@ -8,7 +8,7 @@ snippet base
 
 	%.o: %.c
 		$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 	${1:out}: $1.o
 		$(CC) $(CFLAGS) -o $@ $+
 
@@ -36,3 +36,14 @@ snippet container
 	else
 	    $(error 'podman' or 'docker' missing)
 	endif
+
+snippet verbose
+	V        ?= 0
+	Q_0      =  @
+	Q_1      =
+	Q_2      =
+	Q        =  ${Q_${V}}
+	VPRINT_0 =  @true
+	VPRINT_1 =  @true
+	VPRINT_2 =  @echo
+	VPRINT   =  ${VPRINT_${V}}
