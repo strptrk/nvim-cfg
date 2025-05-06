@@ -30,9 +30,9 @@ snippet oneshell
 
 snippet container
 	ifeq ($(shell command -v podman >/dev/null 2>&1 && echo podman),podman)
-	    CONTAINER = podman
+	    CONTAINERCMD = podman
 	else ifeq ($(shell command -v docker >/dev/null 2>&1 && echo docker),docker)
-	    CONTAINER = docker
+	    CONTAINERCMD = docker
 	else
 	    $(error 'podman' or 'docker' missing)
 	endif
