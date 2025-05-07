@@ -61,6 +61,7 @@ return {
         float_opts = { border = vim.g.float_border_style, winblend = 0 },
         on_create = function(term)
           term.display_name = vim.g.term_name_fmt(term.name)
+          vim.api.nvim_buf_set_name(term.bufnr, term.display_name)
         end,
         on_open = function (term)
           if term.direction ~= "float" then
@@ -71,6 +72,7 @@ return {
           vim.w[term.window].term = {
             name = term.name,
           }
+          vim.cmd.startinsert()
         end,
         winbar = {
           enabled = false
