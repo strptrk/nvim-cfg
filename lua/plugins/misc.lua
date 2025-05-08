@@ -84,6 +84,13 @@ return {
   {
     "echasnovski/mini.operators",
     version = false,
+    lazy = true,
+    event = {
+      "BufAdd",
+      "BufNewFile",
+      "BufReadPost",
+      "StdinReadPost",
+    },
     keys = {
       { "g=",  nil, mode = { "n", "x" } },
       { "gx",  nil, mode = { "n", "x" } },
@@ -118,7 +125,12 @@ return {
     "echasnovski/mini.ai",
     version = false,
     lazy = true,
-    event = { "BufAdd", "BufNewFile", "BufReadPost" },
+    event = {
+      "BufAdd",
+      "BufNewFile",
+      "BufReadPost",
+      "StdinReadPost",
+    },
     config = function()
       local gen_spec = require("mini.ai").gen_spec
       require("mini.ai").setup({
