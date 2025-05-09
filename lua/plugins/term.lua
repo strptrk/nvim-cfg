@@ -27,12 +27,26 @@ return {
       ---@param name string
       ---@return string
       vim.g.term_name_fmt = function(name)
-        local tname, _ = string.gsub(
+        local tname, nrepl = string.gsub(
           name,
           ".*;#toggleterm",
           "Terminal "
         )
+        if nrepl == 0 then
+          tname = "Terminal " .. tname
+        end
         return tname
+      end
+      vim.g.term_name_to_display_name = function(name)
+        local termnr = string.match(name, "#toggleterm#([0-9]+)")
+        if not termnr then
+          return name
+        end
+        local term = require("toggleterm.terminal").get(tonumber(termnr))
+        if not term then
+          return name
+        end
+        return term.display_name
       end
     end,
     config = function()
@@ -61,18 +75,16 @@ return {
         float_opts = { border = vim.g.float_border_style, winblend = 0 },
         on_create = function(term)
           term.display_name = vim.g.term_name_fmt(term.name)
-          vim.api.nvim_buf_set_name(term.bufnr, term.display_name)
         end,
-        on_open = function (term)
+        on_open = function(term)
           if term.direction ~= "float" then
-            vim.wo[term.window].winbar = "%#Title# " .. vim.g.term_name_fmt(term.name)
+            vim.wo[term.window].winbar = "%#Title# " .. term.display_name
           else
             vim.wo[term.window].winbar = ""
           end
           vim.w[term.window].term = {
             name = term.name,
           }
-          vim.cmd.startinsert()
         end,
         winbar = {
           enabled = false
@@ -186,7 +198,7 @@ return {
             end
             local name = vim.fn.input({ prompt = "Name:" })
             if name and name ~= "" then
-              item.value.display_name = name
+              item.value.display_name = vim.g.term_name_fmt(name)
             end
           end,
         })

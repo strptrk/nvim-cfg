@@ -452,6 +452,13 @@ return {
                   gui = "bold",
                 }
               end,
+              fmt = function(s)
+                if vim.g.is_term(s) then
+                  return vim.g.term_name_to_display_name(s)
+                else
+                  return s
+                end
+              end,
               padding = { left = 1, right = 1 },
             },
             {
@@ -577,7 +584,7 @@ return {
         },
         inactive_sections = {},
         tabline = {},
-        extensions = { "quickfix", "nvim-dap-ui", "trouble", "oil" },
+        extensions = {},
       }
       require("lualine").setup(opts)
     end,
