@@ -82,7 +82,10 @@ snippet getopt
     main "$@"
 
 snippet val
-  "${$0}"
+    "${$0}"
 
 snippet out
-  $($0)
+    $($0)
+
+snippet ignore
+    # shellcheck disable=SC$0
