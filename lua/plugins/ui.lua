@@ -317,34 +317,16 @@ return {
     },
     config = function()
       local lsps = {}
-
-      local trouble = {
-        loaded = false,
-        symbols = {
-          get = function() return "" end,
-          has = function() return false end,
-        },
-      }
       local get_lsp = function(bufnr)
         bufnr = bufnr or vim.api.nvim_win_get_buf(0)
         local clients = vim.lsp.get_clients({ bufnr = bufnr })
         if #clients == 0 then return "" end
         return table.concat(vim.tbl_map(function(client) return client.name end, clients), ",")
       end
+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           lsps[args.buf] = get_lsp(args.buf)
-          if not trouble.loaded then
-            trouble.symbols = require("trouble").statusline({
-              mode = "lsp_document_symbols",
-              groups = {},
-              title = false,
-              filter = { range = true },
-              format = "{kind_icon}{symbol.name:Normal}",
-              hl_group = "lualine_c_normal",
-            })
-            trouble.loaded = true
-          end
         end,
       })
       vim.api.nvim_create_autocmd("LspDetach", {
@@ -476,14 +458,6 @@ return {
             {
               function()
                 return "%="
-              end,
-            },
-            {
-              function()
-                return trouble.symbols.get()
-              end,
-              cond = function()
-                return conditions.has_filename() and conditions.editor_width_over(110)() and trouble.symbols.has()
               end,
             },
           },
