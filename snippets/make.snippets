@@ -1,4 +1,3 @@
-# TODO: rework, extend
 snippet base
 	.PHONY: clean, mrproper
 	CC = gcc
@@ -42,8 +41,8 @@ snippet verbose
 	Q_0      =  @
 	Q_1      =
 	Q_2      =
-	Q        =  ${Q_${V}}
-	VPRINT_0 =  @true
-	VPRINT_1 =  @true
-	VPRINT_2 =  @echo
-	VPRINT   =  ${VPRINT_${V}}
+	Q        = ${Q_${V}}
+	VPRINT_0 = @true
+	VPRINT_1 = @true
+	VPRINT_2 = @echo
+	VPRINT   = ${VPRINT_${V}}
