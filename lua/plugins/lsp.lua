@@ -15,7 +15,7 @@ return {
     lazy = true,
     init = function()
       vim.diagnostic.config({
-        virtual_text = true,
+        virtual_text = 1 == vim.fn.has("nvim-0.12") and { current_line = false } or true,
         virtual_lines = { current_line = true },
         signs = {
           text = {
