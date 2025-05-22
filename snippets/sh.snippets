@@ -42,7 +42,7 @@ snippet commandexists command exists
 snippet root
     if [ \$(id -u) -ne 0 ]; then exec sudo \$0; fi
 
-snippet getopt
+snippet main
     __VERSION__=${1:1.0.0}
     __NAME__="\$(basename "\$0")"
     
@@ -80,6 +80,19 @@ snippet getopt
     }
 
     main "$@"
+
+snippet getopts
+    while getopts "a:" opt; do
+        case "\${opt}" in
+            a)
+                echo "\${OPTARG}"
+                ;;
+            *)
+                echo -e "\\n  Option does not exist : \${OPTARG}\\n"
+                return 1
+                ;;
+        esac
+    done
 
 snippet val
     "${$0}"
