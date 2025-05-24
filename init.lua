@@ -1,17 +1,19 @@
+local lazy_available = false
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
----@diagnostic disable-next-line: undefined-field
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+  if vim.fn.executable("git") == 1 then
+    vim.fn.system({
+      "git", "clone",
+      "--filter=blob:none",
+      "https://github.com/folke/lazy.nvim.git",
+      "--branch=stable", -- latest stable release
+      lazypath,
+    })
+    lazy_available = true
+  end
+else
+  lazy_available = true
 end
-vim.opt.rtp:prepend(lazypath)
-
-vim.hl = vim.hl or vim.highlight -- workaround for 0.10.3 bug
 
 -- disable, so which-key does not fall back to it
 vim.keymap.set({ "n", "v" }, "s", "<Nop>")
@@ -47,26 +49,29 @@ vim.g.transparent = vim.env["TERM_TRANSPARENT"] ~= nil
 vim.opt.cmdheight = 0
 vim.opt.laststatus = 3
 
-require("lazy").setup("plugins", {
-  change_detection = {
-    enabled = false,
-  },
-  performance = {
-    cache = { enabled = true },
-    rtp = {
-      reset = true,
-      disabled_plugins = {
-        "tutor",
-        "netrwPlugin"
-      },
+if lazy_available then
+  vim.opt.rtp:prepend(lazypath)
+  require("lazy").setup("plugins", {
+    change_detection = {
+      enabled = false,
     },
-    readme = {
-      enabled = false
-    }
-  },
-})
+    performance = {
+      cache = { enabled = true },
+      rtp = {
+        reset = true,
+        disabled_plugins = {
+          "tutor",
+          "netrwPlugin"
+        },
+      },
+      readme = {
+        enabled = false
+      }
+    },
+  })
+end
 
-vim.g.c_syntax_for_h = 1 -- assume .h files are c, not c++
+vim.g.c_syntax_for_h = 1                                        -- assume .h files are c, not c++
 vim.opt.guicursor = "i-n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20" -- block cursor in insert
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamedplus"
@@ -116,3 +121,7 @@ vim.api.nvim_create_autocmd("User", {
     require("config.maps")
   end,
 })
+
+if not lazy_available then
+  vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy" })
+end

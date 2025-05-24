@@ -1,1 +1,5 @@
-vim.cmd([[Hi color]])
+vim.cmd([[
+  if exists(':Hi')
+    Hi color
+  endif
+]])

@@ -27,7 +27,6 @@ local ts_parsers = {
   "gitignore",
   "gitattributes",
   "diff",
-  "latex",
   "comment",
   "regex",
   "vim",
@@ -62,9 +61,14 @@ local ts_filetypes = {
   "gitignore",
   "gitattributes",
   "diff",
-  "latex",
-  "tex",
 }
+
+-- TS installs the latex parser from grammar which requires node.js
+if 1 == vim.fn.executable("node") then
+  table.insert(ts_parsers, "latex")
+  table.insert(ts_filetypes, "latex")
+  table.insert(ts_filetypes, "tex")
+end
 
 return {
   {

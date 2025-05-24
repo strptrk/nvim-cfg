@@ -236,8 +236,17 @@ M.treesitter_is_active = function(buf)
   return vim.treesitter.highlighter.active[buf or api.nvim_get_current_buf()] ~= nil and true or false
 end
 
+local treesitter_has_refactor = nil
+M.treesitter_has_refactor = function()
+  if treesitter_has_refactor == nil then
+    local success, module = pcall(require, "nvim-treesitter-refactor.smart_rename")
+    treesitter_has_refactor = (success and module) and true or false
+  end
+  return treesitter_has_refactor
+end
+
 M.smart_rename_ts = function()
-  if M.treesitter_is_active() then
+  if M.treesitter_is_active() and M.treesitter_has_refactor() then
     require("nvim-treesitter-refactor.smart_rename").smart_rename(api.nvim_win_get_buf(0))
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.rename_cmd, true, true, true), "", true)
@@ -245,7 +254,7 @@ M.smart_rename_ts = function()
 end
 
 M.highlight_usages = function()
-  if M.treesitter_is_active() then
+  if M.treesitter_is_active() and M.treesitter_has_refactor() then
     require("nvim-treesitter-refactor.highlight_definitions").highlight_usages(api.nvim_win_get_buf(0))
   else
     api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.highlight_cmd_word, true, true, true), "", true)
@@ -253,7 +262,7 @@ M.highlight_usages = function()
 end
 
 M.clear_highlight_usages = function()
-  if M.treesitter_is_active() then
+  if M.treesitter_is_active() and M.treesitter_has_refactor() then
     require("nvim-treesitter-refactor.highlight_definitions").clear_usage_highlights(api.nvim_win_get_buf(0))
   end
   api.nvim_feedkeys(api.nvim_replace_termcodes(utils_local.clear_highlight_cmd, true, true, true), "", true)
@@ -271,11 +280,11 @@ M.smart_rename_lsp = function(client, bufnr)
   if not utils_local.default_rename_handler then
     utils_local.smart_rename_set_handler(M.smart_rename_ts)
   end
-  local supported, supported_result = pcall(client.supports_method, "textDocument/prepareRename")
-  if supported and supported_result then
+  local supported = client:supports_method("textDocument/prepareRename")
+  if supported then
     local win = api.nvim_get_current_win()
     local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
-    client.request("textDocument/prepareRename", params, function(err, result)
+    client:request("textDocument/prepareRename", params, function(err, result)
       if err or (result == nil) then
         M.smart_rename_ts()
       else
