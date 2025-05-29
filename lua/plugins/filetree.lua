@@ -1,4 +1,4 @@
-local oil_long_format = false
+local oil_long_format = true
 
 return {
   {
@@ -303,6 +303,9 @@ return {
     },
     config = function()
       require("oil").setup({
+        columns = {
+          "icon",
+        },
         watch_for_changes = true,
         keymaps = {
           ["g?"] = "actions.show_help",
@@ -327,8 +330,14 @@ return {
           ["<A-T>"] = "actions.toggle_trash",
           ["<A-y>"] = "actions.yank_entry",
           ["<A-f>"] = function()
+            require("oil").set_columns({})
+            oil_long_format = true
+          end,
+          ["<A-l>"] = function()
             if oil_long_format then
-              require("oil").set_columns({ "icon" })
+              require("oil").set_columns({
+                "icon"
+              })
             else
               require("oil").set_columns({
                 "icon",
