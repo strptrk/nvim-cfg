@@ -318,6 +318,7 @@ local ft_interpreter_assoc = {
   ["lua"] = "lua",
   ["python"] = "python3",
   ["awk"] = "awk",
+  ["haskell"] = "runghc"
 }
 
 -- place shebang at the top of the file and set +x on it
