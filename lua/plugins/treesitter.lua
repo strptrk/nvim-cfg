@@ -30,6 +30,7 @@ local ts_parsers = {
   "comment",
   "regex",
   "vim",
+  "haskell",
 }
 
 local ts_filetypes = {
@@ -61,6 +62,7 @@ local ts_filetypes = {
   "gitignore",
   "gitattributes",
   "diff",
+  "haskell",
 }
 
 -- TS installs the latex parser from grammar which requires node.js
