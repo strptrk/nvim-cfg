@@ -11,6 +11,7 @@ return {
       "tex",
       "sh",
       "bash",
+      "haskell"
     },
     lazy = true,
     init = function()
@@ -38,6 +39,9 @@ return {
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       if 1 == vim.fn.executable("gopls") then
         lsp.gopls.setup({ capabilities = capabilities })
+      end
+      if 1 == vim.fn.executable("haskell-language-server") then
+        lsp.hls.setup({ capabilities = capabilities })
       end
       if 1 == vim.fn.executable("cmake-language-server") then
         lsp.cmake.setup({ capabilities = capabilities })
