@@ -576,7 +576,6 @@ return {
     lazy = true,
     event = "User VeryVeryLazy",
     opts = {
-      -- highlights = require("catppuccin.groups.integrations.bufferline").get(),
       options = {
         mode = "tabs",
         themable = true,
@@ -593,6 +592,13 @@ return {
         },
         always_show_bufferline = false,
         separator_style = { "|", "|" },
+        name_formatter = function (buf)
+          local name = nil
+          if vim.g.is_term(buf.name) then
+            name = vim.g.term_name_fmt(buf.name)
+          end
+          return name
+        end
       },
     },
   },
