@@ -263,8 +263,14 @@ return {
         })
       end
 
+      local initial_direction
+      if vim.o.lines * 2.19 > vim.o.columns then
+        initial_direction = "horizontal"
+      else
+        initial_direction = "vertical"
+      end
       Term.runterm = Terminal:new({
-        direction = "vertical",
+        direction = initial_direction,
         hidden = true,
         count = 1001,
       })
