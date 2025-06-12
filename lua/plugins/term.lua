@@ -337,6 +337,42 @@ return {
         end
       })
 
+      vim.api.nvim_create_user_command("RunTermClear", function(args)
+        ---@type "toggle" | "on" | "off"
+        local action = args.fargs[1]
+        if not action or action == "" then
+          action = "toggle"
+        end
+
+        local is_on = string.match(Term.runcmd, "^clear; ")
+
+        if action == "toggle" then
+          if is_on then
+            action = "off"
+          else
+            action = "on"
+          end
+        end
+
+        if action == "on" then
+          if not is_on then
+            Term.runterm:send([[export PS1_save="${PS1_save:-${PS1}}"; PS1=""]], true)
+            Term.runcmd = "clear; " .. Term.runcmd
+          end
+        elseif action == "off" then
+          if is_on then
+            Term.runterm:send([[export PS1="${PS1_save}"]], true)
+            Term.runcmd = string.gsub(Term.runcmd, "^clear; ", "")
+          end
+        end
+      end, {
+        force = true,
+        nargs = "?",
+        complete = function()
+          return { "on", "off", "toggle" }
+        end
+      })
+
       vim.keymap.set({ "n", "t", "x" }, "<A-R>", function()
         Term.runterm_toggle()
       end, { desc = "Set Command to Run" })
