@@ -19,6 +19,65 @@ return {
       { "<A-v>j",  nil, desc = "Open Terminal (horizontal)" },
     },
     init = function()
+      vim.g.default_runcmds = {
+        ["c"] = function()
+          local filename = vim.fn.expand("%:t")
+          local filename_stripped = vim.fn.expand("%:t:r")
+          return string.format(
+            "cc -Wall -Wextra -g %s -o %s && ./%s",
+            filename, filename_stripped, filename_stripped
+          )
+        end,
+        ["cpp"] = function()
+          local compiler
+          if 1 == vim.fn.executable("clang++") then
+            compiler = "clang++"
+          elseif 1 == vim.fn.executable("g++") then
+            compiler = "g++"
+          else
+            return ""
+          end
+          local filename = vim.fn.expand("%:t")
+          local filename_stripped = vim.fn.expand("%:t:r")
+          return string.format(
+            "%s -Wall -Wextra -g %s -o %s && ./%s",
+            compiler, filename, filename_stripped, filename_stripped
+          )
+        end,
+        ["rust"] = function()
+          -- are we in a git directory with a Cargo.toml present
+          if 1 == vim.fn.executable("git") then
+            local obj = vim.system({ "git", "rev-parse", "--show-toplevel" }, { text = true }):wait()
+            if obj.code == 0 and vim.uv.fs_stat(vim.fn.trim(obj.stdout) .. "/Cargo.toml") then
+              return "cargo run"
+            end
+          end
+          local filename = vim.fn.expand("%:t")
+          local filename_stripped = vim.fn.expand("%:t:r")
+          return string.format(
+            "rustc -g %s -o %s && ./%s",
+            filename, filename_stripped, filename_stripped
+          )
+        end,
+        ["haskell"] = function()
+          return string.format("runghc %s", vim.fn.expand("%:t"))
+        end,
+        ["lua"] = function()
+          return string.format("lua %s", vim.fn.expand("%:t"))
+        end,
+        ["python"] = function()
+          return string.format("python3 %s", vim.fn.expand("%:t"))
+        end,
+        ["perl"] = function()
+          return string.format("perl %s", vim.fn.expand("%:t"))
+        end,
+        ["bash"] = function()
+          return string.format("bash %s", vim.fn.expand("%:t"))
+        end,
+        ["sh"] = function()
+          return string.format("sh %s", vim.fn.expand("%:t"))
+        end
+      }
       ---@param name string
       ---@return boolean
       vim.g.is_term = function(name)
@@ -215,7 +274,20 @@ return {
 
       Term.runterm_run = function()
         if Term.runcmd == nil then
-          local input = vim.fn.input("Command to run: ")
+          local default_runcmd
+          local filename = vim.api.nvim_buf_get_name(0)
+          local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
+          if vim.uv.fs_access(filename, "x") and string.match(first_line, "^#!") then
+            default_runcmd = "./" .. vim.fn.expand("%:t")
+          else
+            local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+            if vim.g.default_runcmds[ft] then
+              default_runcmd = vim.g.default_runcmds[ft]()
+            else
+              default_runcmd = ""
+            end
+          end
+          local input = vim.fn.input("Command to run: ", default_runcmd)
           if not input or input == "" then
             return
           end
@@ -233,7 +305,7 @@ return {
       end
 
       Term.runterm_askcmd = function()
-        local input = vim.fn.input("Command to run: ")
+        local input = vim.fn.input("Command to run: ", Term.runcmd or "")
         if not input or input == "" then
           return
         else
