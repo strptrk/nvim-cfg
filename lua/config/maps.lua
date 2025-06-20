@@ -189,9 +189,9 @@ map("n", "<A-`>", function ()
   vim.cmd.nohlsearch()
 end)
 
-map("n", "<Space>hl", ":Right set buftype=help | help ")
-map("n", "<Space>hj", ":Down set buftype=help | help ")
-map("n", "<Space>hh", ":set buftype=help | help ")
+map("n", "<Space>hl", ":Right Help ")
+map("n", "<Space>hj", ":Down Help ")
+map("n", "<Space>hh", ":Scratch Help ")
 map("n", "<Space>ht", ":tab help ")
 map("n", "<Space>ho", ":help  | only" .. string.rep("<Left>", 7))
 map("n", "<Space>N", "<cmd>Noice<cr>")
@@ -206,7 +206,7 @@ map("n", "s,", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 
 map("n", "sv", [[:'<,'>s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute (selection)" })
 map("n", "s/", [[:%s//gI<Left><Left><Left>]], { desc = "Substitute" })
 
-map("n", "<leader>s", "<cmd>Scratch<cr>", { desc = "Scratch Buffer" })
+map("n", "<leader>s", function ()require("config.utils").mkscratch() end, { desc = "Scratch Buffer" })
 
 map("n", "<leader>S", function() require("config.utils").mkscript() end)
 
