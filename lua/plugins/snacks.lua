@@ -32,7 +32,7 @@ return {
       { "<Space>sw", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Symbols (workspace)" },
       { "<Space>/",  function() Snacks.picker.lines({ layout = "ivy" }) end, desc = "Grep current buffer" },
       { "<Space>;",  function() Snacks.picker.commands({ layout = 'select' }) end, desc = "Commands" },
-      { "<space>ss", function() Snacks.picker.spelling({ layout = { preset = "select", layout = { relative = "cursor" } } }) end, desc = "Spell suggest" },
+      { "<space>ss", function() Snacks.picker.spelling({ layout = { preset = "select", layout = { relative = "cursor", row = 1 } } }) end, desc = "Spell suggest" },
       { "<Space>de", function() Snacks.picker.diagnostics({ severity = vim.diagnostic.severity.ERROR }) end,   desc = "LSP errors" },
       { "<Space>dw", function() Snacks.picker.diagnostics({ severity = vim.diagnostic.severity.WARN }) end, desc = "LSP warnings" },
       { "<Space>W",  function() Snacks.picker.grep({ search = vim.fn.expand("%:t"), args = { "--fixed-strings" } }) end, desc = "Grep current file name" },
