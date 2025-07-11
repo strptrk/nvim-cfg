@@ -264,7 +264,8 @@ return {
       end
 
       local initial_direction
-      if vim.o.lines * 2.19 > vim.o.columns then
+      -- this depends on the font used (usually between 2.19 and 2.5)
+      if vim.o.lines * 2.5 > vim.o.columns then
         initial_direction = "horizontal"
       else
         initial_direction = "vertical"
@@ -279,7 +280,7 @@ return {
       end
 
       Term.runterm_run = function()
-        if Term.runcmd == nil then
+        if vim.g.runcmd == nil then
           local default_runcmd
           local filename = vim.api.nvim_buf_get_name(0)
           local first_line = vim.api.nvim_buf_get_lines(0, 0, 1, false)[1]
@@ -297,16 +298,16 @@ return {
           if not input or input == "" then
             return
           end
-          Term.runcmd = input
+          vim.g.runcmd = input
           if not Term.runterm:is_open() then
             Term.runterm:open()
           end
-          Term.runterm:send(Term.runcmd, true)
+          Term.runterm:send(vim.g.runcmd, true)
         else
           if not Term.runterm:is_open() then
             Term.runterm:open()
           end
-          Term.runterm:send(Term.runcmd, true)
+          Term.runterm:send(vim.g.runcmd, true)
         end
       end
 
@@ -315,7 +316,7 @@ return {
         if not input or input == "" then
           return
         else
-          Term.runcmd = input
+          vim.g.runcmd = input
         end
       end
 
@@ -344,7 +345,7 @@ return {
           action = "toggle"
         end
 
-        local is_on = string.match(Term.runcmd, "^clear; ")
+        local is_on = string.match(vim.g.runcmd, "^clear; ")
 
         if action == "toggle" then
           if is_on then
@@ -357,12 +358,12 @@ return {
         if action == "on" then
           if not is_on then
             Term.runterm:send([[export PS1_save="${PS1_save:-${PS1}}"; PS1=""]], true)
-            Term.runcmd = "clear; " .. Term.runcmd
+            vim.g.runcmd = "clear; " .. Term.runcmd
           end
         elseif action == "off" then
           if is_on then
             Term.runterm:send([[export PS1="${PS1_save}"]], true)
-            Term.runcmd = string.gsub(Term.runcmd, "^clear; ", "")
+            vim.g.runcmd = string.gsub(Term.runcmd, "^clear; ", "")
           end
         end
       end, {
