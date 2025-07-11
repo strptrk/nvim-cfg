@@ -352,4 +352,15 @@ M.mkscript = function()
   end
 end
 
+M.mkscratch = function()
+  vim.cmd("enew")
+  local buf = vim.api.nvim_get_current_buf()
+  vim.api.nvim_buf_set_name(0, "Scratch")
+  vim.api.nvim_set_option_value("filetype", "scratch", { buf = buf })
+  vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+  vim.api.nvim_set_option_value("swapfile", false, { buf = buf })
+  vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
+end
+
 return M

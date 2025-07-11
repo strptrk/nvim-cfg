@@ -51,6 +51,8 @@ return {
             IblScope = { fg = "palette.black.bright" },
             MiniHippaterns_trail_virtualtext = { fg = "palette.red.base" },
             ["@lsp.typemod.function.defaultLibrary"] = { fg = "palette.cyan.bright" },
+            ["@lsp.typemod.enum.globalScope.c"] = { fg = "palette.orange.bright" },
+            ["@lsp.typemod.type.fileScope.c"] = { style = "italic" },
             ["@type.builtin"] = { fg = "palette.yellow", style = "italic" },
             ["@constant.builtin"] = { style = "bold" },
             ["@lsp.type.unresolvedReference.rust"] = {},
