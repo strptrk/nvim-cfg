@@ -9,7 +9,6 @@ local M = {
     fd   = { "--type", "x", "--color", "never", "--no-ignore-vcs" },
     find = { ".", "-executable", "-type", "f", "-not", "-path", "*/.git/*" },
   },
-  dap = nil,
   picker = {}
 }
 
