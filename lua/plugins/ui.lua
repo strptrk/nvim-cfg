@@ -10,6 +10,8 @@ local symbols = {
   full_block = "█",
 }
 
+local lsps = {}
+
 return {
   {
     "folke/edgy.nvim",
@@ -315,8 +317,7 @@ return {
     dependencies = {
       { "nvim-tree/nvim-web-devicons", lazy = true },
     },
-    config = function()
-      local lsps = {}
+    init = function()
       local get_lsp = function(bufnr)
         bufnr = bufnr or vim.api.nvim_win_get_buf(0)
         local clients = vim.lsp.get_clients({ bufnr = bufnr })
@@ -334,7 +335,8 @@ return {
           lsps[args.buf] = nil
         end,
       })
-
+    end,
+    config = function()
       local conditions = {
         has_filename = function()
           return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
