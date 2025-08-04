@@ -239,45 +239,40 @@ return {
     },
   },
   {
-    -- TODO replace (unmaintained)
-    "phaazon/hop.nvim",
+    "smoka7/hop.nvim",
     lazy = true,
-    init = function()
-      vim.keymap.set({ "n", "x" }, "<Space><CR>", function()
-        require("hop").hint_words()
-      end, { desc = "Hop Word" })
-      vim.keymap.set({ "n", "x" }, "<Space><BS>", function()
-        require("hop").hint_lines()
-      end, { desc = "Hop Lines" })
-      vim.keymap.set({ "n", "x", "o" }, "f", function()
-        require("hop").hint_char1({
-          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
-          current_line_only = true,
-        })
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "F", function()
-        require("hop").hint_char1({
-          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
-          current_line_only = true,
-        })
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "t", function()
-        require("hop").hint_char1({
-          direction = require("hop.hint").HintDirection.AFTER_CURSOR,
-          current_line_only = true,
-          hint_offset = -1,
-        })
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "T", function()
-        require("hop").hint_char1({
-          direction = require("hop.hint").HintDirection.BEFORE_CURSOR,
-          current_line_only = true,
-          hint_offset = -1,
-        })
-      end)
-    end,
-    config = function()
-      require("hop").setup()
-    end,
+    keys = {
+      { "<Space><CR>", function() require("hop").hint_words() end, mode = { "n", "x" }, desc = "Hop Word" },
+      { "<Space><BS>", function() require("hop").hint_lines() end, mode = { "n", "x" }, desc = "Hop Lines" },
+      {
+        "f",
+        function()
+          require("hop").hint_char1({ direction = require("hop.hint").HintDirection.AFTER_CURSOR, current_line_only = true })
+        end,
+        mode = { "n", "x", "o" },
+      },
+      {
+        "F",
+        function()
+          require("hop").hint_char1({ direction = require("hop.hint").HintDirection.BEFORE_CURSOR, current_line_only = true })
+        end,
+        mode = { "n", "x", "o" },
+      },
+      {
+        "t",
+        function()
+          require("hop").hint_char1({ direction = require("hop.hint").HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+        end,
+        mode = { "n", "x", "o" },
+      },
+      {
+        "T",
+        function()
+          require("hop").hint_char1({ direction = require("hop.hint").HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = -1 })
+        end,
+        mode = { "n", "x", "o" },
+      },
+    },
+    opts = {},
   },
 }
