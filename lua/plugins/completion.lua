@@ -63,8 +63,8 @@ return {
           ["<S-Tab>"] = { "select_prev", "fallback" },
           ["<Up>"] = { "select_prev", "fallback" },
           ["<Down>"] = { "select_next", "fallback" },
-          ["<Left>"] = { "fallback" },
-          ["<Right>"] = { "fallback" },
+          ["<Left>"] = {},
+          ["<Right>"] = {},
         },
       },
 

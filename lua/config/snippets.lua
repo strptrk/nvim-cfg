@@ -3,7 +3,7 @@ local M = {}
 M.foobar = function()
   local foo = "foo"
   local bar = "bar"
-  print(foo .. " " .. bar)
+  return foo .. " " .. bar
 end
 
 return M
