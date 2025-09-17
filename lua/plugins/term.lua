@@ -60,7 +60,10 @@ return {
           )
         end,
         ["haskell"] = function()
-          return string.format("runghc %s", vim.fn.expand("%:t"))
+          -- for an interpreted script
+          -- return string.format("runghc %s", vim.fn.expand("%:t"))
+          -- for loading it into ghci
+          return string.format(":load %s", vim.fn.expand("%:t"))
         end,
         ["lua"] = function()
           return string.format("lua %s", vim.fn.expand("%:t"))
@@ -312,7 +315,7 @@ return {
       end
 
       Term.runterm_askcmd = function()
-        local input = vim.fn.input("Command to run: ", Term.runcmd or "")
+        local input = vim.fn.input("Command to run: ", vim.g.runcmd or "")
         if not input or input == "" then
           return
         else

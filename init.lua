@@ -27,6 +27,7 @@ if 1 == vim.fn.has("nvim-0.11") then
   vim.keymap.del("n", "gri") -- implementation
   vim.keymap.del("n", "gO")  -- document symbols
   vim.keymap.del("n", "grn") -- rename
+  vim.keymap.del("n", "grt") -- type definiton
 end
 
 -- custom global variables

@@ -18,6 +18,8 @@ map("ca", "qq", "q!")
 map("ca", "qqa", "qa!")
 map("ca", "qt", "tabclose")
 
+map({"n", "x"}, "gb", "%")
+
 map("n", "<A-a>", "<cmd>tabprevious<cr>")
 map("n", "<A-d>", "<cmd>tabnext<cr>")
 map("n", "<A-A>", "<cmd>tabmove -1<cr>")
