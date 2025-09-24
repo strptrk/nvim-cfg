@@ -2,7 +2,14 @@ return {
   {
     "akinsho/toggleterm.nvim",
     lazy = true,
-    cmd = { "TermExec", "ToggleTerm", "ToggleTermSetName", "TermSelect", "TermNew" },
+    cmd = {
+      "TermExec",
+      "ToggleTerm",
+      "ToggleTermSetName",
+      "TermSelect",
+      "TermNew",
+      "Ghci"
+    },
     keys = {
       { "<A-f>",   nil, desc = "Open Terminal" },
       { "<A-F>",   nil, desc = "Open Terminal (floating)" },
@@ -375,6 +382,18 @@ return {
         complete = function()
           return { "on", "off", "toggle" }
         end
+      })
+
+      vim.api.nvim_create_user_command("Ghci", function()
+        if not Term.runterm:is_open() then
+          Term.runterm:open()
+        end
+        Term.runterm:send("ghci", true)
+        vim.g.runcmd = vim.g.default_runcmds["haskell"]()
+        Term.runterm:send(vim.g.runcmd, true)
+      end, {
+        force = true,
+        nargs = 0,
       })
 
       vim.keymap.set({ "n", "t", "x" }, "<A-R>", function()
